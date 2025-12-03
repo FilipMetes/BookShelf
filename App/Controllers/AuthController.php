@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use App\Configuration;
 use Exception;
 use Framework\Core\BaseController;
@@ -70,5 +71,5 @@ class AuthController extends BaseController
         $this->app->getAuthenticator()->logout();
         return $this->html();
     }
-}
 
+}

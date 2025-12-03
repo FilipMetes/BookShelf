@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Framework\Core\Model;
 use Framework\DB\Connection;
 use Exception;
 
-class Book
+class Book extends Model
 {
     public ?int $id = null;
     public string $name = '';
@@ -36,102 +37,6 @@ class Book
         $this->cover_path = $data['cover_path'] ?? null;
     }
 
-    /**
-     * Create a new book record and return Book instance
-     * @param array $data
-     * @return self
-     * @throws Exception
-     */
-    public static function create(array $data): self
-    {
-        if (empty($data['name'])) {
-            throw new Exception('Book name is required');
-        }
-
-        $conn = Connection::getInstance();
-        $stmt = $conn->prepare(
-            "INSERT INTO books (name, author, genre, format, year, price, number_availible, pages, text, sample_path, cover_path) VALUES (:name, :author, :genre, :format, :year, :price, :number_availible, :pages, :text, :sample_path, :cover_path)"
-        );
-
-        $params = [
-            ':name' => $data['name'],
-            ':author' => $data['author'] ?? '',
-            ':genre' => $data['genre'] ?? '',
-            ':format' => $data['format'] ?? '',
-            ':year' => $data['year'] ?? null,
-            ':price' => $data['price'] ?? 0,
-            ':number_availible' => $data['number_availible'] ?? 0,
-            ':pages' => $data['pages'] ?? null,
-            ':text' => $data['text'] ?? null,
-            ':sample_path' => $data['sample_path'] ?? null,
-            ':cover_path' => $data['cover_path'] ?? null,
-        ];
-
-        $stmt->execute($params);
-        $id = (int)$conn->lastInsertId();
-
-        return new self(array_merge($data, ['id' => $id]));
-    }
-
-    public static function findById(int $id): ?self
-    {
-        $conn = Connection::getInstance();
-        $stmt = $conn->prepare("SELECT * FROM books WHERE id = :id LIMIT 1");
-        $stmt->execute([':id' => $id]);
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if (!$row) return null;
-        return new self($row);
-    }
-
-    public static function findByName(string $name): array
-    {
-        $conn = Connection::getInstance();
-        $stmt = $conn->prepare("SELECT * FROM books WHERE name LIKE :name");
-        $stmt->execute([':name' => "%" . $name . "%"]);
-        $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $result = [];
-        foreach ($rows as $r) {
-            $result[] = new self($r);
-        }
-        return $result;
-    }
-
-    public function update(array $data): void
-    {
-        if ($this->id === null) {
-            throw new Exception('Cannot update book without id');
-        }
-        $conn = Connection::getInstance();
-        $fields = [];
-        $params = [':id' => $this->id];
-
-        $allowed = ['name','author','genre','format','year','price','number_availible','pages','text','sample_path','cover_path'];
-        foreach ($allowed as $f) {
-            if (array_key_exists($f, $data)) {
-                $fields[] = "{$f} = :{$f}";
-                $params[":{$f}"] = $data[$f];
-                $this->{$f} = $data[$f];
-            }
-        }
-
-        if (empty($fields)) return;
-
-        $sql = "UPDATE books SET " . implode(', ', $fields) . " WHERE id = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute($params);
-    }
-
-    public function delete(): void
-    {
-        if ($this->id === null) {
-            throw new Exception('Cannot delete book without id');
-        }
-        $conn = Connection::getInstance();
-        $stmt = $conn->prepare("DELETE FROM books WHERE id = :id");
-        $stmt->execute([':id' => $this->id]);
-    }
-
-    // Getters / setters
 
     public function getId(): ?int { return $this->id; }
     public function getName(): string { return $this->name; }
