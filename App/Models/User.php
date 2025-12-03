@@ -123,5 +123,48 @@ class User extends Model implements IIdentity
     {
         $this->role = $role;
     }
-}
 
+    // --- persistence helpers ---
+
+    /**
+     * Find a user by email address.
+     * @param string $email
+     * @return self|null
+     */
+    public static function findByEmail(string $email): ?self
+    {
+        // Use Model::executeRawSQL to avoid direct fetch() on statement wrappers
+        $rows = self::executeRawSQL(
+            "SELECT id, name, surname, city, PSC, street, e_mail, password, role FROM users WHERE e_mail = :email LIMIT 1",
+            [':email' => $email]
+        );
+
+        if (empty($rows)) {
+            return null;
+        }
+
+        $row = $rows[0];
+        return new self([
+            'id' => $row['id'],
+            'name' => $row['name'],
+            'surname' => $row['surname'],
+            'city' => $row['city'],
+            'PSC' => $row['PSC'],
+            'street' => $row['street'],
+            'e_mail' => $row['e_mail'],
+            'password' => $row['password'],
+            'role' => $row['role']
+        ]);
+    }
+
+    /**
+     * Verify a raw password against the stored hashed password.
+     * @param string $raw
+     * @return bool
+     */
+    public function verifyPassword(string $raw): bool
+    {
+        if (empty($this->password)) return false;
+        return password_verify($raw, $this->password);
+    }
+}

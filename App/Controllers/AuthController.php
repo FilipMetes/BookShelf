@@ -46,16 +46,29 @@ class AuthController extends BaseController
      */
     public function login(Request $request): Response
     {
-        $logged = null;
+        $message = null;
+
         if ($request->hasValue('submit')) {
-            $logged = $this->app->getAuthenticator()->login($request->value('username'), $request->value('password'));
-            if ($logged) {
-                return $this->redirect($this->url("admin.index"));
+            $email = trim($request->value('username'));
+            $password = $request->value('password');
+
+            // Use the User model (registered users) to authenticate
+            try {
+                $user = User::findByEmail($email);
+                if ($user && $user->verifyPassword($password)) {
+                    // store identity in session so framework recognizes logged user
+                    $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $user);
+                    return $this->redirect($this->url("admin.index"));
+                } else {
+                    $message = 'Neplatné prihlasovacie údaje.';
+                }
+            } catch (Exception) {
+                // log or return generic message
+                $message = 'Chyba pri prihlasovaní. Skúste neskôr.';
             }
         }
 
-        $message = $logged === false ? 'Bad username or password' : null;
-        return $this->html(compact("message"));
+        return $this->html(compact('message'));
     }
 
     /**
@@ -73,4 +86,3 @@ class AuthController extends BaseController
     }
 
 }
-
