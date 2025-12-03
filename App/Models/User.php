@@ -123,4 +123,25 @@ class User extends Model implements IIdentity
     {
         $this->role = $role;
     }
+
+    /**
+     * Find a user by email.
+     */
+    public static function findByEmail(string $email): ?self
+    {
+        $conn = Connection::getInstance();
+        $stmt = $conn->prepare("SELECT * FROM users WHERE e_mail = :email LIMIT 1");
+        $stmt->execute([':email' => $email]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) return null;
+        return new self($row);
+    }
+
+    /**
+     * Verify a raw password against stored hash
+     */
+    public function verifyPassword(string $raw): bool
+    {
+        return password_verify($raw, $this->password);
+    }
 }

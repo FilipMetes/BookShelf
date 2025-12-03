@@ -24,7 +24,7 @@ $view->setLayout('auth');
                         </div>
                     <?php } ?>
 
-                    <form method="post" action="<?= $link->url('register.create') ?>">
+                    <form method="post" action="<?= $link->url('register.register') ?>">
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label">Meno</label>
@@ -73,4 +73,3 @@ $view->setLayout('auth');
         </div>
     </div>
 </div>
-

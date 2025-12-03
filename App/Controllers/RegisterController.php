@@ -17,6 +17,9 @@ class RegisterController extends BaseController
         return $this->html();
     }
 
+    /**
+     * @throws Exception
+     */
     public function register(Request $request): Response
     {
         $errors = [];
@@ -55,7 +58,7 @@ class RegisterController extends BaseController
             }
         }
 
-        return $this->html(compact('errors'));
+        // If there are errors (or showing form after POST), render the register form (index view)
+        return $this->html(compact('errors'), 'index');
     }
 }
-
