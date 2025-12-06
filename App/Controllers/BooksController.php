@@ -166,6 +166,10 @@ class BooksController extends BaseController
             $errors[] = "Názov knihy musí byť vyplnený.";
         }
 
+        if ($request->value('genre') == "") {
+            $errors[] = "Žáner musí byť vyplnený.";
+        }
+
         if ($request->value('author') == "") {
             $errors[] = "Autor musí byť vyplnený.";
         }

@@ -29,7 +29,7 @@
 <body>
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<?= $link->url('home.index') ?>">Bookly</a>
+        <a class="navbar-brand" href="<?= $link->url('home.index') ?>">BookShelf</a>
 
         <ul class="navbar-nav me-auto">
             <li class="nav-item">

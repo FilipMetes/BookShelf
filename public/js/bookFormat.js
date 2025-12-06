@@ -4,12 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!form) return;
 
     const fields = [
-        {id: 'title', errorId: 'titleError', message: 'Názov knihy je povinný.'},
-        {id: 'author', errorId: 'authorError', message: 'Autor je povinný.'},
+        {id: 'title', errorId: 'titleError', message: 'Názov knihy musí byť vyplnený.'},
+        {id: 'author', errorId: 'authorError', message: 'Autor musí byť vyplnený.'},
+        {id: 'genre', errorId: 'genreError', message: 'Žáner knihy musí byť vyplnený.'},
         {id: 'formatE', radioGroup: 'format', errorId: 'formatError', message: 'Formát knihy musí byť vybraný.'},
-        {id: 'price', errorId: 'priceError', message: 'Cena musí byť číslo.'},
-        {id: 'number_availible', errorId: 'numberError', message: 'Počet kusov musí byť číslo.'},
-        {id: 'pages', errorId: 'pagesError', message: 'Počet strán musí byť číslo.'}
+        {id: 'price', errorId: 'priceError', message: 'Cena je povinná.'},
+        {id: 'number_availible', errorId: 'numberError', message: 'Počet dostupných kusov je povinný.'},
+        {id: 'pages', errorId: 'pagesError', message: 'Počet strán je povinný.'},
+        {id: 'cover', errorId: 'coverError', message: 'Obrázok obálky musí byť JPG alebo PNG.'}
     ];
 
     form.addEventListener('submit', function (e) {
@@ -53,15 +55,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     radios.forEach(r => r.classList.add('is-invalid'));
                     hasError = true;
                 }
+            } else if (f.id === 'cover') {
+                const input = document.getElementById(f.id);
+                if (input.files.length > 0) {
+                    const file = input.files[0];
+                    if (!['image/jpeg','image/png'].includes(file.type)) {
+                        const errorDiv = document.getElementById(f.errorId);
+                        errorDiv.textContent = f.message;
+                        errorDiv.style.display = 'block';
+                        input.classList.add('is-invalid');
+                        hasError = true;
+                    }
+                }
             } else {
                 const input = document.getElementById(f.id);
-                const errorDiv = document.getElementById(f.errorId);
                 if (input.value.trim() === '') {
-                    errorDiv.textContent = f.message;
-                    errorDiv.style.display = 'block';
-                    input.classList.add('is-invalid');
-                    hasError = true;
-                } else if (['price','number_availible','pages'].includes(f.id) && isNaN(input.value)) {
+                    const errorDiv = document.getElementById(f.errorId);
                     errorDiv.textContent = f.message;
                     errorDiv.style.display = 'block';
                     input.classList.add('is-invalid');

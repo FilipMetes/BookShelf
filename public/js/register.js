@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('registerForm');
 
     const fields = [
-        {id: 'name', errorId: 'nameError', message: 'Meno je povinné.'},
-        {id: 'surname', errorId: 'surnameError', message: 'Priezvisko je povinné.'},
-        {id: 'e_mail', errorId: 'emailError', message: 'Email je povinný.'},
-        {id: 'password', errorId: 'passwordError', message: 'Heslo je povinné.'}
+        {id: 'name', errorId: 'nameError', requiredMessage: 'Meno je povinné.'},
+        {id: 'surname', errorId: 'surnameError', requiredMessage: 'Priezvisko je povinné.'},
+        {id: 'e_mail', errorId: 'emailError', requiredMessage: 'Email je povinný.', invalidMessage: 'Neplatný formát emailu.'},
+        {id: 'password', errorId: 'passwordError', requiredMessage: 'Heslo je povinné.', invalidMessage: 'Heslo musí mať aspoň 6 znakov.', minLength: 6}
     ];
 
     if (!form) return;
@@ -32,14 +32,33 @@ document.addEventListener('DOMContentLoaded', function () {
         fields.forEach(f => {
             const input = document.getElementById(f.id);
             const errorDiv = document.getElementById(f.errorId);
-            if (input.value.trim() === '') {
-                errorDiv.textContent = f.message;
+            const value = input.value.trim();
+
+            if (value === '') {
+                // prázdne pole
+                errorDiv.textContent = f.requiredMessage;
                 errorDiv.style.display = 'block';
                 input.classList.add('is-invalid');
                 hasError = true;
+            } else {
+                // kontrola špecifického formátu len ak pole nie je prázdne
+                if (f.id === 'e_mail') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(value)) {
+                        errorDiv.textContent = f.invalidMessage;
+                        errorDiv.style.display = 'block';
+                        input.classList.add('is-invalid');
+                        hasError = true;
+                    }
+                } else if (f.id === 'password' && value.length < f.minLength) {
+                    errorDiv.textContent = f.invalidMessage;
+                    errorDiv.style.display = 'block';
+                    input.classList.add('is-invalid');
+                    hasError = true;
+                }
             }
         });
 
-        if (hasError) e.preventDefault(); // stop form submission
+        if (hasError) e.preventDefault(); // zastaví odoslanie formulára
     });
 });
