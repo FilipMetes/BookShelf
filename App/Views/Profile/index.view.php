@@ -26,6 +26,12 @@ $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
                         <p class="text-muted">Nie ste prihlásený.</p>
                     <?php endif; ?>
                 </div>
+
+                <?php if ($user): ?>
+                    <div class="text-center mb-4">
+                        <a href="<?= $link->url('profile.edit') ?>" class="btn btn-dark">Upraviť profil</a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -83,11 +83,13 @@ $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
         <!-- Main content: search, actions and books grid -->
         <main class="col-12 col-md-9">
             <div class="d-flex justify-content-between align-items-center mb-4">
+
                 <h2 class="catalog-title">Katalóg kníh</h2>
 
-                <div class="search-wrap">
+                <div class="search-wrap d-flex align-items-center gap-2">
                     <label for="bookSearch" class="visually-hidden">Vyhľadať</label>
-                    <input id="bookSearch" class="form-control" type="search" placeholder="Vyhľadať knihu alebo autora...">
+                    <input id="bookSearch" class="form-control" type="search" placeholder="Vyhľadať knihu podľa názvu">
+                    <button type="button" id="searchButton" class="btn btn-primary btn-sm">Vyhľadať</button>
                 </div>
 
                 <?php if ($user?->isAdmin()): ?>
@@ -148,3 +150,5 @@ $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
     </div>
 
 </div>
+
+<script src="<?= $link->asset('js/searchBook.js') ?>"></script>
