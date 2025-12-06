@@ -1,0 +1,84 @@
+<?php
+/** @var Framework\Support\LinkGenerator $link */
+/** @var \App\Models\Book $book */
+/** @var array $formErrors */
+?>
+
+<?php if (!empty($formErrors)): ?>
+    <div class="alert alert-danger">
+        <ul>
+            <?php foreach ($formErrors as $err): ?>
+                <li><?= htmlspecialchars($err) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+<form action="<?= $link->url('books.save') ?>" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="id" value="<?= $book->getId() ?? '' ?>">
+
+    <div class="mb-3">
+        <label for="title" class="form-label">Názov knihy</label>
+        <input type="text" name="title" id="title" class="form-control" value="<?= htmlspecialchars($book->getTitle() ?? '') ?>" >
+    </div>
+
+    <div class="mb-3">
+        <label for="author" class="form-label">Autor</label>
+        <input type="text" name="author" id="author" class="form-control" value="<?= htmlspecialchars($book->getAuthor() ?? '') ?>" >
+    </div>
+
+    <div class="mb-3">
+        <label for="genre" class="form-label">Žáner</label>
+        <input type="text" name="genre" id="genre" class="form-control" value="<?= htmlspecialchars($book->getGenre() ?? '') ?>">
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Formát knihy</label>
+        <div>
+            <input type="radio" id="formatE" name="format" value="E" <?= $book->getFormat() === 'E' ? 'checked' : '' ?>>
+            <label for="formatE">Elektronický</label>
+
+            <input type="radio" id="formatF" name="format" value="F" <?= $book->getFormat() === 'F' ? 'checked' : '' ?>>
+            <label for="formatF">Fyzický</label>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="price" class="form-label">Cena (€)</label>
+        <input type="number" step="0.01" name="price" id="price" class="form-control" value="<?= htmlspecialchars($book->getPrice() ?? '') ?>">
+    </div>
+
+    <div class="mb-3">
+        <label for="number_availible" class="form-label">Počet dostupných kusov</label>
+        <input type="number" name="number_availible" id="number_availible" class="form-control" value="<?= htmlspecialchars($book->getNumberAvailible() ?? '') ?>">
+    </div>
+
+    <div class="mb-3">
+        <label for="pages" class="form-label">Počet strán</label>
+        <input type="number" name="pages" id="pages" class="form-control" value="<?= htmlspecialchars($book->getPages() ?? '') ?>">
+    </div>
+
+    <div class="mb-3">
+        <label for="text" class="form-label">Popis / text knihy</label>
+        <textarea name="text" id="text" class="form-control"><?= htmlspecialchars($book->getText() ?? '') ?></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="cover" class="form-label">Obálka knihy</label>
+        <input type="file" name="cover" id="cover" class="form-control">
+
+        <?php if ($book->getCoverPath()): ?>
+            <div class="mt-2">
+                <div class="text-muted mb-1">Aktuálna obálka:</div>
+                <img src="<?= $link->asset(\App\Configuration::UPLOAD_URL . $book->getCoverPath()) ?>"
+                     alt="Obálka knihy"
+                     style="max-width: 150px; height: auto; border: 1px solid #ccc; padding: 2px;">
+            </div>
+        <?php endif; ?>
+    </div>
+
+
+    <button type="submit" class="btn btn-success">Uložiť</button>
+    <a href="<?= $link->url('books.index') ?>" class="btn btn-secondary">Zrušiť</a>
+</form>
+<script src="<?= $link->asset('js/bookFormat.js') ?>"></script>

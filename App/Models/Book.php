@@ -9,7 +9,7 @@ use Exception;
 class Book extends Model
 {
     public ?int $id = null;
-    public string $name = '';
+    public string $title = '';
     public string $author = '';
     public string $genre = '';
     public string $format = '';
@@ -24,7 +24,7 @@ class Book extends Model
     public function __construct(array $data = [])
     {
         $this->id = isset($data['id']) ? (int)$data['id'] : null;
-        $this->name = $data['name'] ?? '';
+        $this->title = $data['title'] ?? '';
         $this->author = $data['author'] ?? '';
         $this->genre = $data['genre'] ?? '';
         $this->format = $data['format'] ?? '';
@@ -39,8 +39,8 @@ class Book extends Model
 
 
     public function getId(): ?int { return $this->id; }
-    public function getName(): string { return $this->name; }
-    public function setName(string $v): void { $this->name = $v; }
+    public function getTitle(): string { return $this->title; }
+    public function setTitle(string $v): void { $this->title = $v; }
     public function getAuthor(): string { return $this->author; }
     public function setAuthor(string $v): void { $this->author = $v; }
     public function getGenre(): string { return $this->genre; }

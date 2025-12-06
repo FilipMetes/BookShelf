@@ -30,3 +30,87 @@
     .book-cover { height: 140px; }
 }
 
+/* --- Filter sidebar styles --- */
+.filter-panel {
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 0.5rem;
+    background: #ffffff;
+}
+
+.filter-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+}
+
+.filter-heading {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.filter-section .form-check {
+    margin-bottom: 0.35rem;
+}
+
+.filter-panel .btn {
+    margin-right: 0.5rem;
+}
+
+/* Keep sidebar visible on larger screens */
+@media (min-width: 768px) {
+    .filter-panel {
+        position: sticky;
+        top: 80px; /* adjust if you have a taller header */
+    }
+}
+
+/* Small-screen tweaks */
+@media (max-width: 767.98px) {
+    .filter-panel { box-shadow: none; }
+    .filter-panel .card-body { padding: .75rem; }
+}
+
+/* Format section tweaks */
+.format-section .form-check {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin-bottom: .4rem;
+}
+
+/* Price slider styles */
+.price-slider { padding-top: .25rem; }
+.price-slider .form-range { width: 100%; }
+
+/* Customize range appearance (webkit + firefox) */
+.price-slider input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    background: linear-gradient(90deg, #0d6efd 0%, #0d6efd 25%, #e9ecef 25%);
+    border-radius: 4px;
+    outline: none;
+}
+
+.price-slider input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #0d6efd; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(13,110,253,.4);
+    margin-top: -5px; /* centers the thumb */
+}
+
+.price-slider input[type=range]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #0d6efd; border: none; box-shadow: 0 1px 3px rgba(13,110,253,.4);
+}
+
+/* small helper for slider labels */
+.price-slider .range-value {
+    font-weight: 600; color: #212529; margin-left: .5rem; }
+
+@media (max-width: 576px) {
+    .filter-panel { margin-bottom: 1rem; }
+}
