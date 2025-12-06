@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Configuration;
 use Framework\Core\Model;
 use Framework\DB\Connection;
 use Exception;
@@ -59,7 +60,16 @@ class Book extends Model
     public function setText(?string $v): void { $this->text = $v; }
     public function getSamplePath(): ?string { return $this->sample_path; }
     public function setSamplePath(?string $v): void { $this->sample_path = $v; }
-    public function getCoverPath(): ?string { return $this->cover_path; }
+    public function getCoverPath(): string {
+        // Ak cover existuje a súbor je na disku, vráti ho (len názov súboru, nie URL)
+        if ($this->cover_path && file_exists(Configuration::UPLOAD_DIR . $this->cover_path)) {
+            return Configuration::UPLOAD_URL . $this->cover_path; // napr. "/uploads/nazov_súboru.jpg"
+        }
+
+        // Predvolený obrázok (v public/images)
+        return '/images/coverNotFound.jpg';
+    }
+
     public function setCoverPath(?string $v): void { $this->cover_path = $v; }
 
 }

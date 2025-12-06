@@ -70,9 +70,10 @@
         <?php if ($book->getCoverPath()): ?>
             <div class="mt-2">
                 <div class="text-muted mb-1">Aktuálna obálka:</div>
-                <img src="<?= $link->asset(\App\Configuration::UPLOAD_URL . $book->getCoverPath()) ?>"
-                     alt="Obálka knihy"
-                     style="max-width: 150px; height: auto; border: 1px solid #ccc; padding: 2px;">
+                <img src="<?= $book->getCoverPath() ?>"
+                     alt="<?= htmlspecialchars($book->getTitle()) ?>"
+                     class="book-cover-img">
+
             </div>
         <?php endif; ?>
     </div>

@@ -18,102 +18,42 @@ use App\Configuration;
 
                     <div class="filter-section">
                         <h6 class="filter-heading">Žáner</h6>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Horror" id="genre-horror">
-                            <label class="form-check-label" for="genre-horror">Horror</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Akcne" id="genre-akcne">
-                            <label class="form-check-label" for="genre-akcne">Akčné</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Romanticke" id="genre-romanticke">
-                            <label class="form-check-label" for="genre-romanticke">Romantické</label>
-                        </div>
-
-                        <!-- Additional genres -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Sci-Fi" id="genre-scifi">
-                            <label class="form-check-label" for="genre-scifi">Sci‑Fi</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Fantasy" id="genre-fantasy">
-                            <label class="form-check-label" for="genre-fantasy">Fantasy</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Mystery" id="genre-mystery">
-                            <label class="form-check-label" for="genre-mystery">Mystery</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Non-fiction" id="genre-nonfiction">
-                            <label class="form-check-label" for="genre-nonfiction">Non‑fiction</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Thriller" id="genre-thriller">
-                            <label class="form-check-label" for="genre-thriller">Thriller</label>
-                        </div>
-
+                        <?php
+                        $genres = ['Horror', 'Akčné', 'Romantické', 'Sci‑Fi', 'Fantasy', 'Mystery', 'Non‑fiction', 'Thriller'];
+                        foreach ($genres as $genre):
+                            ?>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= strtolower($genre) ?>">
+                                <label class="form-check-label" for="genre-<?= strtolower($genre) ?>"><?= $genre ?></label>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
 
                     <div class="filter-section mt-3">
                         <h6 class="filter-heading">Autor</h6>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Stephen King" id="author-king">
-                            <label class="form-check-label" for="author-king">Stephen King</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Agatha Christie" id="author-christie">
-                            <label class="form-check-label" for="author-christie">Agatha Christie</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="J.K. Rowling" id="author-rowling">
-                            <label class="form-check-label" for="author-rowling">J.K. Rowling</label>
-                        </div>
-
-                        <!-- Additional authors -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="George R.R. Martin" id="author-martin">
-                            <label class="form-check-label" for="author-martin">George R.R. Martin</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Isaac Asimov" id="author-asimov">
-                            <label class="form-check-label" for="author-asimov">Isaac Asimov</label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Dan Brown" id="author-brown">
-                            <label class="form-check-label" for="author-brown">Dan Brown</label>
-                        </div>
-
+                        <?php
+                        $authors = ['Stephen King', 'Agatha Christie', 'J.K. Rowling', 'George R.R. Martin', 'Isaac Asimov', 'Dan Brown'];
+                        foreach ($authors as $author):
+                            ?>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="<?= $author ?>" id="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
+                                <label class="form-check-label" for="author-<?= strtolower(str_replace(' ', '-', $author)) ?>"><?= $author ?></label>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
 
-                    <!-- Format section (elektronicky / fyzicky) -->
                     <div class="filter-section mt-3 format-section">
                         <h6 class="filter-heading">Formát</h6>
-
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="Elektronicky" id="format-e">
                             <label class="form-check-label" for="format-e">Elektronický</label>
                         </div>
-
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" value="Fyzicky" id="format-p">
                             <label class="form-check-label" for="format-p">Fyzický</label>
                         </div>
                     </div>
 
-                    <!-- Price slider -->
                     <div class="filter-section mt-3 price-section">
                         <h6 class="filter-heading">Cena (€)</h6>
                         <div class="price-slider">
@@ -155,9 +95,10 @@ use App\Configuration;
                     <?php foreach ($books as $book): ?>
                         <div class="col-6 col-md-4 col-lg-3">
                             <div class="card book-card h-100">
-                                <div class="book-cover"
-                                     style="background-image: url('<?= $link->asset(Configuration::UPLOAD_URL . $book->getCoverPath()) ?>')">
-                                </div>
+                                <!-- nový <img> tag -->
+                                <img src="<?= $book->getCoverPath() ?>"
+                                     alt="<?= htmlspecialchars($book->getTitle()) ?>"
+                                     class="book-cover-img">
 
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h5>
