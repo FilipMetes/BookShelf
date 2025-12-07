@@ -170,6 +170,22 @@ class BooksController extends BaseController
             $errors[] = "Autor musí byť vyplnený.";
         }
 
+        // UNIKÁTNY názov + autor
+        $title = $request->value('title');
+        $author = $request->value('author');
+        $id = (int)$request->value('id'); // ak editujeme, ignorujeme aktuálny záznam
+
+        if ($title && $author) {
+            $existing = Book::getAll(
+                "title = ? AND author = ? AND id <> ?",
+                [$title, $author, $id]
+            );
+
+            if (!empty($existing)) {
+                $errors[] = "Kniha s týmto názvom a autorom už existuje.";
+            }
+        }
+
         $format = $request->value('format');
         if ($format === null || $format === '') {
             $errors[] = "Formát musí byť vyplnený.";
@@ -184,4 +200,5 @@ class BooksController extends BaseController
 
         return $errors;
     }
+
 }
