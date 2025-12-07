@@ -13,8 +13,8 @@
                 </div>
                 <div class="card-body">
 
-                    <p><strong>Address:</strong> Oravská Polhora, Slovakia</p>
-                    <p><strong>Tel. number:</strong> +421/915 123 456</p>
+                    <p><strong>Adresa:</strong> Oravská Polhora, Slovakia</p>
+                    <p><strong>Tel. číslo:</strong> +421/915 123 456</p>
                     <p><strong>GPS:</strong> 49°27'30"N 19°34'00"E</p>
 
                     <div class="mt-3">
