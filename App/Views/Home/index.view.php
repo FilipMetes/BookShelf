@@ -8,7 +8,7 @@
         <div class="col text-center">
             <h1 class="display-4">Vitajte v BookShelf</h1>
             <p class="lead">
-                Objavujte, čítajte a spravujte svoje obľúbené knihy na jednom mieste.
+                Objavujte a nakupujte svoje obľúbené knihy na jednom mieste.
             </p>
         </div>
     </div>
@@ -17,8 +17,8 @@
         <div class="col text-center">
             <h2>O BookShelf</h2>
             <p class="mt-3">
-                BookShelf je moderná knižnica, ktorá vám umožní prehľadne spravovať vašu zbierku kníh,
-                vyhľadávať nové tituly a objavovať obľúbené žánre a autorov. Vytvorená pre čitateľov a nadšencov kníh.
+                BookShelf je e-shop, ktorý vám umožní prehľadne nakupovať,
+                vyhľadávať a objavovať nové tituly. Vytvorená pre čitateľov a nadšencov kníh.
             </p>
         </div>
     </div>
