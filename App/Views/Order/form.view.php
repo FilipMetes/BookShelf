@@ -25,11 +25,15 @@
         <div class="mb-3">
             <label for="count" class="form-label">Počet kusov</label>
             <select name="count" id="count" class="form-select" required>
-                <?php for ($i = 1; $i <= 10; $i++): ?>
+                <?php
+                $maxCount = max(1, $book->getNumberAvailible()); // aspoň 1
+                for ($i = 1; $i <= $maxCount; $i++):
+                    ?>
                     <option value="<?= $i ?>"><?= $i ?></option>
                 <?php endfor; ?>
             </select>
         </div>
+
 
         <button type="submit" class="btn btn-success">Pridať do košíka</button>
         <a href="<?= $link->url('books.index') ?>" class="btn btn-secondary">Späť na katalóg</a>

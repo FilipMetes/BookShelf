@@ -58,8 +58,10 @@ use App\Configuration;
                             <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
                             <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
                             <input type="hidden" name="action" value="minus">
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">−</button>
+                            <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                <?= $item['count'] <= 1 ? 'disabled' : '' ?>> − </button>
                         </form>
+
 
                         <span class="mx-2"><?= $item['count'] ?></span>
 
@@ -67,8 +69,10 @@ use App\Configuration;
                             <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
                             <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
                             <input type="hidden" name="action" value="plus">
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+                            <button type="submit" class="btn btn-sm btn-outline-secondary"
+                                <?= $item['count'] >= $book->getNumberAvailible() ? 'disabled' : '' ?>> + </button>
                         </form>
+
                     </td>
                     <td class="text-end">
                         <b><?= number_format($item['subtotal'], 2) ?> €</b>

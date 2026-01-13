@@ -90,10 +90,25 @@ class OrderController extends BaseController
             throw new HttpException(400, "Neplatná objednávka.");
         }
 
+        $items = OrderItem::getAll('id_order = ?', [$orderId]);
+
+        foreach ($items as $item) {
+            $book = Book::getOne($item->getIdBook());
+            if (!$book) continue;
+
+            if ($book->getNumberAvailible() < $item->getCountItems()) {
+                throw new HttpException(400, "Nie je dostatok kusov knihy: " . $book->getTitle());
+            }
+
+            $book->setNumberAvailible($book->getNumberAvailible() - $item->getCountItems());
+            $book->save();
+        }
+
         $order->setState('P'); // zmena stavu na prebiehajúcu
         $order->save();
 
         return $this->redirect($this->url('shopcart.index'));
     }
+
 
 }
