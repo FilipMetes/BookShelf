@@ -4,9 +4,9 @@ use App\Configuration;
 
 /** @var array $cartItems */
 /** @var float $totalPrice */
+/** @var \App\Models\Order $order */
 
 /** @var \Framework\Support\LinkGenerator $link */
-/** @var \App\Models\Book[] $books */
 ?>
 
 <div class="container mt-4">
@@ -32,6 +32,7 @@ use App\Configuration;
                 <th class="text-end">Cena</th>
                 <th class="text-center">Množstvo</th>
                 <th class="text-end">Spolu</th>
+                <th class="text-center">Akcia</th>
             </tr>
             </thead>
 
@@ -52,10 +53,34 @@ use App\Configuration;
                         <?= number_format($book->getPrice(), 2) ?> €
                     </td>
                     <td class="text-center">
-                        <?= $item['count'] ?>
+                        <!-- plus/minus tlačidlá -->
+                        <form method="post" action="<?= $link->url('order.updateCartItem') ?>" style="display:inline">
+                            <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
+                            <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
+                            <input type="hidden" name="action" value="minus">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">−</button>
+                        </form>
+
+                        <span class="mx-2"><?= $item['count'] ?></span>
+
+                        <form method="post" action="<?= $link->url('order.updateCartItem') ?>" style="display:inline">
+                            <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
+                            <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
+                            <input type="hidden" name="action" value="plus">
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+                        </form>
                     </td>
                     <td class="text-end">
                         <b><?= number_format($item['subtotal'], 2) ?> €</b>
+                    </td>
+                    <td class="text-center">
+                        <form method="post" action="<?= $link->url('order.removeFromCart') ?>">
+                            <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
+                            <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Odstrániť
+                            </button>
+                        </form>
                     </td>
                 </tr>
             <?php endforeach; ?>

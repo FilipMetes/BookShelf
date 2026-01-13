@@ -11,6 +11,7 @@ use Framework\Core\BaseController;
 use Framework\Http\HttpException;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
+use Framework\DB\Connection;
 
 class OrderController extends BaseController
 {
@@ -28,21 +29,17 @@ class OrderController extends BaseController
         }
 
         $userId = $sessionUser->getId();
-
-        // nájdeme košík (objednávku v stave C)
         $orders = Order::getAll('id_user = ? AND state = ?', [$userId, 'C']);
 
         if (empty($orders)) {
-            // prázdny košík
             return $this->html([
                 'cartItems' => [],
-                'totalPrice' => 0
+                'totalPrice' => 0,
+                'order' => null
             ]);
         }
 
         $order = $orders[0];
-
-        // položky v košíku
         $items = OrderItem::getAll('id_order = ?', [$order->getId()]);
 
         $cartItems = [];
@@ -50,10 +47,7 @@ class OrderController extends BaseController
 
         foreach ($items as $item) {
             $book = Book::getOne($item->getIdBook());
-
-            if (!$book) {
-                continue;
-            }
+            if (!$book) continue;
 
             $subtotal = $book->getPrice() * $item->getCountItems();
             $totalPrice += $subtotal;
@@ -65,37 +59,24 @@ class OrderController extends BaseController
             ];
         }
 
-        return $this->html(compact('cartItems', 'totalPrice'));
+        return $this->html(compact('cartItems', 'totalPrice', 'order'));
     }
-
 
     public function add(Request $request): Response
     {
         $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
-
-        if (!$sessionUser) {
-            throw new HttpException(401, "Musíš byť prihlásený.");
-        }
+        if (!$sessionUser) throw new HttpException(401, "Musíš byť prihlásený.");
 
         $userId = $sessionUser->getId();
-
-        // Získame ID knihy z GET alebo POST
         $bookId = (int)$request->value('book_id');
-        if (!$bookId) {
-            throw new HttpException(400, "Neplatné ID knihy.");
-        }
+        if (!$bookId) throw new HttpException(400, "Neplatné ID knihy.");
 
         $book = Book::getOne($bookId);
-        if (!$book) {
-            throw new HttpException(404, "Kniha nenájdená.");
-        }
-
-        $formErrors = [];
+        if (!$book) throw new HttpException(404, "Kniha nenájdená.");
 
         if ($request->isPost()) {
             $count = max(1, (int)$request->value('count', 1));
 
-            // Získame existujúcu objednávku (košík)
             $orders = Order::getAll('id_user = ? AND state = ?', [$userId, 'C']);
             if (!empty($orders)) {
                 $order = $orders[0];
@@ -109,41 +90,96 @@ class OrderController extends BaseController
                 $order->save();
             }
 
-            // Skontrolujeme, či už existuje OrderItem
             $existingItems = OrderItem::getAll('id_order = ? AND id_book = ?', [$order->getId(), $book->getId()]);
-
             if (!empty($existingItems)) {
-                // Existuje → aktualizujeme countItems
                 $orderItem = $existingItems[0];
                 $orderItem->setCountItems($orderItem->getCountItems() + $count);
 
-                // Explicitný UPDATE pre zložený PK
                 $sql = "UPDATE `order_items` 
-                    SET countItems=:countItems 
-                    WHERE id_order=:id_order AND id_book=:id_book";
-                $stmt = \Framework\DB\Connection::getInstance()->prepare($sql);
+                        SET countItems=:countItems 
+                        WHERE id_order=:id_order AND id_book=:id_book";
+                $stmt = Connection::getInstance()->prepare($sql);
                 $stmt->execute([
                     'countItems' => $orderItem->getCountItems(),
                     'id_order'   => $orderItem->getIdOrder(),
                     'id_book'    => $orderItem->getIdBook()
                 ]);
-
             } else {
-                // Neexistuje → vytvoríme nový OrderItem
                 $orderItem = new OrderItem([
                     'id_order' => $order->getId(),
                     'id_book' => $book->getId(),
                     'countItems' => $count
                 ]);
-                $orderItem->save(); // INSERT
+                $orderItem->save();
             }
 
             return $this->redirect($this->url("books.index"));
         }
 
-        // GET → zobrazíme formulár
-        return $this->html(compact('book', 'formErrors'));
+        return $this->html(compact('book'));
     }
 
+    public function removeFromCart(Request $request): Response
+    {
+        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+        if (!$sessionUser) throw new HttpException(401, "Musíš byť prihlásený.");
 
+        $userId = $sessionUser->getId();
+        $bookId = (int)$request->value('id_book');
+        $orderId = (int)$request->value('id_order');
+
+        if (!$bookId || !$orderId) throw new HttpException(400, "Neplatná kniha alebo objednávka.");
+
+        $book = Book::getOne($bookId);
+        $order = Order::getOne($orderId);
+
+        if (!$book || !$order || $order->getIdUser() != $userId || $order->getState() != 'C') {
+            throw new HttpException(400, "Neplatná kniha alebo objednávka.");
+        }
+
+        $sql = "DELETE FROM `order_items` WHERE id_order=:id_order AND id_book=:id_book";
+        $stmt = Connection::getInstance()->prepare($sql);
+        $stmt->execute([
+            'id_order' => $orderId,
+            'id_book'  => $bookId
+        ]);
+
+        return $this->redirect($this->url('order.shopCart'));
+    }
+
+    /**
+     * Aktualizácia počtu položky v košíku (+ alebo -)
+     */
+    public function updateCartItem(Request $request): Response
+    {
+        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+        if (!$sessionUser) throw new HttpException(401, "Musíš byť prihlásený.");
+
+        $userId = $sessionUser->getId();
+        $bookId = (int)$request->value('id_book');
+        $orderId = (int)$request->value('id_order');
+        $action = $request->value('action'); // "plus" alebo "minus"
+
+        if (!$bookId || !$orderId || !in_array($action, ['plus','minus'])) {
+            throw new HttpException(400, "Neplatná požiadavka.");
+        }
+
+        $orderItemList = OrderItem::getAll('id_order = ? AND id_book = ?', [$orderId, $bookId]);
+        if (empty($orderItemList)) throw new HttpException(400, "Položka nenájdená.");
+
+        $orderItem = $orderItemList[0];
+        $newCount = $orderItem->getCountItems() + ($action === 'plus' ? 1 : -1);
+        $newCount = max(1, $newCount); // minimum 1
+
+        $sql = "UPDATE `order_items` SET countItems=:countItems 
+                WHERE id_order=:id_order AND id_book=:id_book";
+        $stmt = Connection::getInstance()->prepare($sql);
+        $stmt->execute([
+            'countItems' => $newCount,
+            'id_order' => $orderId,
+            'id_book' => $bookId
+        ]);
+
+        return $this->redirect($this->url('order.shopCart'));
+    }
 }
