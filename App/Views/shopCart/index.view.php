@@ -54,7 +54,7 @@ use App\Configuration;
                     </td>
                     <td class="text-center">
                         <!-- plus/minus tlačidlá -->
-                        <form method="post" action="<?= $link->url('order.updateCartItem') ?>" style="display:inline">
+                        <form method="post" action="<?= $link->url('shopcart.updateCartItem') ?>" style="display:inline">
                             <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
                             <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
                             <input type="hidden" name="action" value="minus">
@@ -63,7 +63,7 @@ use App\Configuration;
 
                         <span class="mx-2"><?= $item['count'] ?></span>
 
-                        <form method="post" action="<?= $link->url('order.updateCartItem') ?>" style="display:inline">
+                        <form method="post" action="<?= $link->url('shopcart.updateCartItem') ?>" style="display:inline">
                             <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
                             <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
                             <input type="hidden" name="action" value="plus">
@@ -74,7 +74,7 @@ use App\Configuration;
                         <b><?= number_format($item['subtotal'], 2) ?> €</b>
                     </td>
                     <td class="text-center">
-                        <form method="post" action="<?= $link->url('order.removeFromCart') ?>">
+                        <form method="post" action="<?= $link->url('shopcart.removeFromCart') ?>">
                             <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
                             <input type="hidden" name="id_book" value="<?= $book->getId() ?>">
                             <button type="submit" class="btn btn-danger btn-sm">
@@ -102,9 +102,12 @@ use App\Configuration;
                     </span>
                 </h4>
 
-                <a href="#" class="btn btn-success btn-lg mt-2">
-                    Objednať
-                </a>
+                <form method="post" action="<?= $link->url('order.checkout') ?>">
+                    <input type="hidden" name="id_order" value="<?= $order->getId() ?>">
+                    <button type="submit" class="btn btn-success btn-lg mt-2">
+                        Objednať
+                    </button>
+                </form>
             </div>
         </div>
 
