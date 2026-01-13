@@ -15,8 +15,36 @@ class ProfileController extends BaseController
     public function index(Request $request): Response
     {
         $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
-        return $this->html(['user' => $user], 'index'); // explicitne názov view
+
+        if (!$user) {
+            return $this->html(['user' => null], 'index');
+        }
+
+        $userId = $user->getId();
+
+        // Získame všetky objednávky používateľa so stavom 'P'
+        $orders = \App\Models\Order::getAll('id_user = ? AND state = ?', [$userId, 'P']);
+
+        $orderedBooks = [];
+
+        foreach ($orders as $order) {
+            $items = \App\Models\OrderItem::getAll('id_order = ?', [$order->getId()]);
+
+            foreach ($items as $item) {
+                $book = \App\Models\Book::getOne($item->getIdBook());
+                if ($book) {
+                    $orderedBooks[] = [
+                        'book' => $book,
+                        'count' => $item->getCountItems(),
+                        'orderDate' => $order->getDate()
+                    ];
+                }
+            }
+        }
+
+        return $this->html(compact('user', 'orderedBooks'), 'index');
     }
+
 
 
     public function save(Request $request): Response

@@ -4,8 +4,7 @@ use App\Configuration;
 
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \App\Models\Book[] $books */
-
-$user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+/** @var \App\Models\User $user */
 
 ?>
 

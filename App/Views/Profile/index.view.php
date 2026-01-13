@@ -1,5 +1,6 @@
 <?php
 /** @var \App\Models\User $user */
+/** @var array $orderedBooks */
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
 
@@ -30,6 +31,40 @@
                     </div>
                 <?php endif; ?>
             </div>
+
+            <?php if (!empty($orderedBooks)): ?>
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Vaše objednané knihy</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <?php foreach ($orderedBooks as $item): ?>
+                                <?php $book = $item['book']; ?>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong><?= htmlspecialchars($book->getTitle()) ?></strong>
+                                        od <?= htmlspecialchars($book->getAuthor()) ?>
+                                    </div>
+                                    <div>
+                                        <?= $item['count'] ?> ks
+                                        <span class="text-muted ms-2">(<?= $item['orderDate'] ?>)</span>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            <?php else: ?>
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Vaše objednané knihy</h5>
+                    </div>
+                    <div class="card-body text-center text-muted">
+                        Žiadne prebiehajúce objednávky
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
