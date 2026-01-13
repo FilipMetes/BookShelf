@@ -216,34 +216,53 @@ abstract class Model implements \JsonSerializable
                 $prop = static::toPropertyName($key);
                 $item = isset($this->{$prop}) ? $this->{$prop} : null;
             }
+
             // Insert new record
             if ($this->_dbId === null) {
+
                 $arrColumns = array_map(fn($item) => (':' . $item), array_keys($data));
                 $columns = '`' . implode('`,`', array_keys($data)) . "`";
                 $params = implode(',', $arrColumns);
+
                 $sql = "INSERT INTO `" . static::getTableName() . "` ($columns) VALUES ($params)";
                 $stmt = Connection::getInstance()->prepare($sql);
                 $stmt->execute($data);
 
-                $pkPropertyName = static::toPropertyName(static::getPkColumnName());
-                if (!isset($this->{$pkPropertyName})) {
-                    $this->{$pkPropertyName} = Connection::getInstance()->lastInsertId();
-                    $this->_dbId = $this->{$pkPropertyName};
+                // 🔥 OPRAVA – len ak PK existuje
+                if (static::getPkColumnName() !== null) {
+                    $pkPropertyName = static::toPropertyName(static::getPkColumnName());
+
+                    if (property_exists($this, $pkPropertyName)) {
+                        $this->{$pkPropertyName} = Connection::getInstance()->lastInsertId();
+                        $this->_dbId = $this->{$pkPropertyName};
+                    }
                 }
+
                 // Update existing record
             } else {
+
+                // 🔥 UPDATE len ak existuje PK
+                if (static::getPkColumnName() === null) {
+                    throw new Exception("Update not supported for model without primary key");
+                }
+
                 $arrColumns = array_map(fn($item) => ("`" . $item . '`=:' . $item), array_keys($data));
                 $columns = implode(',', $arrColumns);
-                $sql = "UPDATE `" . static::getTableName() . "` SET $columns WHERE `" . static::getPkColumnName() .
-                    "`=:__pk";
+
+                $sql = "UPDATE `" . static::getTableName() . "` 
+                    SET $columns 
+                    WHERE `" . static::getPkColumnName() . "` = :__pk";
+
                 $stmt = Connection::getInstance()->prepare($sql);
                 $data["__pk"] = $this->_dbId;
                 $stmt->execute($data);
             }
+
         } catch (PDOException $exception) {
             throw new Exception('Query failed: ' . $exception->getMessage(), 0, $exception);
         }
     }
+
 
     /**
      * Deletes the current model instance from the database.
@@ -420,7 +439,7 @@ abstract class Model implements \JsonSerializable
         if (isset(self::$modelProperties[static::class])) {
             return self::$modelProperties[static::class];
         }
-        
+
         $reflection = new \ReflectionClass(static::class);
         $properties = [];
         foreach ($reflection->getProperties() as $property) {
@@ -435,7 +454,7 @@ abstract class Model implements \JsonSerializable
             }
             $properties[$propertyName] = true;
         }
-        
+
         self::$modelProperties[static::class] = $properties;
         return $properties;
     }
@@ -452,23 +471,23 @@ abstract class Model implements \JsonSerializable
         $dbColumns = [];
         $modelProperties = static::getModelProperties();
         $extraColumns = [];
-        
+
         foreach (static::getDbColumns() as $columnName) {
             $propertyName = static::toPropertyName($columnName);
-            
+
             // Check if the property exists in the model
             if (!isset($modelProperties[$propertyName])) {
                 $extraColumns[] = $columnName;
                 continue;
             }
-            
+
             if ($propertyName != $columnName) {
                 $dbColumns[] = "`$columnName` AS {$propertyName}";
             } else {
                 $dbColumns[] = $columnName;
             }
         }
-        
+
         // Throw a descriptive error if there are extra columns in the database
         if (!empty($extraColumns)) {
             $columnList = implode(', ', array_map(fn($col) => "`$col`", $extraColumns));
@@ -480,7 +499,7 @@ abstract class Model implements \JsonSerializable
                 $columnList
             ));
         }
-        
+
         return implode(', ', $dbColumns);
     }
 

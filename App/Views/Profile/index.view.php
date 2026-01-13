@@ -1,9 +1,6 @@
 <?php
-use App\Configuration;
-
+/** @var \App\Models\User $user */
 /** @var \Framework\Support\LinkGenerator $link */
-
-$user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
 ?>
 
 <div class="container my-5">

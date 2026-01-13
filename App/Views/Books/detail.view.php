@@ -12,12 +12,10 @@
 
     <div class="book-detail-frame p-4">
         <div class="row g-4">
-            <!-- Obrázok knihy mimo karty -->
             <div class="col-md-4">
                 <img src="<?= $book->getCoverPath() ?>" alt="<?= htmlspecialchars($book->getTitle()) ?>" class="img-fluid rounded shadow-sm">
             </div>
 
-            <!-- Bootstrap card s informáciami -->
             <div class="col-md-8">
                 <div class="card shadow-lg">
                     <div class="card-header bg-dark text-white">
@@ -52,6 +50,20 @@
                         <?php if ($book->getSamplePath()): ?>
                             <a href="<?= htmlspecialchars($book->getSamplePath()) ?>" class="btn btn-outline-primary" target="_blank">Ukážka knihy</a>
                         <?php endif; ?>
+
+                        <!-- Tlačidlo pre košík alebo správa o nedostupnosti -->
+                        <div class="mt-3">
+                            <?php if ($book->getNumberAvailible() > 0): ?>
+                                <a href="<?= $link->url('order.add', ['book_id' => $book->getId()]) ?>" class="btn btn-success mt-3">
+                                    Pridať do košíka
+                                </a>
+                            <?php else: ?>
+                                <span class="text-danger fw-bold">Nie je na sklade</span>
+                            <?php endif; ?>
+
+                        </div>
+
+
                     </div>
                 </div>
             </div>

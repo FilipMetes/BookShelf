@@ -54,6 +54,9 @@
                         <span class="navbar-text">Prihlásený: <b><?= htmlspecialchars($user->getName()) ?></b></span>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="<?= $link->url('order.shopCart') ?>"> Košík</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= $link->url('profile.index') ?>">Profil</a>
                     </li>
                     <li class="nav-item">

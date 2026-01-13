@@ -11,10 +11,13 @@ use Framework\Http\HttpException;
 
 class ProfileController extends BaseController
 {
+    // Controller
     public function index(Request $request): Response
     {
-        return $this->html();
+        $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+        return $this->html(['user' => $user], 'index'); // explicitne názov view
     }
+
 
     public function save(Request $request): Response
     {
