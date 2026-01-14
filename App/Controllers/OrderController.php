@@ -23,9 +23,13 @@ class OrderController extends BaseController
     public function checkout(Request $request): Response
     {
         $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+
         if (!$user) {
-            throw new HttpException(401, "Pre objednávku sa musíš prihlásiť.");
+            // namiesto výnimky
+            $this->app->getSession()->set('flash_message', 'Musíte byť prihlásený, aby ste mohli pokračovať v objednávke.');
+            return $this->redirect($this->url('shopcart.index'));
         }
+
 
         $cart = $this->app->getSession()->get('cart');
         if (empty($cart)) {

@@ -4,7 +4,7 @@ use App\Configuration;
 
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \App\Models\Book[] $books */
-/** @var \App\Models\User $user */
+/** @var \Framework\Auth\AppUser $user */
 
 ?>
 
@@ -49,27 +49,28 @@ use App\Configuration;
                     <div class="filter-section mt-3 format-section">
                         <h6 class="filter-heading">Formát</h6>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Elektronicky" id="format-e">
+                            <input class="form-check-input" type="checkbox" value="E" id="format-e">
                             <label class="form-check-label" for="format-e">Elektronický</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="Fyzicky" id="format-p">
+                            <input class="form-check-input" type="checkbox" value="F" id="format-p">
                             <label class="form-check-label" for="format-p">Fyzický</label>
                         </div>
                     </div>
 
                     <!-- Cena filter -->
+                    <!-- Cena filter -->
                     <div class="filter-section mt-3 price-section">
                         <h6 class="filter-heading">Cena (€)</h6>
-                        <div class="price-slider">
-                            <label for="priceRange" class="visually-hidden">Maximálna cena</label>
+                        <div class="d-flex flex-column">
                             <input type="range" class="form-range" min="0" max="200" step="1" id="priceRange" value="50">
                             <div class="d-flex justify-content-between mt-1 small text-muted">
-                                <span>0€</span>
-                                <span>200€</span>
+                                <span id="priceCurrent">50€</span> <!-- Aktuálna hodnota slidera -->
+                                <span>200€</span> <!-- Max -->
                             </div>
                         </div>
                     </div>
+
 
                     <div class="mt-3">
                         <button type="button" class="btn btn-primary btn-sm">Použiť filtre</button>
@@ -103,7 +104,12 @@ use App\Configuration;
                 <?php else: ?>
                     <?php foreach ($books as $book): ?>
                         <div class="col-6 col-md-4 col-lg-3">
-                            <div class="card book-card h-100">
+                            <div class="card book-card h-100"
+                                 data-format="<?= htmlspecialchars($book->getFormat()) ?>"
+                                 data-genre="<?= htmlspecialchars($book->getGenre()) ?>"
+                                 data-author="<?= htmlspecialchars($book->getAuthor()) ?>"
+                                 data-price="<?= htmlspecialchars($book->getPrice()) ?>">
+
                                 <img src="<?= $book->getCoverPath() ?>"
                                      alt="<?= htmlspecialchars($book->getTitle()) ?>"
                                      class="book-cover-img">
@@ -111,14 +117,14 @@ use App\Configuration;
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h5>
                                     <p class="book-author mb-1"><?= htmlspecialchars($book->getAuthor()) ?></p>
-                                    <p class="book-genre text-muted mb-2">
-                                        <?= $book->getGenre() ? 'Žáner: ' . htmlspecialchars($book->getGenre()) : '' ?>
+                                    <p class="book-genre text-muted mb-1"><?= htmlspecialchars($book->getGenre()) ?></p>
+                                    <p class="book-format text-muted mb-2">
+                                        <?= htmlspecialchars($book->getFormat() === 'E' ? 'Elektronický' : ($book->getFormat() === 'F' ? 'Fyzický' : $book->getFormat())) ?>
                                     </p>
 
+
                                     <div class="mt-auto">
-                                        <?php if ($book->getPrice()): ?>
-                                            <strong class="book-price d-block mb-2">€<?= htmlspecialchars($book->getPrice()) ?></strong>
-                                        <?php endif; ?>
+                                        <strong class="book-price d-block mb-2">€<?= htmlspecialchars($book->getPrice()) ?></strong>
 
                                         <div class="d-flex flex-wrap gap-1">
                                             <a class="btn btn-outline-secondary btn-sm"
@@ -139,15 +145,18 @@ use App\Configuration;
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+
 
             </div>
         </main>
     </div>
 
 </div>
+<script src="<?= $link->asset('js/filterBooks.js') ?>"></script>
 
 <script src="<?= $link->asset('js/searchBook.js') ?>"></script>

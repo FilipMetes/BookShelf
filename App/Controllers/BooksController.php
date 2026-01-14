@@ -26,7 +26,7 @@ class BooksController extends BaseController
                 $isAdmin = $user->isAdmin();
             }
 
-            return $this->html(compact('books', 'user', 'isAdmin'));
+            return $this->html(compact('books', 'isAdmin'));
 
         } catch (Exception $e) {
             throw new HttpException(500, "DB Chyba: " . $e->getMessage());

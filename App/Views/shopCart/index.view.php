@@ -8,6 +8,14 @@
 
     <h1 class="mb-4">🛒 Nákupný košík</h1>
 
+    <!-- Flash správa -->
+    <?php if ($this->app->getSession()->get('flash_message')): ?>
+        <div class="alert alert-warning">
+            <?= htmlspecialchars($this->app->getSession()->get('flash_message')) ?>
+        </div>
+        <?php $this->app->getSession()->remove('flash_message'); ?>
+    <?php endif; ?>
+
     <?php if (empty($cartItems)): ?>
         <div class="alert alert-info">
             Košík je momentálne prázdny.

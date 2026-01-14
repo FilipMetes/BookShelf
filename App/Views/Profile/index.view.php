@@ -1,5 +1,5 @@
 <?php
-/** @var \App\Models\User $user */
+/** @var \Framework\Auth\AppUser $user */
 /** @var array $orderedBooks */
 /** @var \Framework\Support\LinkGenerator $link */
 ?>

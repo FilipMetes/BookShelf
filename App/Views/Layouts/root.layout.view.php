@@ -49,12 +49,12 @@
             </ul>
 
             <ul class="navbar-nav ms-auto d-flex align-items-center">
-                <!-- Košík je teraz vždy viditeľný -->
-                <li class="nav-item">
+                <!-- Košík je vždy viditeľný -->
+                <li class="nav-item me-3">
                     <a class="nav-link" href="<?= $link->url('shopCart.index') ?>">🛒 Košík</a>
                 </li>
 
-                <?php if ($user->isLoggedIn()) { ?>
+                <?php if ($user && $user->isLoggedIn()) { ?>
                     <li class="nav-item me-3 d-flex align-items-center">
                         <span class="navbar-text">Prihlásený: <b><?= htmlspecialchars($user->getName()) ?></b></span>
                     </li>
@@ -70,6 +70,8 @@
                     </li>
                 <?php } ?>
             </ul>
+
+
         </div>
     </div>
 </nav>
