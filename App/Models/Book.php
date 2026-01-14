@@ -72,6 +72,16 @@ class Book extends Model
 
     public function setCoverPath(?string $v): void { $this->cover_path = $v; }
 
+    /**
+     * @throws Exception
+     */
+    public static function getDistinctAuthors(): array
+    {
+        $rows = static::executeRawSQL("SELECT DISTINCT author FROM `" . static::getTableName() . "` ORDER BY author ASC");
+        return array_column($rows, 'author');
+    }
+
+
 
 }
 

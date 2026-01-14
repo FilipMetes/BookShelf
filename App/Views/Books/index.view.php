@@ -6,6 +6,8 @@ use App\Configuration;
 /** @var \App\Models\Book[] $books */
 /** @var \Framework\Auth\AppUser $user */
 
+use App\Models\Genres;
+
 ?>
 
 <div class="container books-catalog my-4">
@@ -20,30 +22,30 @@ use App\Configuration;
                     <!-- Žáner filter -->
                     <div class="filter-section">
                         <h6 class="filter-heading">Žáner</h6>
-                        <?php
-                        $genres = ['Horror', 'Akčné', 'Romantické', 'Sci‑Fi', 'Fantasy', 'Mystery', 'Non‑fiction', 'Thriller'];
-                        foreach ($genres as $genre):
-                            ?>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= strtolower($genre) ?>">
-                                <label class="form-check-label" for="genre-<?= strtolower($genre) ?>"><?= $genre ?></label>
-                            </div>
+                        <?php foreach(Genres::all() as $genre): ?>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= strtolower($genre) ?>">
+                            <label class="form-check-label" for="genre-<?= strtolower($genre) ?>"><?= $genre ?></label>
+                        </div>
                         <?php endforeach; ?>
+
                     </div>
 
                     <!-- Autor filter -->
                     <div class="filter-section mt-3">
                         <h6 class="filter-heading">Autor</h6>
-                        <?php
-                        $authors = ['Stephen King', 'Agatha Christie', 'J.K. Rowling', 'George R.R. Martin', 'Isaac Asimov', 'Dan Brown'];
-                        foreach ($authors as $author):
-                            ?>
+                        <?php foreach(\App\Models\Book::getDistinctAuthors() as $author): ?>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="<?= $author ?>" id="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
-                                <label class="form-check-label" for="author-<?= strtolower(str_replace(' ', '-', $author)) ?>"><?= $author ?></label>
+                                <input class="form-check-input" type="checkbox"
+                                       value="<?= htmlspecialchars($author) ?>"
+                                       id="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
+                                <label class="form-check-label" for="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
+                                    <?= htmlspecialchars($author) ?>
+                                </label>
                             </div>
                         <?php endforeach; ?>
                     </div>
+
 
                     <!-- Formát filter -->
                     <div class="filter-section mt-3 format-section">

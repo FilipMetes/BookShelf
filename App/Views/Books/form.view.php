@@ -2,6 +2,8 @@
 /** @var Framework\Support\LinkGenerator $link */
 /** @var \App\Models\Book $book */
 /** @var array $formErrors */
+
+use App\Models\Genres;
 ?>
 
 <div class="container my-5">
@@ -39,8 +41,17 @@
 
                         <div class="mb-3">
                             <label for="genre" class="form-label">Žáner</label>
-                            <input type="text" name="genre" id="genre" class="form-control" value="<?= htmlspecialchars($book->getGenre() ?? '') ?>">
+                            <select name="genre" id="genre" class="form-select">
+                                <option value="">Vyberte žáner</option>
+                                <?php foreach(\App\Models\Genres::all() as $g): ?>
+                                    <option value="<?= htmlspecialchars($g) ?>" <?= $book->getGenre() === $g ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($g) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
+
+
 
                         <div class="mb-3">
                             <label class="form-label">Formát knihy</label>

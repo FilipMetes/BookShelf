@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Configuration;
 use App\Models\Book;
+use App\Models\Genres;
 use Exception;
 use Framework\Core\BaseController;
 use Framework\Http\HttpException;
@@ -69,7 +70,6 @@ class BooksController extends BaseController
             return $this->redirect('books.index'); // alebo 404
         }
 
-        // Tu sa zobrazí samostatná stránka detail knihy
         return $this->html(['book' => $book]);
     }
 
@@ -97,7 +97,7 @@ class BooksController extends BaseController
             );
         }
 
-        // TEXTOVÉ POLIA až po validácii
+        // Naplnenie objektu až po validácii
         $book->setTitle($request->value('title'));
         $book->setAuthor($request->value('author'));
         $book->setGenre($request->value('genre'));
@@ -168,22 +168,26 @@ class BooksController extends BaseController
     {
         $errors = [];
 
+        // Kontrola názvu
         if ($request->value('title') == "") {
             $errors[] = "Názov knihy musí byť vyplnený.";
         }
 
-        if ($request->value('genre') == "") {
-            $errors[] = "Žáner musí byť vyplnený.";
+        // Kontrola žánru
+        $genre = $request->value('genre');
+        if (!$genre || !in_array($genre, Genres::all())) {
+            $errors[] = "Vybraný žáner nie je platný.";
         }
 
+        // Kontrola autora
         if ($request->value('author') == "") {
             $errors[] = "Autor musí byť vyplnený.";
         }
 
-        // UNIKÁTNY názov + autor
+        // Unikátny názov + autor
         $title = $request->value('title');
         $author = $request->value('author');
-        $id = (int)$request->value('id'); // ak editujeme, ignorujeme aktuálny záznam
+        $id = (int)$request->value('id');
 
         if ($title && $author) {
             $existing = Book::getAll(
@@ -196,12 +200,13 @@ class BooksController extends BaseController
             }
         }
 
+        // Kontrola formátu
         $format = $request->value('format');
-        if ($format === null || $format === '') {
-            $errors[] = "Formát musí byť vyplnený.";
+        if ($format === null || $format === '' || !in_array($format, ['E','F'])) {
+            $errors[] = "Formát musí byť vyplnený a platný.";
         }
 
-        // kontrola typu cover obrázka
+        // Kontrola typu cover obrázka
         $file = $request->file('cover');
         if ($file && $file->getName() != "" &&
             !in_array($file->getType(), ['image/jpeg', 'image/png'])) {
@@ -210,5 +215,4 @@ class BooksController extends BaseController
 
         return $errors;
     }
-
 }
