@@ -1,6 +1,7 @@
 <?php
 /** @var \App\Models\Book $book */
 /** @var \Framework\Support\LinkGenerator $link */
+/** @var \Framework\Http\Session $session */
 ?>
 
 <div class="container my-4">
@@ -52,15 +53,17 @@
                         <?php endif; ?>
 
                         <!-- Tlačidlo pre košík alebo správa o nedostupnosti -->
+                        <!-- Tlačidlo pre košík alebo správa o nedostupnosti -->
                         <div class="mt-3">
                             <?php if ($book->getNumberAvailible() > 0): ?>
-                                <a href="<?= $link->url('order.add', ['book_id' => $book->getId()]) ?>" class="btn btn-success mt-3">
-                                    Pridať do košíka
-                                </a>
+                                <form method="post" action="<?= $link->url('shopcart.add', ['book_id' => $book->getId()]) ?>">
+                                    <button type="submit" class="btn btn-success mt-3">
+                                        Pridať do košíka
+                                    </button>
+                                </form>
                             <?php else: ?>
                                 <span class="text-danger fw-bold">Nie je na sklade</span>
                             <?php endif; ?>
-
                         </div>
 
 

@@ -63,6 +63,11 @@ class User extends Model implements IIdentity
         return $this->city;
     }
 
+    public function isLoggedIn(): bool
+    {
+        return $this->id !== null;
+    }
+
     public function setCity(?string $city): void
     {
         $this->city = $city;

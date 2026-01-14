@@ -91,7 +91,7 @@ use App\Configuration;
                     <button type="button" id="searchButton" class="btn btn-primary btn-sm">Vyhľadať</button>
                 </div>
 
-                <?php if ($user?->isAdmin()): ?>
+                <?php if (($isAdmin ?? false)): ?>
                     <a href="<?= $link->url('books.add') ?>" class="btn btn-success ms-3">Pridať knihu</a>
                 <?php endif; ?>
             </div>
@@ -126,7 +126,7 @@ use App\Configuration;
                                                 Detail
                                             </a>
 
-                                            <?php if ($user?->isAdmin()): ?>
+                                            <?php if ($isAdmin): ?>
                                                 <a class="btn btn-outline-primary btn-sm"
                                                    href="<?= $link->url('books.edit', ['id' => $book->getId()]) ?>">
                                                     Upraviť

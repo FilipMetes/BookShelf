@@ -48,13 +48,15 @@
                 </li>
             </ul>
 
-            <?php if ($user->isLoggedIn()) { ?>
-                <ul class="navbar-nav ms-auto d-flex align-items-center">
+            <ul class="navbar-nav ms-auto d-flex align-items-center">
+                <!-- Košík je teraz vždy viditeľný -->
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= $link->url('shopCart.index') ?>">🛒 Košík</a>
+                </li>
+
+                <?php if ($user->isLoggedIn()) { ?>
                     <li class="nav-item me-3 d-flex align-items-center">
                         <span class="navbar-text">Prihlásený: <b><?= htmlspecialchars($user->getName()) ?></b></span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= $link->url('shopCart.index') ?>"> Košík</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= $link->url('profile.index') ?>">Profil</a>
@@ -62,14 +64,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="<?= $link->url('auth.logout') ?>">Log out</a>
                     </li>
-                </ul>
-            <?php } else { ?>
-                <ul class="navbar-nav ms-auto">
+                <?php } else { ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= App\Configuration::LOGIN_URL ?>">Log in</a>
                     </li>
-                </ul>
-            <?php } ?>
+                <?php } ?>
+            </ul>
         </div>
     </div>
 </nav>

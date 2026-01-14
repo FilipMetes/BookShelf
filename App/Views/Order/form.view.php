@@ -19,7 +19,7 @@
         </div>
     <?php endif; ?>
 
-    <form method="post" action="<?= $link->url('order.add') ?>">
+    <form method="post" action="<?= $link->url('shopcart.add') ?>">
         <input type="hidden" name="book_id" value="<?= $book->getId() ?>">
 
         <div class="mb-3">

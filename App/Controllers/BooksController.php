@@ -21,7 +21,13 @@ class BooksController extends BaseController
             $books = Book::getAll();
             $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
 
-            return $this->html(compact('books', 'user'));
+            $isAdmin = false;
+            if ($user && $user->isLoggedIn()) {
+                $isAdmin = $user->isAdmin();
+            }
+
+            return $this->html(compact('books', 'user', 'isAdmin'));
+
         } catch (Exception $e) {
             throw new HttpException(500, "DB Chyba: " . $e->getMessage());
         }

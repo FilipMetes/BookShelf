@@ -2,121 +2,90 @@
 
 namespace App\Controllers;
 
-use App\Configuration;
-use App\Models\Order;
 use App\Models\Book;
-use App\Models\OrderItem;
-use Exception;
 use Framework\Core\BaseController;
 use Framework\Http\HttpException;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
-use Framework\DB\Connection;
 
 class ShopCartController extends BaseController
 {
     public function index(Request $request): Response
     {
-        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
-
-        if (!$sessionUser) {
-            throw new HttpException(401, "Musíš byť prihlásený.");
-        }
-
-        $userId = $sessionUser->getId();
-        $orders = Order::getAll('id_user = ? AND state = ?', [$userId, 'C']);
-
-        if (empty($orders)) {
-            return $this->html([
-                'cartItems' => [],
-                'totalPrice' => 0,
-                'order' => null
-            ]);
-        }
-
-        $order = $orders[0];
-        $items = OrderItem::getAll('id_order = ?', [$order->getId()]);
+        $cart = $this->app->getSession()->get('cart') ?? [];
 
         $cartItems = [];
         $totalPrice = 0;
 
-        foreach ($items as $item) {
-            $book = Book::getOne($item->getIdBook());
+        foreach ($cart as $bookId => $count) {
+            $book = Book::getOne($bookId);
             if (!$book) continue;
 
-            $subtotal = $book->getPrice() * $item->getCountItems();
+            $subtotal = $book->getPrice() * $count;
             $totalPrice += $subtotal;
 
             $cartItems[] = [
                 'book' => $book,
-                'count' => $item->getCountItems(),
+                'count' => $count,
                 'subtotal' => $subtotal
             ];
         }
 
-        return $this->html(compact('cartItems', 'totalPrice', 'order'));
+        return $this->html(compact('cartItems', 'totalPrice'));
     }
 
-    public function removeFromCart(Request $request): Response
+    public function add(Request $request): Response
     {
-        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
-        if (!$sessionUser) throw new HttpException(401, "Musíš byť prihlásený.");
+        $bookId = (int)$request->value('book_id');
+        $count  = max(1, (int)$request->value('count', 1));
 
-        $userId = $sessionUser->getId();
-        $bookId = (int)$request->value('id_book');
-        $orderId = (int)$request->value('id_order');
-
-        if (!$bookId || !$orderId) throw new HttpException(400, "Neplatná kniha alebo objednávka.");
-
-        $book = Book::getOne($bookId);
-        $order = Order::getOne($orderId);
-
-        if (!$book || !$order || $order->getIdUser() != $userId || $order->getState() != 'C') {
-            throw new HttpException(400, "Neplatná kniha alebo objednávka.");
+        if (!$bookId) {
+            throw new HttpException(400, "Neplatná kniha.");
         }
 
-        $sql = "DELETE FROM `order_items` WHERE id_order=:id_order AND id_book=:id_book";
-        $stmt = Connection::getInstance()->prepare($sql);
-        $stmt->execute([
-            'id_order' => $orderId,
-            'id_book'  => $bookId
-        ]);
+        $book = Book::getOne($bookId);
+        if (!$book) {
+            throw new HttpException(404, "Kniha neexistuje.");
+        }
+
+        $cart = $this->app->getSession()->get('cart') ?? [];
+        $cart[$bookId] = ($cart[$bookId] ?? 0) + $count;
+
+        $this->app->getSession()->set('cart', $cart);
 
         return $this->redirect($this->url('shopcart.index'));
     }
 
-    /**
-     * Aktualizácia počtu položky v košíku (+ alebo -)
-     */
-    public function updateCartItem(Request $request): Response
+    public function remove(Request $request): Response
     {
-        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
-        if (!$sessionUser) throw new HttpException(401, "Musíš byť prihlásený.");
+        $bookId = (int)$request->value('book_id');
 
-        $userId = $sessionUser->getId();
-        $bookId = (int)$request->value('id_book');
-        $orderId = (int)$request->value('id_order');
-        $action = $request->value('action'); // "plus" alebo "minus"
+        $cart = $this->app->getSession()->get('cart') ?? [];
+        unset($cart[$bookId]);
 
-        if (!$bookId || !$orderId || !in_array($action, ['plus','minus'])) {
-            throw new HttpException(400, "Neplatná požiadavka.");
+        $this->app->getSession()->set('cart', $cart);
+
+        return $this->redirect($this->url('shopcart.index'));
+    }
+
+    public function update(Request $request): Response
+    {
+        $bookId = (int)$request->value('book_id');
+        $action = $request->value('action');
+
+        $cart = $this->app->getSession()->get('cart') ?? [];
+
+        if (!isset($cart[$bookId])) {
+            throw new HttpException(400, "Položka v košíku neexistuje.");
         }
 
-        $orderItemList = OrderItem::getAll('id_order = ? AND id_book = ?', [$orderId, $bookId]);
-        if (empty($orderItemList)) throw new HttpException(400, "Položka nenájdená.");
+        if ($action === 'plus') {
+            $cart[$bookId]++;
+        } elseif ($action === 'minus') {
+            $cart[$bookId] = max(1, $cart[$bookId] - 1);
+        }
 
-        $orderItem = $orderItemList[0];
-        $newCount = $orderItem->getCountItems() + ($action === 'plus' ? 1 : -1);
-        $newCount = max(1, $newCount); // minimum 1
-
-        $sql = "UPDATE `order_items` SET countItems=:countItems 
-                WHERE id_order=:id_order AND id_book=:id_book";
-        $stmt = Connection::getInstance()->prepare($sql);
-        $stmt->execute([
-            'countItems' => $newCount,
-            'id_order' => $orderId,
-            'id_book' => $bookId
-        ]);
+        $this->app->getSession()->set('cart', $cart);
 
         return $this->redirect($this->url('shopcart.index'));
     }
