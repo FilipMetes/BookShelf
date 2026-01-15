@@ -51,8 +51,8 @@ class BooksController extends BaseController
         $id = (int)$request->value('id');
         $book = Book::getOne($id);
 
-        if (is_null($book)) {
-            return $this->redirect('books.index');
+        if (!$book) {
+            return $this->redirect($this->url('books.index'));
         }
 
         return $this->html(compact('book'));
@@ -67,8 +67,9 @@ class BooksController extends BaseController
 
         $book = Book::getOne($id);
         if (!$book) {
-            return $this->redirect('books.index'); // alebo 404
+            return $this->redirect($this->url('books.index'));
         }
+
 
         return $this->html(['book' => $book]);
     }
@@ -146,14 +147,18 @@ class BooksController extends BaseController
         $book = Book::getOne($id);
 
         if (!$book) {
-            throw new HttpException(404);
+            return $this->redirect($this->url('books.index'));
         }
 
         if ($book->getCoverPath()) {
             @unlink(Configuration::UPLOAD_DIR . $book->getCoverPath());
         }
 
-        $book->delete();
+        try {
+            $book->delete();
+        } catch (Exception $e) {
+            return $this->redirect($this->url('books.index'));
+        }
 
         return $this->redirect($this->url("books.index"));
     }
