@@ -49,7 +49,7 @@ class ShopCartController extends BaseController
 
         $book = Book::getOne($bookId);
         if (!$book) {
-            throw new HttpException(404, "Kniha neexistuje.");
+            return $this->redirect($this->url("books.index"));
         }
 
         $cart = $this->app->getSession()->get('cart') ?? [];

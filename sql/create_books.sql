@@ -5,7 +5,7 @@ CREATE OR REPLACE TABLE books (
                                      genre VARCHAR(20) NOT NULL,
                                      format CHAR(1) NOT NULL,
                                      year INT(11) NOT NULL,
-                                     price DECIMAL(10,0) NOT NULL,
+                                     price DECIMAL(10,2) NOT NULL,
                                      number_availible INT(11) NOT NULL,
                                      pages INT(11) NOT NULL,
                                      text TEXT NULL,

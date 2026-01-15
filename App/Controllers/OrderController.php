@@ -68,6 +68,7 @@ class OrderController extends BaseController
         // položky objednávky + odpis zo skladu
         foreach ($cart as $bookId => $count) {
             $book = Book::getOne($bookId);
+            if (!$book) continue;
             $orderItem = new OrderItem([
                 'id_order' => $order->getId(),
                 'id_book' => $bookId,
