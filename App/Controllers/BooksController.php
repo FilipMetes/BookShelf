@@ -23,7 +23,7 @@ class BooksController extends BaseController
             $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
 
             $isAdmin = false;
-            if ($user && $user->isLoggedIn()) {
+            if ($user) {
                 $isAdmin = $user->isAdmin();
             }
 
@@ -52,7 +52,7 @@ class BooksController extends BaseController
         $book = Book::getOne($id);
 
         if (is_null($book)) {
-            throw new HttpException(404);
+            return $this->redirect('books.index');
         }
 
         return $this->html(compact('book'));
@@ -91,10 +91,7 @@ class BooksController extends BaseController
         // VALIDÁCIA formulára
         $formErrors = $this->formErrors($request);
         if (count($formErrors) > 0) {
-            return $this->html(
-                compact('book', 'formErrors'),
-                ($id > 0 ? 'edit' : 'add')
-            );
+            return $this->html(compact('book', 'formErrors'), 'form');
         }
 
         // Naplnenie objektu až po validácii

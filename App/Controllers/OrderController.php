@@ -33,21 +33,28 @@ class OrderController extends BaseController
 
         $cart = $this->app->getSession()->get('cart');
         if (empty($cart)) {
-            throw new HttpException(400, "Košík je prázdny.");
+            $this->app->getSession()->set('errors', [
+                'Košík je prázdny. Nie je možné vytvoriť objednávku.'
+            ]);
+            return $this->redirect($this->url('shopcart.index'));
         }
 
-        // kontrola skladu
+        $errors = [];
+
         foreach ($cart as $bookId => $count) {
             $book = Book::getOne($bookId);
             if (!$book) continue;
 
             if ($book->getNumberAvailible() < $count) {
-                throw new HttpException(
-                    400,
-                    "Nie je dostatok kusov knihy: " . $book->getTitle()
-                );
+                $errors[] = 'Nie je dostatok kusov knihy: ' . $book->getTitle();
             }
         }
+
+        if (!empty($errors)) {
+            $this->app->getSession()->set('errors', $errors);
+            return $this->redirect($this->url('shopcart.index'));
+        }
+
 
         // vytvorenie objednávky
         $order = new Order([
@@ -61,16 +68,15 @@ class OrderController extends BaseController
         // položky objednávky + odpis zo skladu
         foreach ($cart as $bookId => $count) {
             $book = Book::getOne($bookId);
-
-            (new OrderItem([
+            $orderItem = new OrderItem([
                 'id_order' => $order->getId(),
                 'id_book' => $bookId,
                 'countItems' => $count
-            ]))->save();
+            ]);
 
-            $book->setNumberAvailible(
-                $book->getNumberAvailible() - $count
-            );
+            $orderItem->save();
+
+            $book->setNumberAvailible($book->getNumberAvailible() - $count);
             $book->save();
         }
 

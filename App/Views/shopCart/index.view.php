@@ -16,6 +16,16 @@
         <?php $this->app->getSession()->remove('flash_message'); ?>
     <?php endif; ?>
 
+    <?php if (!empty($errors)) { ?>
+        <div class="alert alert-danger">
+            <ul>
+                <?php foreach ($errors as $e) { ?>
+                    <li><?= htmlspecialchars($e) ?></li>
+                <?php } ?>
+            </ul>
+        </div>
+    <?php } ?>
+
     <?php if (empty($cartItems)): ?>
         <div class="alert alert-info">
             Košík je momentálne prázdny.

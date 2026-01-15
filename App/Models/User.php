@@ -63,11 +63,6 @@ class User extends Model implements IIdentity
         return $this->city;
     }
 
-    public function isLoggedIn(): bool
-    {
-        return $this->id !== null;
-    }
-
     public function setCity(?string $city): void
     {
         $this->city = $city;
@@ -138,29 +133,11 @@ class User extends Model implements IIdentity
      */
     public static function findByEmail(string $email): ?self
     {
-        // Use Model::executeRawSQL to avoid direct fetch() on statement wrappers
-        $rows = self::executeRawSQL(
-            "SELECT id, name, surname, city, PSC, street, e_mail, password, role FROM users WHERE e_mail = :email LIMIT 1",
-            [':email' => $email]
-        );
+        $users = self::getAll("e_mail = ?", [$email], null, 1);
 
-        if (empty($rows)) {
-            return null;
-        }
-
-        $row = $rows[0];
-        return new self([
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'surname' => $row['surname'],
-            'city' => $row['city'],
-            'PSC' => $row['PSC'],
-            'street' => $row['street'],
-            'e_mail' => $row['e_mail'],
-            'password' => $row['password'],
-            'role' => $row['role']
-        ]);
+        return $users[0] ?? null;
     }
+
 
     public function isAdmin(): bool
     {

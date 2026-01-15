@@ -14,6 +14,9 @@ class ShopCartController extends BaseController
     {
         $cart = $this->app->getSession()->get('cart') ?? [];
 
+        $errors = $this->app->getSession()->get('errors') ?? [];
+        $this->app->getSession()->remove('errors'); // flash správanie
+
         $cartItems = [];
         $totalPrice = 0;
 
@@ -31,8 +34,9 @@ class ShopCartController extends BaseController
             ];
         }
 
-        return $this->html(compact('cartItems', 'totalPrice'));
+        return $this->html(compact('cartItems', 'totalPrice', 'errors'));
     }
+
 
     public function add(Request $request): Response
     {
@@ -76,7 +80,7 @@ class ShopCartController extends BaseController
         $cart = $this->app->getSession()->get('cart') ?? [];
 
         if (!isset($cart[$bookId])) {
-            throw new HttpException(400, "Položka v košíku neexistuje.");
+            return $this->redirect($this->url('shopcart.index'));
         }
 
         if ($action === 'plus') {

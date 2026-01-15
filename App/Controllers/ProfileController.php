@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Configuration;
 use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Book;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -23,15 +26,15 @@ class ProfileController extends BaseController
         $userId = $user->getId();
 
         // Získame všetky objednávky používateľa so stavom 'P'
-        $orders = \App\Models\Order::getAll('id_user = ? AND state = ?', [$userId, 'P']);
+        $orders = Order::getAll('id_user = ? AND state = ?', [$userId, 'P']);
 
         $orderedBooks = [];
 
         foreach ($orders as $order) {
-            $items = \App\Models\OrderItem::getAll('id_order = ?', [$order->getId()]);
+            $orderitems = OrderItem::getAll('id_order = ?', [$order->getId()]);
 
-            foreach ($items as $item) {
-                $book = \App\Models\Book::getOne($item->getIdBook());
+            foreach ($orderitems as $item) {
+                $book = Book::getOne($item->getIdBook());
                 if ($book) {
                     $orderedBooks[] = [
                         'book' => $book,
@@ -42,10 +45,25 @@ class ProfileController extends BaseController
             }
         }
 
-        return $this->html(compact('user', 'orderedBooks'), 'index');
+        return $this->html(compact('user', 'orderedBooks'));
     }
 
+    public function edit(Request $request): Response
+    {
+        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
 
+        if (!$sessionUser) {
+            throw new HttpException(401, "Musíš byť prihlásený.");
+        }
+
+        $user = User::getOne($sessionUser->getId());
+
+        if (!$user) {
+            throw new HttpException(404, "Používateľ nenájdený.");
+        }
+
+        return $this->html(compact('user'), 'form');
+    }
 
     public function save(Request $request): Response
     {
@@ -61,7 +79,7 @@ class ProfileController extends BaseController
             throw new HttpException(404, "Používateľ nenájdený.");
         }
 
-        $errors = $this->validateForm($request);
+        $errors = $this->formErrors($request);
         if (!empty($errors)) {
             return $this->html(compact('user', 'errors'), 'form');
         }
@@ -86,24 +104,7 @@ class ProfileController extends BaseController
         return $this->html(compact('user', 'success'), 'index');
     }
 
-    public function edit(Request $request): Response
-    {
-        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
-
-        if (!$sessionUser) {
-            throw new HttpException(401, "Musíš byť prihlásený.");
-        }
-
-        $user = User::getOne($sessionUser->getId());
-
-        if (!$user) {
-            throw new HttpException(404, "Používateľ nenájdený.");
-        }
-
-        return $this->html(compact('user'), 'form');
-    }
-
-    private function validateForm(Request $request): array
+    private function formErrors(Request $request): array
     {
         $errors = [];
 

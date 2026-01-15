@@ -7,6 +7,7 @@ use App\Configuration;
 /** @var \Framework\Auth\AppUser $user */
 
 use App\Models\Genres;
+use  App\Models\Book;
 
 ?>
 
@@ -24,8 +25,8 @@ use App\Models\Genres;
                         <h6 class="filter-heading">Žáner</h6>
                         <?php foreach(Genres::all() as $genre): ?>
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= strtolower($genre) ?>">
-                            <label class="form-check-label" for="genre-<?= strtolower($genre) ?>"><?= $genre ?></label>
+                            <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= $genre ?>">
+                            <label class="form-check-label" for="genre-<?= $genre ?>"><?= $genre ?></label>
                         </div>
                         <?php endforeach; ?>
 
@@ -34,7 +35,7 @@ use App\Models\Genres;
                     <!-- Autor filter -->
                     <div class="filter-section mt-3">
                         <h6 class="filter-heading">Autor</h6>
-                        <?php foreach(\App\Models\Book::getDistinctAuthors() as $author): ?>
+                        <?php foreach(Book::getDistinctAuthors() as $author): ?>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox"
                                        value="<?= htmlspecialchars($author) ?>"
@@ -75,8 +76,12 @@ use App\Models\Genres;
 
 
                     <div class="mt-3">
-                        <button type="button" class="btn btn-primary btn-sm">Použiť filtre</button>
-                        <button type="button" class="btn btn-link btn-sm text-muted">Vymazať</button>
+                        <button type="button" id="applyFilters" class="btn btn-primary btn-sm">
+                            Použiť filtre
+                        </button>
+                        <button type="button" id="resetFilters" class="btn btn-link btn-sm text-muted">
+                            Vymazať
+                        </button>
                     </div>
                 </div>
             </div>
@@ -91,7 +96,9 @@ use App\Models\Genres;
                 <div class="search-wrap d-flex align-items-center gap-2">
                     <label for="bookSearch" class="visually-hidden">Vyhľadať</label>
                     <input id="bookSearch" class="form-control" type="search" placeholder="Vyhľadať knihu podľa názvu">
-                    <button type="button" id="searchButton" class="btn btn-primary btn-sm">Vyhľadať</button>
+                    <button type="button" id="searchButton" class="btn btn-primary btn-sm">
+                        Vyhľadať
+                    </button>
                 </div>
 
                 <?php if (($isAdmin ?? false)): ?>
@@ -120,7 +127,7 @@ use App\Models\Genres;
                                     <h5 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h5>
                                     <p class="book-author mb-1"><?= htmlspecialchars($book->getAuthor()) ?></p>
                                     <p class="book-genre text-muted mb-1"><?= htmlspecialchars($book->getGenre()) ?></p>
-                                    <p class="book-format text-muted mb-2">
+                                    <p class="book-format text-muted mb-1">
                                         <?= htmlspecialchars($book->getFormat() === 'E' ? 'Elektronický' : ($book->getFormat() === 'F' ? 'Fyzický' : $book->getFormat())) ?>
                                     </p>
 
@@ -160,5 +167,3 @@ use App\Models\Genres;
 
 </div>
 <script src="<?= $link->asset('js/filterBooks.js') ?>"></script>
-
-<script src="<?= $link->asset('js/searchBook.js') ?>"></script>

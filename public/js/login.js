@@ -1,37 +1,39 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const loginForm = document.querySelector('.form-signin');
-    const usernameInput = document.getElementById('username');
-    const passwordInput = document.getElementById('password');
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('.form-signin');
+    const fields = [
+        { id: 'username', message: 'E-mail je povinný.' },
+        { id: 'password', message: 'Heslo je povinné.' }
+    ];
 
-    const usernameError = document.createElement('div');
-    usernameError.style.color = 'red';
-    usernameError.style.fontSize = '0.875rem';
-    usernameInput.parentNode.appendChild(usernameError);
+    if (!form) return;
 
-    const passwordError = document.createElement('div');
-    passwordError.style.color = 'red';
-    passwordError.style.fontSize = '0.875rem';
-    passwordInput.parentNode.appendChild(passwordError);
+    // vytvorenie error divov
+    fields.forEach(f => {
+        const input = document.getElementById(f.id);
+        const error = document.createElement('div');
+        error.className = 'text-danger';
+        error.style.fontSize = '0.875rem';
+        error.id = f.id + 'Error';
+        input.after(error);
+    });
 
-    loginForm.addEventListener('submit', function (e) {
+    form.addEventListener('submit', e => {
         let valid = true;
 
-        if (usernameInput.value.trim() === '') {
-            usernameError.textContent = 'E-mail je povinný.';
-            valid = false;
-        } else {
-            usernameError.textContent = '';
-        }
+        fields.forEach(f => {
+            const input = document.getElementById(f.id);
+            const error = document.getElementById(f.id + 'Error');
 
-        if (passwordInput.value.trim() === '') {
-            passwordError.textContent = 'Heslo je povinné.';
-            valid = false;
-        } else {
-            passwordError.textContent = '';
-        }
+            error.textContent = '';
+            input.classList.remove('is-invalid');
 
-        if (!valid) {
-            e.preventDefault();
-        }
+            if (input.value.trim() === '') {
+                error.textContent = f.message;
+                input.classList.add('is-invalid');
+                valid = false;
+            }
+        });
+
+        if (!valid) e.preventDefault();
     });
 });
