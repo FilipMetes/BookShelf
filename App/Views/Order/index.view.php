@@ -1,1 +1,202 @@
 <?php
+/** @var Framework\Support\LinkGenerator $link */
+/** @var \Framework\Auth\AppUser $user */
+/** @var array $formErrors */
+?>
+
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-6 d-flex gap-4 flex-column">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4>Objednávka</h4>
+                </div>
+
+                <div class="card-body">
+
+                    <?php if (!empty($formErrors)): ?>
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                <?php foreach ($formErrors as $err): ?>
+                                    <li><?= htmlspecialchars(($err ?? '')) ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="<?= $link->url('order.checkout') ?>" method="post" id="orderForm">
+
+                        <?php if ($user->isLoggedIn()): ?>
+                            <!-- Meno -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Meno</label>
+                                <input type="text"
+                                       name="name"
+                                       id="name"
+                                       class="form-control"
+                                       value="<?= htmlspecialchars(($user->getName() ?? '')) ?>">
+                            </div>
+
+                            <!-- Priezvisko -->
+                            <div class="mb-3">
+                                <label for="surname" class="form-label">Priezvisko</label>
+                                <input type="text"
+                                       name="surname"
+                                       id="surname"
+                                       class="form-control"
+                                       value="<?= htmlspecialchars(($user->getSurname() ?? '')) ?>">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email"
+                                       name="email"
+                                       id="email"
+                                       class="form-control"
+                                       value="<?= htmlspecialchars(($user->getEmail() ?? '')) ?>">
+                            </div>
+                        <?php else: ?>
+                            <!-- Meno -->
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Meno</label>
+                                <input type="text"
+                                       name="name"
+                                       id="name"
+                                       class="form-control">
+                            </div>
+
+                            <!-- Priezvisko -->
+                            <div class="mb-3">
+                                <label for="surname" class="form-label">Priezvisko</label>
+                                <input type="text"
+                                       name="surname"
+                                       id="surname"
+                                       class="form-control">
+                            </div>
+
+                            <!-- Email -->
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email"
+                                       name="email"
+                                       id="email"
+                                       class="form-control">
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- Telefón -->
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Telefón</label>
+                            <input type="text"
+                                   name="phone"
+                                   id="phone"
+                                   class="form-control">
+                        </div>
+
+                        <hr>
+
+                        <!-- Adresa -->
+                        <div class="mb-3">
+                            <label for="street" class="form-label">Ulica</label>
+                            <input type="text" name="street" id="street" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="city" class="form-label">Mesto</label>
+                            <input type="text" name="city" id="city" class="form-control">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="psc" class="form-label">PSČ</label>
+                            <input type="text" name="psc" id="psc" class="form-control">
+                        </div>
+
+                        <hr>
+
+                        <!-- Spôsob dopravy -->
+                        <div class="mb-3">
+                            <label class="form-label">Spôsob dopravy</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivery" value="kurier">
+                                <label class="form-check-label">Kuriér</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivery" value="posta">
+                                <label class="form-check-label">Slovenská pošta</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="delivery" value="osobne">
+                                <label class="form-check-label">Osobný odber</label>
+                            </div>
+                        </div>
+
+
+                        <!-- Spôsob platby -->
+                        <div class="mb-3">
+                            <label class="form-label">Spôsob platby</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment" value="hotovost">
+                                <label class="form-check-label">Hotovosť</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payment" value="karta">
+                                <label class="form-check-label">Platba kartou</label>
+                            </div>
+                        </div>
+
+                        <!-- Údaje k platbe kartou -->
+                        <div id="cardPaymentFields" style="display: none;">
+                            <hr>
+
+                            <div class="mb-3">
+                                <label for="card_number" class="form-label">Číslo karty</label>
+                                <input type="text"
+                                       name="card_number"
+                                       id="card_number"
+                                       class="form-control"
+                                       placeholder="1234 5678 9012 3456">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="card_expiry" class="form-label">Platnosť (MM/RR)</label>
+                                <input type="text"
+                                       name="card_expiry"
+                                       id="card_expiry"
+                                       class="form-control"
+                                       placeholder="MM/RR">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="card_cvc" class="form-label">CVC</label>
+                                <input type="text"
+                                       name="card_cvc"
+                                       id="card_cvc"
+                                       class="form-control"
+                                       placeholder="123">
+                            </div>
+                        </div>
+
+                        <!-- Súhlas -->
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="terms" id="terms" class="form-check-input">
+                            <label for="terms" class="form-check-label">
+                                Súhlasím s obchodnými podmienkami
+                            </label>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="btn btn-success w-100">
+                            Potvrdiť objednávku
+                        </button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="<?= $link->asset('js/cardPayment.js') ?>"></script>
+<script src="<?= $link->asset('js/order.js') ?>"></script>

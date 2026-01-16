@@ -117,7 +117,7 @@
                     </span>
                 </h4>
 
-                <form method="post" action="<?= $link->url('order.checkout') ?>">
+                <form method="post" action="<?= $link->url('order.index') ?>">
                     <button type="submit" class="btn btn-success btn-lg mt-2">
                         Objednať
                     </button>

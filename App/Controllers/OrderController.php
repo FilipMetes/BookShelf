@@ -6,6 +6,7 @@ use App\Configuration;
 use App\Models\Order;
 use App\Models\Book;
 use App\Models\OrderItem;
+use App\Models\User;
 use Exception;
 use Framework\Core\BaseController;
 use Framework\Http\HttpException;
@@ -17,7 +18,10 @@ class OrderController extends BaseController
 {
     public function index(Request $request): Response
     {
-        return $this->html();
+
+        $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+
+        return $this->html(compact('user'));
     }
 
     public function checkout(Request $request): Response
@@ -25,8 +29,7 @@ class OrderController extends BaseController
         $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
 
         if (!$user) {
-            // namiesto výnimky
-            $this->app->getSession()->set('flash_message', 'Musíte byť prihlásený, aby ste mohli pokračovať v objednávke.');
+            $this->app->getSession()->remove('cart');
             return $this->redirect($this->url('shopcart.index'));
         }
 
@@ -39,6 +42,17 @@ class OrderController extends BaseController
             return $this->redirect($this->url('shopcart.index'));
         }
 
+        // ====== VALIDÁCIA FORMULÁRA ======
+        $delivery = $request->value('delivery');
+
+        if (!$delivery) {
+            $this->app->getSession()->set('errors', [
+                'Nie je zvolený spôsob dopravy.'
+            ]);
+            return $this->redirect($this->url('order.index'));
+        }
+
+        // ====== KONTROLA SKLADU ======
         $errors = [];
 
         foreach ($cart as $bookId => $count) {
@@ -55,20 +69,21 @@ class OrderController extends BaseController
             return $this->redirect($this->url('shopcart.index'));
         }
 
-
-        // vytvorenie objednávky
+        // ====== VYTVORENIE OBJEDNÁVKY ======
         $order = new Order([
             'id_user' => $user->getId(),
             'date' => date('Y-m-d'),
-            'delivery' => '',
+            'delivery' => $delivery,
             'state' => 'P'
         ]);
+
         $order->save();
 
-        // položky objednávky + odpis zo skladu
+        // ====== POLOŽKY OBJEDNÁVKY ======
         foreach ($cart as $bookId => $count) {
             $book = Book::getOne($bookId);
             if (!$book) continue;
+
             $orderItem = new OrderItem([
                 'id_order' => $order->getId(),
                 'id_book' => $bookId,
@@ -77,14 +92,17 @@ class OrderController extends BaseController
 
             $orderItem->save();
 
-            $book->setNumberAvailible($book->getNumberAvailible() - $count);
+            $book->setNumberAvailible(
+                $book->getNumberAvailible() - $count
+            );
             $book->save();
         }
 
-        // vymazanie session košíka
+        // ====== VYČISTENIE KOŠÍKA ======
         $this->app->getSession()->remove('cart');
 
         return $this->redirect($this->url('shopcart.index'));
     }
+
 
 }
