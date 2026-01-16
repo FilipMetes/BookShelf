@@ -65,6 +65,41 @@
                     </div>
                 </div>
             <?php endif; ?>
+
+        <?php if (!empty($favouriteBooks)): ?>
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Vaše obľúbené knihy</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <?php foreach ($favouriteBooks as $item): ?>
+                            <?php $book = $item['book']; ?>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong><?= htmlspecialchars($book->getTitle()) ?></strong>
+                                    od <?= htmlspecialchars($book->getAuthor()) ?>
+                                </div>
+                                <div>
+                                    <span class="text-muted">(<?= htmlspecialchars($item['date']) ?>)</span>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+        <?php else: ?>
+            <div class="card shadow-sm mt-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Vaše obľúbené knihy</h5>
+                </div>
+                <div class="card-body text-center text-muted">
+                    Zatiaľ nemáte žiadne obľúbené knihy
+                </div>
+            </div>
+        <?php endif; ?>
+
         </div>
+
     </div>
 </div>

@@ -55,20 +55,34 @@
                         <?php endif; ?>
 
                         <!-- Tlačidlo pre košík alebo správa o nedostupnosti -->
-                        <!-- Tlačidlo pre košík alebo správa o nedostupnosti -->
-                        <div class="mt-3">
-                            <?php if ($book->getNumberAvailible() > 0): ?>
-                                <form method="post" action="<?= $link->url('shopcart.add', ['book_id' => $book->getId()]) ?>">
-                                    <button type="submit" class="btn btn-success mt-3">
-                                        Pridať do košíka
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                <?php if ($book->getNumberAvailible() > 0): ?>
+                                    <form method="post"
+                                          action="<?= $link->url('shopcart.add', ['book_id' => $book->getId()]) ?>"
+                                          class="m-0">
+                                        <button type="submit" class="btn btn-success">
+                                            Pridať do košíka
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <span class="text-danger fw-bold">Nie je na sklade</span>
+                                <?php endif; ?>
+                            </div>
+
+                            <!-- PRAVÁ STRANA – obľúbené -->
+                            <?php if ($user->isLoggedIn()): ?>
+                                <form method="post"
+                                      action="<?= $link->url('books.addToFavourite') ?>"
+                                      class="m-0">
+                                    <input type="hidden" name="book_id" value="<?= $book->getId() ?>">
+                                    <button type="submit" class="btn btn-outline-danger">
+                                        Pridať do obľúbených
                                     </button>
                                 </form>
-                            <?php else: ?>
-                                <span class="text-danger fw-bold">Nie je na sklade</span>
                             <?php endif; ?>
+
                         </div>
-
-
                     </div>
                 </div>
             </div>

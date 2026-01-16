@@ -6,6 +6,7 @@ use App\Configuration;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\FavouriteBook;
 use App\Models\Book;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
@@ -45,7 +46,28 @@ class ProfileController extends BaseController
             }
         }
 
-        return $this->html(compact('user', 'orderedBooks'));
+        // 🔹 Obľúbené knihy
+        $favourites = FavouriteBook::getAll('id_user = ?', [$userId]);
+
+        $favouriteBooks = [];
+
+        foreach ($favourites as $fav) {
+            $book = Book::getOne($fav->getBookId());
+            if ($book) {
+                $favouriteBooks[] = [
+                    'book' => $book,
+                    'date' => $fav->getDate()
+                ];
+            }
+        }
+
+
+        return $this->html(compact(
+            'user',
+            'orderedBooks',
+            'favouriteBooks'
+        ));
+
     }
 
     public function edit(Request $request): Response

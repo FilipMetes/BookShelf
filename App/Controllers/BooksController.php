@@ -5,7 +5,9 @@ namespace App\Controllers;
 use App\Configuration;
 use App\Models\Book;
 use App\Models\Genres;
+use App\Models\FavouriteBook;
 use App\Models\Review;
+
 
 use Exception;
 use Framework\Core\BaseController;
@@ -265,6 +267,38 @@ class BooksController extends BaseController
         // 🔥 PRG – redirect, žiadny resubmit
         return $this->redirect($this->url('books.detail', ['id' => $bookId]));
     }
+
+    public function addToFavourite(Request $request): Response
+    {
+        $bookId = (int)$request->value('book_id');
+
+        // musí byť prihlásený
+        if (!$this->user->isLoggedIn()) {
+            return $this->redirect($this->url('auth.login'));
+        }
+
+        $userId = $this->user->getId();
+
+        // už existuje?
+        $existing = FavouriteBook::getAll(
+            'id_user = ? AND id_book = ?',
+            [$userId, $bookId]
+        );
+
+        if (!$existing) {
+            $fav = new FavouriteBook([
+                'id_user' => $userId,
+                'id_book' => $bookId,
+                'date' => date('Y-m-d')
+            ]);
+
+            $fav->save();
+        }
+
+        // PRG
+        return $this->redirect($this->url('books.detail', ['id' => $bookId]));
+    }
+
 
 
 
