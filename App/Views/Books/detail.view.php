@@ -1,5 +1,7 @@
 <?php
 /** @var \App\Models\Book $book */
+/** @var \App\Models\Review[] $reviews */
+/** @var \Framework\Auth\AppUser $user */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Http\Session $session */
 ?>
@@ -72,4 +74,66 @@
             </div>
         </div>
     </div>
+
+    <?php if ($user->isLoggedIn()): ?>
+        <hr>
+        <h5>Hodnotenie knihy</h5>
+
+        <form method="post" action="<?= $link->url('books.rate') ?>">
+            <input type="hidden" name="book_id" value="<?= $book->getId() ?>">
+
+            <div class="btn-group" role="group">
+                <?php for ($i = 1; $i <= 5; $i++): ?>
+                    <input type="radio"
+                           class="btn-check"
+                           name="rating"
+                           id="rate<?= $i ?>"
+                           value="<?= $i ?>"
+                           required>
+
+                    <label class="btn btn-outline-warning" for="rate<?= $i ?>">
+                        <?= $i ?> ★
+                    </label>
+                <?php endfor; ?>
+            </div>
+
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary">
+                    Uložiť hodnotenie
+                </button>
+            </div>
+        </form>
+    <?php else: ?>
+        <p class="text-muted">
+            Pre hodnotenie sa musíte <a href="<?= $link->url('auth.login') ?>">prihlásiť</a>.
+        </p>
+    <?php endif; ?>
+
+    <hr>
+    <h5>Hodnotenia čitateľov</h5>
+
+    <?php if (empty($reviews)): ?>
+        <p class="text-muted">Zatiaľ žiadne hodnotenia.</p>
+    <?php else: ?>
+        <div class="list-group">
+            <?php foreach ($reviews as $review): ?>
+                <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <strong>
+                            Hodnotenie:
+                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                <?= $i <= $review->getRating() ? '★' : '☆' ?>
+                            <?php endfor; ?>
+                        </strong>
+
+                        <small class="text-muted">
+                            <?= htmlspecialchars($review->getDate()) ?>
+                        </small>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
+
 </div>

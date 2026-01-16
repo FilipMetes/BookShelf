@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Configuration;
 use App\Models\Book;
 use App\Models\Genres;
+use App\Models\Review;
+
 use Exception;
 use Framework\Core\BaseController;
 use Framework\Http\HttpException;
@@ -55,9 +57,9 @@ class BooksController extends BaseController
 
     public function detail(Request $request): Response
     {
-        $id = (int)$request->value('id'); // získa parameter id z URL alebo GET/POST
+        $id = (int)$request->value('id');
         if (!$id) {
-            return $this->redirect('books.index');
+            return $this->redirect($this->url('books.index'));
         }
 
         $book = Book::getOne($id);
@@ -65,9 +67,18 @@ class BooksController extends BaseController
             return $this->redirect($this->url('books.index'));
         }
 
+        // 🔹 všetky recenzie ku knihe
+        $reviews = Review::getAll(
+            'id_book = ?',
+            [$id]
+        );
 
-        return $this->html(['book' => $book]);
+        return $this->html([
+            'book' => $book,
+            'reviews' => $reviews
+        ]);
     }
+
 
     /**
      * Uloženie knihy (create / update)
@@ -212,4 +223,49 @@ class BooksController extends BaseController
 
         return $errors;
     }
+
+    public function rate(Request $request): Response
+    {
+        $bookId = (int)$request->value('book_id');
+        $rating = (int)$request->value('rating');
+
+        // musí byť prihlásený
+        if (!$this->user->isLoggedIn()) {
+            return $this->redirect($this->url('auth.login'));
+        }
+
+        // validácia ratingu
+        if ($rating < 1 || $rating > 5) {
+            return $this->redirect($this->url('books.detail', ['id' => $bookId]));
+        }
+
+        $userId = $this->user->getId();
+
+        // existuje už review?
+        $existing = Review::getAll(
+            'id_book = ? AND id_user = ?',
+            [$bookId, $userId]
+        );
+
+        if ($existing) {
+            $review = $existing[0];
+            $review->setRating($rating);
+            $review->setDate(date('Y-m-d'));
+        } else {
+            $review = new Review([
+                'id_book' => $bookId,
+                'id_user' => $userId,
+                'rating' => $rating,
+                'date' => date('Y-m-d')
+            ]);
+        }
+
+        $review->save();
+
+        // 🔥 PRG – redirect, žiadny resubmit
+        return $this->redirect($this->url('books.detail', ['id' => $bookId]));
+    }
+
+
+
 }

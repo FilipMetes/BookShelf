@@ -35,7 +35,7 @@ class AdminController extends BaseController
         }
 
         // flash správa
-        $this->app->getSession()->set('success', 'Zmeny vykonané ✔');
+        $this->app->getSession()->set('success', 'Zmeny vykonané');
 
         // PRG pattern
         return $this->redirect($this->url('admin.index'));
