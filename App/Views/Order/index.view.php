@@ -1,7 +1,7 @@
 <?php
 /** @var Framework\Support\LinkGenerator $link */
 /** @var \Framework\Auth\AppUser $user */
-/** @var array $formErrors */
+/** @var array $errors */
 ?>
 
 <div class="container my-5">
@@ -14,10 +14,10 @@
 
                 <div class="card-body">
 
-                    <?php if (!empty($formErrors)): ?>
+                    <?php if (!empty($errors)): ?>
                         <div class="alert alert-danger">
                             <ul class="mb-0">
-                                <?php foreach ($formErrors as $err): ?>
+                                <?php foreach ($errors as $err): ?>
                                     <li><?= htmlspecialchars(($err ?? '')) ?></li>
                                 <?php endforeach; ?>
                             </ul>
@@ -118,16 +118,16 @@
                         <div class="mb-3">
                             <label class="form-label">Spôsob dopravy</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="delivery" value="kurier">
-                                <label class="form-check-label">Kuriér</label>
+                                <input class="form-check-input" type="radio" name="delivery" id="delivery-k" value="kurier">
+                                <label for="delivery-k" class="form-check-label">Kuriér</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="delivery" value="posta">
-                                <label class="form-check-label">Slovenská pošta</label>
+                                <input class="form-check-input" type="radio" name="delivery" id="delivery-p" value="posta">
+                                <label for="delivery-p" class="form-check-label">Slovenská pošta</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="delivery" value="osobne">
-                                <label class="form-check-label">Osobný odber</label>
+                                <input class="form-check-input" type="radio" name="delivery" id="delivery-o" value="osobne">
+                                <label for="delivery-o" class="form-check-label">Osobný odber</label>
                             </div>
                         </div>
 
@@ -136,12 +136,12 @@
                         <div class="mb-3">
                             <label class="form-label">Spôsob platby</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment" value="hotovost">
-                                <label class="form-check-label">Hotovosť</label>
+                                <input class="form-check-input" type="radio" name="payment" id='payment-h' value="hotovost">
+                                <label for='payment-h' class="form-check-label">Hotovosť</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="payment" value="karta">
-                                <label class="form-check-label">Platba kartou</label>
+                                <input class="form-check-input" type="radio" name="payment" id='payment-k' value="karta">
+                                <label for='payment-k' class="form-check-label">Platba kartou</label>
                             </div>
                         </div>
 

@@ -101,7 +101,7 @@ use  App\Models\Book;
                     </button>
                 </div>
 
-                <?php if (($isAdmin ?? false)): ?>
+                <?php if (($user->isLoggedIn() && $user->isAdmin() ?? false)): ?>
                     <a href="<?= $link->url('books.add') ?>" class="btn btn-success ms-3">Pridať knihu</a>
                 <?php endif; ?>
             </div>
@@ -141,7 +141,7 @@ use  App\Models\Book;
                                                 Detail
                                             </a>
 
-                                            <?php if ($isAdmin): ?>
+                                            <?php if ($user->isLoggedIn() && $user->isAdmin()): ?>
                                                 <a class="btn btn-outline-primary btn-sm"
                                                    href="<?= $link->url('books.edit', ['id' => $book->getId()]) ?>">
                                                     Upraviť

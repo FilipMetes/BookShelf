@@ -20,19 +20,14 @@ class BooksController extends BaseController
     {
         try {
             $books = Book::getAll();
-            $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
 
-            $isAdmin = false;
-            if ($user) {
-                $isAdmin = $user->isAdmin();
-            }
-
-            return $this->html(compact('books', 'isAdmin'));
+            return $this->html(compact('books'));
 
         } catch (Exception $e) {
             throw new HttpException(500, "DB Chyba: " . $e->getMessage());
         }
     }
+
 
     /**
      * Formular na pridanie

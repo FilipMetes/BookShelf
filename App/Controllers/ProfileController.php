@@ -17,10 +17,10 @@ class ProfileController extends BaseController
     // Controller
     public function index(Request $request): Response
     {
-        $user = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+        $user = $this->user;
 
-        if (!$user) {
-            return $this->html(['user' => null], 'index');
+        if (!$user->isLoggedIn()) {
+            return $this->redirect($this->url('home.index'));
         }
 
         $userId = $user->getId();
@@ -50,16 +50,16 @@ class ProfileController extends BaseController
 
     public function edit(Request $request): Response
     {
-        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+        $sessionUser = $this->user;
 
-        if (!$sessionUser) {
-            throw new HttpException(401, "Musíš byť prihlásený.");
+        if (!$sessionUser->isLoggedIn()) {
+            return $this->redirect($this->url('home.index'));
         }
 
         $user = User::getOne($sessionUser->getId());
 
         if (!$user) {
-            throw new HttpException(404, "Používateľ nenájdený.");
+            return $this->redirect($this->url('home.index'));
         }
 
         return $this->html(compact('user'), 'form');
@@ -67,9 +67,9 @@ class ProfileController extends BaseController
 
     public function save(Request $request): Response
     {
-        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
+        $sessionUser = $this->user;
 
-        if (!$sessionUser) {
+        if (!$sessionUser->isLoggedIn()) {
             throw new HttpException(401, "Musíš byť prihlásený.");
         }
 

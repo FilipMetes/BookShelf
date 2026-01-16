@@ -54,13 +54,19 @@
                     <a class="nav-link" href="<?= $link->url('shopCart.index') ?>">🛒 Košík</a>
                 </li>
 
-                <?php if ($user && $user->isLoggedIn()) { ?>
+                <?php if ($user->isLoggedIn()) { ?>
                     <li class="nav-item me-3 d-flex align-items-center">
                         <span class="navbar-text">Prihlásený: <b><?= htmlspecialchars($user->getName()) ?></b></span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= $link->url('profile.index') ?>">Profil</a>
                     </li>
+                    <?php if ($user->isAdmin()) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" href="<?= $link->url('admin.index') ?>"> Admin </a>
+                        </li>
+                    <?php } ?>
+
                     <li class="nav-item">
                         <a class="nav-link" href="<?= $link->url('auth.logout') ?>">Log out</a>
                     </li>

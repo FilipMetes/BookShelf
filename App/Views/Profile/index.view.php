@@ -12,7 +12,7 @@
                     <h4 class="mb-0">Profil používateľa</h4>
                 </div>
                 <div class="card-body">
-                    <?php if ($user): ?>
+                    <?php if ($user->isLoggedIn()): ?>
                         <div class="mb-2"><strong>Meno:</strong> <?= htmlspecialchars($user->getName() ?? '-') ?></div>
                         <div class="mb-2"><strong>Priezvisko:</strong> <?= htmlspecialchars($user->getSurname() ?? '-') ?></div>
                         <div class="mb-2"><strong>Ulica:</strong> <?= htmlspecialchars($user->getStreet() ?? '-') ?></div>
@@ -25,7 +25,7 @@
                     <?php endif; ?>
                 </div>
 
-                <?php if ($user): ?>
+                <?php if ($user->isLoggedIn()): ?>
                     <div class="text-center mb-4">
                         <a href="<?= $link->url('profile.edit') ?>" class="btn btn-dark">Upraviť profil</a>
                     </div>
