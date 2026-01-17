@@ -34,15 +34,13 @@ use App\Models\Genres;
         <label for="genre" class="form-label">Žáner</label>
         <select name="genre" id="genre" class="form-select">
             <option value="">Vyberte žáner</option>
-            <?php foreach(\App\Models\Genres::all() as $g): ?>
+            <?php foreach(Genres::all() as $g): ?>
                 <option value="<?= htmlspecialchars($g) ?>" <?= $book->getGenre() === $g ? 'selected' : '' ?>>
                     <?= htmlspecialchars($g) ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
-
-
 
     <div class="mb-3">
         <label class="form-label">Formát knihy</label>
@@ -79,7 +77,6 @@ use App\Models\Genres;
         <label for="sample" class="form-label">Ukážka knihy (PDF)</label>
         <input type="file" name="sample" id="sample" class="form-control" accept="application/pdf">
     </div>
-
 
     <div class="mb-3">
         <label for="cover" class="form-label">Obálka knihy</label>

@@ -13,17 +13,21 @@ class RegisterController extends BaseController
 {
     public function index(Request $request): Response
     {
-        // show register form
-        return $this->html();
+        $session = $this->app->getSession();
+
+        $errors = $session->get('register_errors') ?? [];
+
+        $session->remove('register_errors');
+
+        return $this->html(compact('errors'));
     }
+
 
     /**
      * @throws Exception
      */
     public function register(Request $request): Response
     {
-        $errors = [];
-
         if ($request->hasValue('submit')) {
 
             $errors = $this->formErrors($request);
@@ -43,14 +47,19 @@ class RegisterController extends BaseController
 
                     return $this->redirect(Configuration::LOGIN_URL);
 
-                } catch (\Exception $ex) {
-                    $errors[] = $ex->getMessage();
+                } catch (Exception $e) {
+                    $errors[] = $e->getMessage();
                 }
             }
+
+            $this->app->getSession()->set('register_errors', $errors);
+
+            return $this->redirect($this->url('register.index'));
         }
 
-        return $this->html(compact('errors'), 'index');
+        return $this->redirect($this->url('register.index'));
     }
+
 
     private function formErrors(Request $request): array
     {

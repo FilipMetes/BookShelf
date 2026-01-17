@@ -93,8 +93,6 @@ class BooksController extends BaseController
         ]);
     }
 
-
-
     /**
      * Uloženie knihy (create / update)
      */
@@ -113,10 +111,7 @@ class BooksController extends BaseController
         $formErrors = $this->formErrors($request);
 
         if (!empty($formErrors)) {
-            return $this->html([
-                'book' => $book,
-                'formErrors' => $formErrors
-            ], $id > 0 ? 'edit' : 'create');
+            return $this->html(['book' => $book, 'formErrors' => $formErrors], $id > 0 ? 'edit' : 'create');
         }
 
 
@@ -189,12 +184,12 @@ class BooksController extends BaseController
             return $this->redirect($this->url('books.index'));
         }
 
-        // 🖼️ zmaž obálku
+        // zmaž obálku
         if ($book->getCoverPath()) {
             @unlink(Configuration::UPLOAD_DIR . $book->getCoverPath());
         }
 
-        // 📄 zmaž PDF ukážku
+        // zmaž PDF ukážku
         if ($book->getSamplePath()) {
             @unlink(Configuration::UPLOAD_DIR . $book->getSamplePath());
         }
@@ -249,18 +244,16 @@ class BooksController extends BaseController
 
         // Kontrola formátu
         $format = $request->value('format');
-        if ($format === null || $format === '' || !in_array($format, ['E','F'])) {
+        if ($format === '' || !in_array($format, ['E','F'])) {
             $errors[] = "Formát musí byť vyplnený a platný.";
         }
 
         // Kontrola typu cover obrázka
         $file = $request->file('cover');
-        if ($file && $file->getName() != "" &&
-            !in_array($file->getType(), ['image/jpeg', 'image/png'])) {
+        if ($file && $file->getName() != "" && !in_array($file->getType(), ['image/jpeg', 'image/png'])) {
             $errors[] = "Obrázok obálky musí byť typu JPG alebo PNG!";
         }
 
-        // Kontrola ukážky knihy (PDF)
         // Kontrola ukážky knihy (PDF)
         $sample = $request->file('sample');
         if ($sample && $sample->getName() !== '') {
@@ -271,8 +264,6 @@ class BooksController extends BaseController
                 $errors[] = "Ukážka knihy musí byť vo formáte PDF.";
             }
         }
-
-
 
         return $errors;
     }

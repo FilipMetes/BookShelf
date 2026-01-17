@@ -15,7 +15,6 @@ use Framework\Http\HttpException;
 
 class ProfileController extends BaseController
 {
-    // Controller
     public function index(Request $request): Response
     {
         $user = $this->user;
@@ -26,7 +25,7 @@ class ProfileController extends BaseController
 
         $userId = $user->getId();
 
-        // Získame všetky objednávky používateľa so stavom 'P'
+
         $orders = Order::getAll('id_user = ? AND state = ?', [$userId, 'P']);
 
         $orderedBooks = [];
@@ -46,7 +45,6 @@ class ProfileController extends BaseController
             }
         }
 
-        // 🔹 Obľúbené knihy
         $favourites = FavouriteBook::getAll('id_user = ?', [$userId]);
 
         $favouriteBooks = [];
@@ -79,13 +77,18 @@ class ProfileController extends BaseController
         }
 
         $user = User::getOne($sessionUser->getId());
-
         if (!$user) {
             return $this->redirect($this->url('home.index'));
         }
 
-        return $this->html(compact('user'), 'form');
+        $session = $this->app->getSession();
+
+        $errors = $session->get('profile_errors') ?? [];
+        $session->remove('profile_errors'); // 🔥 flash
+
+        return $this->html(compact('user', 'errors'), 'form');
     }
+
 
     public function save(Request $request): Response
     {
@@ -96,16 +99,19 @@ class ProfileController extends BaseController
         }
 
         $user = User::getOne($sessionUser->getId());
-
         if (!$user) {
             throw new HttpException(404, "Používateľ nenájdený.");
         }
 
         $errors = $this->formErrors($request);
+
         if (!empty($errors)) {
-            return $this->html(compact('user', 'errors'), 'form');
+            $this->app->getSession()->set('profile_errors', $errors);
+
+            return $this->redirect($this->url('profile.edit'));
         }
 
+        // ukladanie
         $user->setName($request->value('name'));
         $user->setSurname($request->value('surname'));
         $user->setCity($request->value('city'));
@@ -119,19 +125,19 @@ class ProfileController extends BaseController
 
         $user->save();
 
-        // aktualizuj session aby obsahovala nové údaje
+        // aktualizuj session usera
         $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $user);
 
-        $success = "Profil bol úspešne aktualizovaný.";
-        return $this->html(compact('user', 'success'), 'index');
+        return $this->redirect($this->url('profile.index'));
     }
+
 
     private function formErrors(Request $request): array
     {
         $errors = [];
 
-        $sessionUser = $this->app->getSession()->get(Configuration::IDENTITY_SESSION_KEY);
-        $currentUserId = $sessionUser ? $sessionUser->getId() : null;
+        $sessionUser = $this->user;
+        $currentUserId = $sessionUser->getId();
 
         $name = trim((string)$request->value('name'));
         $surname = trim((string)$request->value('surname'));
@@ -160,15 +166,16 @@ class ProfileController extends BaseController
             }
         }
 
-        // PSČ (voliteľné)
+        // PSČ
         if ($PSC = $request->value('PSC')) {
             if (!preg_match('/^\d{5}$/', $PSC)) {
                 $errors[] = "PSČ musí byť presne 5 číslic.";
             }
         }
 
-        // Heslo (iba ak je zadané)
-        if ($pass = $request->value('password')) {
+        // Heslo
+        $pass = $request->value('password');
+        if ($pass) {
             if (strlen($pass) < 6) $errors[] = "Heslo musí mať aspoň 6 znakov.";
         }
 

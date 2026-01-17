@@ -50,11 +50,7 @@
                             </div>
                         <?php endif; ?>
 
-                        <?php if ($book->getSamplePath()): ?>
-                            <a href="<?= htmlspecialchars($book->getSamplePath()) ?>" class="btn btn-outline-primary" target="_blank">Ukážka knihy</a>
-                        <?php endif; ?>
-
-                        <!-- Tlačidlo pre košík alebo správa o nedostupnosti -->
+                        <!-- Tlačidlo pre košík -->
                         <div class="d-flex justify-content-between align-items-center mt-4">
                             <div>
                                 <?php if ($book->getNumberAvailible() > 0): ?>
@@ -74,15 +70,15 @@
                             <?php if ($user->isLoggedIn()): ?>
                                 <div class="text-end">
 
-                                    <div id="favMsg"
-                                         class="text-success mb-2"
-                                         style="display:none;">
+                                    <div id="favMsg" class="text-success mb-2" style="display:none;">
                                         ✔ Pridané
                                     </div>
 
                                     <button
+                                            type="button"
                                             id="favBtn"
                                             data-book-id="<?= $book->getId() ?>"
+                                            data-url="<?= $link->url('books.addToFavourite') ?>"
                                             class="btn btn-outline-danger">
                                         Pridať do obľúbených
                                     </button>
@@ -97,7 +93,7 @@
                         <a href="<?= htmlspecialchars($book->getSamplePath()) ?>"
                            target="_blank"
                            class="btn btn-outline-primary btn-lg">
-                            📄 Zobraziť ukážku knihy
+                            Zobraziť ukážku knihy
                         </a>
                     </div>
 
@@ -108,7 +104,7 @@
                               onsubmit="return confirm('Naozaj chcete odstrániť ukážku?');">
 
                             <button type="submit" class="btn btn-sm btn-outline-danger">
-                                ❌ Odstrániť ukážku
+                                Odstrániť ukážku
                             </button>
                         </form>
                     <?php endif; ?>
@@ -139,7 +135,6 @@
                                id="rate<?= $i ?>"
                                value="<?= $i ?>"
                                required>
-
                         <label class="btn btn-outline-warning" for="rate<?= $i ?>">
                             <?= $i ?> ★
                         </label>
@@ -148,11 +143,13 @@
             </div>
 
             <div class="mb-3">
-            <textarea
-                    name="review"
-                    class="form-control"
-                    rows="3"
-                    placeholder="Napíšte krátku recenziu..."></textarea>
+                <label>
+                    <textarea
+                         name="review"
+                         class="form-control"
+                         rows="3"
+                         placeholder="Napíšte krátku recenziu..."></textarea>
+                </label>
             </div>
 
             <button type="submit" class="btn btn-primary">
@@ -160,8 +157,6 @@
             </button>
         </form>
     <?php else: ?>
-
-
         <p class="text-muted">
             Pre hodnotenie sa musíte <a href="<?= $link->url('auth.login') ?>">prihlásiť</a>.
         </p>
@@ -199,7 +194,7 @@
 
                     <?php if ($review->getReview()): ?>
                         <p class="mb-0">
-                            <?= nl2br(htmlspecialchars($review->getReview())) ?>
+                            <?= htmlspecialchars($review->getReview()) ?>
                         </p>
                     <?php endif; ?>
                 </div>
@@ -208,29 +203,5 @@
 
         </div>
     <?php endif; ?>
-
-
-
 </div>
-<script>
-    document.getElementById('favBtn')?.addEventListener('click', function () {
-        const btn = this;
-        const bookId = btn.dataset.bookId;
-
-        fetch('<?= $link->url('books.addToFavourite') ?>', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'book_id=' + bookId
-        })
-            .then(response => response.text())
-            .then(() => {
-                btn.disabled = true;
-                btn.classList.remove('btn-outline-danger');
-                btn.classList.add('btn-danger');
-
-                document.getElementById('favMsg').style.display = 'inline';
-            });
-    });
-</script>
+<script src="<?= $link->asset('js/addedToFavourite.js') ?>"></script>

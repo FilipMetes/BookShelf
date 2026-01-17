@@ -34,11 +34,12 @@
                             <td><strong><?= htmlspecialchars($u->getSurname()) ?></strong></td>
                             <td><?= htmlspecialchars($u->getEmail()) ?></td>
                             <td class="text-center">
-                                <input type="checkbox"
-                                       class="form-check-input"
-                                       name="admins[]"
-                                       value="<?= $u->getId() ?>"
-                                        <?= $u->getRole() === 'A' ? 'checked' : '' ?>>
+                                <label>
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           name="admins[]"
+                                           value="<?= $u->getId() ?>"<?= $u->getRole() === 'A' ? 'checked' : '' ?>>
+                                </label>
                             </td>
                             <td class="text-center">
                                 <a href="<?= $link->url('order.listOrders', ['id' => $u->getId()]) ?>"

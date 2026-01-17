@@ -49,7 +49,7 @@
             </ul>
 
             <ul class="navbar-nav ms-auto d-flex align-items-center">
-                <!-- Košík je vždy viditeľný -->
+                <!--Košík-->
                 <li class="nav-item me-3">
                     <a class="nav-link" href="<?= $link->url('shopCart.index') ?>">🛒 Košík</a>
                 </li>
@@ -59,7 +59,7 @@
                         <span class="navbar-text">Prihlásený: <b><?= htmlspecialchars($user->getName()) ?></b></span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="<?= $link->url('profile.index') ?>">Profil</a>
+                        <a class="nav-link" href="<?= $link->url('profile.index') ?>"> Profil </a>
                     </li>
                     <?php if ($user->isAdmin()) { ?>
                         <li class="nav-item">
@@ -76,8 +76,6 @@
                     </li>
                 <?php } ?>
             </ul>
-
-
         </div>
     </div>
 </nav>

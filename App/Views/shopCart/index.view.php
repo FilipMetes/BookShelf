@@ -6,15 +6,7 @@
 
 <div class="container mt-4">
 
-    <h1 class="mb-4">🛒 Nákupný košík</h1>
-
-    <!-- Flash správa -->
-    <?php if ($this->app->getSession()->get('flash_message')): ?>
-        <div class="alert alert-warning">
-            <?= htmlspecialchars($this->app->getSession()->get('flash_message')) ?>
-        </div>
-        <?php $this->app->getSession()->remove('flash_message'); ?>
-    <?php endif; ?>
+    <h1 class="mb-4">🛒 Nákupný košík </h1>
 
     <?php if (!empty($errors)) { ?>
         <div class="alert alert-danger">

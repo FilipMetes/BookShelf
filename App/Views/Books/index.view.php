@@ -24,10 +24,10 @@ use  App\Models\Book;
                     <div class="filter-section">
                         <h6 class="filter-heading">Žáner</h6>
                         <?php foreach(Genres::all() as $genre): ?>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= $genre ?>">
-                            <label class="form-check-label" for="genre-<?= $genre ?>"><?= $genre ?></label>
-                        </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= $genre ?>">
+                                <label class="form-check-label" for="genre-<?= $genre ?>"><?= $genre ?></label>
+                            </div>
                         <?php endforeach; ?>
 
                     </div>
@@ -47,7 +47,6 @@ use  App\Models\Book;
                         <?php endforeach; ?>
                     </div>
 
-
                     <!-- Formát filter -->
                     <div class="filter-section mt-3 format-section">
                         <h6 class="filter-heading">Formát</h6>
@@ -62,11 +61,11 @@ use  App\Models\Book;
                     </div>
 
                     <!-- Cena filter -->
-                    <!-- Cena filter -->
                     <div class="filter-section mt-3 price-section">
                         <h6 class="filter-heading">Cena (€)</h6>
                         <div class="d-flex flex-column">
                             <input type="range" class="form-range" min="0" max="200" step="1" id="priceRange" value="50">
+                            <label for="priceRange"></label>
                             <div class="d-flex justify-content-between mt-1 small text-muted">
                                 <span id="priceCurrent">50€</span> <!-- Aktuálna hodnota slidera -->
                                 <span>200€</span> <!-- Max -->
@@ -76,13 +75,14 @@ use  App\Models\Book;
 
 
                     <div class="mt-3">
-                        <button type="button" id="applyFilters" class="btn btn-primary btn-sm">
+                        <button type="button" id="applyFilters" class="btn btn-primary btn-sm btn-dark">
                             Použiť filtre
                         </button>
                         <button type="button" id="resetFilters" class="btn btn-link btn-sm text-muted">
                             Vymazať
                         </button>
                     </div>
+
                 </div>
             </div>
         </aside>
@@ -159,8 +159,6 @@ use  App\Models\Book;
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
-
-
             </div>
         </main>
     </div>
