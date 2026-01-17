@@ -6,6 +6,7 @@ use App\Configuration;
 use App\Models\Order;
 use App\Models\Book;
 use App\Models\OrderItem;
+use App\Models\User;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
@@ -143,4 +144,100 @@ class OrderController extends BaseController
 
         return $errors;
     }
+
+    public function listOrders(Request $request): Response
+    {
+        $user = $this->user;
+
+        // len admin
+        if (!$user->isLoggedIn() || !$user->isAdmin()) {
+            return $this->redirect($this->url('home.index'));
+        }
+
+        $userId = (int)$request->value('id');
+        $user = User::getOne($userId);
+        if (!$userId) {
+            return $this->redirect($this->url('admin.index'));
+        }
+
+        // objednávky daného používateľa
+        $orders = Order::getAll(
+            'id_user = ?',
+            [$userId],
+            'date DESC'
+        );
+
+        $ordersWithItems = [];
+
+        foreach ($orders as $order) {
+            $items = OrderItem::getAll(
+                'id_order = ?',
+                [$order->getId()]
+            );
+
+            $books = [];
+
+            foreach ($items as $item) {
+                $book = Book::getOne($item->getIdBook());
+                if ($book) {
+                    $books[] = [
+                        'book' => $book,
+                        'count' => $item->getCountItems()
+                    ];
+                }
+            }
+
+            $ordersWithItems[] = [
+                'order' => $order,
+                'books' => $books
+            ];
+        }
+
+        return $this->html(compact('ordersWithItems', 'user'), 'listOrders');
+    }
+
+    public function deleteOrder(Request $request): Response
+    {
+        $user = $this->user;
+
+        // len admin
+        if (!$user->isLoggedIn() || !$user->isAdmin()) {
+            return $this->redirect($this->url('home.index'));
+        }
+
+        $orderId = (int)$request->value('order_id');
+        if (!$orderId) {
+            return $this->redirect($this->url('admin.index'));
+        }
+
+        $order = Order::getOne($orderId);
+        if (!$order) {
+            return $this->redirect($this->url('admin.index'));
+        }
+
+        // vrátenie kníh späť na sklad
+        $items = OrderItem::getAll('id_order = ?', [$orderId]);
+
+        foreach ($items as $item) {
+            $book = Book::getOne($item->getIdBook());
+            if ($book) {
+                $book->setNumberAvailible(
+                    $book->getNumberAvailible() + $item->getCountItems()
+                );
+                $book->save();
+            }
+
+            // zmazanie položky objednávky
+            $item->delete();
+        }
+
+        // zmazanie objednávky
+        $order->delete();
+
+        return $this->redirect(
+            $this->url('order.listOrders', ['id' => $order->getIdUser()])
+        );
+    }
+
+
 }

@@ -72,16 +72,23 @@
 
                             <!-- PRAVÁ STRANA – obľúbené -->
                             <?php if ($user->isLoggedIn()): ?>
-                                <form method="post"
-                                      action="<?= $link->url('books.addToFavourite') ?>"
-                                      class="m-0">
-                                    <input type="hidden" name="book_id" value="<?= $book->getId() ?>">
-                                    <button type="submit" class="btn btn-outline-danger">
+                                <div class="text-end">
+
+                                    <div id="favMsg"
+                                         class="text-success mb-2"
+                                         style="display:none;">
+                                        ✔ Pridané
+                                    </div>
+
+                                    <button
+                                            id="favBtn"
+                                            data-book-id="<?= $book->getId() ?>"
+                                            class="btn btn-outline-danger">
                                         Pridať do obľúbených
                                     </button>
-                                </form>
-                            <?php endif; ?>
 
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -96,28 +103,38 @@
         <form method="post" action="<?= $link->url('books.rate') ?>">
             <input type="hidden" name="book_id" value="<?= $book->getId() ?>">
 
-            <div class="btn-group" role="group">
-                <?php for ($i = 1; $i <= 5; $i++): ?>
-                    <input type="radio"
-                           class="btn-check"
-                           name="rating"
-                           id="rate<?= $i ?>"
-                           value="<?= $i ?>"
-                           required>
+            <div class="mb-2">
+                <div class="btn-group" role="group">
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                        <input type="radio"
+                               class="btn-check"
+                               name="rating"
+                               id="rate<?= $i ?>"
+                               value="<?= $i ?>"
+                               required>
 
-                    <label class="btn btn-outline-warning" for="rate<?= $i ?>">
-                        <?= $i ?> ★
-                    </label>
-                <?php endfor; ?>
+                        <label class="btn btn-outline-warning" for="rate<?= $i ?>">
+                            <?= $i ?> ★
+                        </label>
+                    <?php endfor; ?>
+                </div>
             </div>
 
-            <div class="mt-2">
-                <button type="submit" class="btn btn-primary">
-                    Uložiť hodnotenie
-                </button>
+            <div class="mb-3">
+            <textarea
+                    name="review"
+                    class="form-control"
+                    rows="3"
+                    placeholder="Napíšte krátku recenziu..."></textarea>
             </div>
+
+            <button type="submit" class="btn btn-primary">
+                Pridať hodnotenie
+            </button>
         </form>
     <?php else: ?>
+
+
         <p class="text-muted">
             Pre hodnotenie sa musíte <a href="<?= $link->url('auth.login') ?>">prihlásiť</a>.
         </p>
@@ -126,28 +143,67 @@
     <hr>
     <h5>Hodnotenia čitateľov</h5>
 
-    <?php if (empty($reviews)): ?>
+    <?php if (empty($reviewsData)): ?>
         <p class="text-muted">Zatiaľ žiadne hodnotenia.</p>
     <?php else: ?>
-        <div class="list-group">
-            <?php foreach ($reviews as $review): ?>
+        <div class="list-group" id="reviewsList">
+
+            <?php foreach ($reviewsData as $item): ?>
+                <?php
+                $review = $item['review'];
+                $user = $item['user'];
+                ?>
+
                 <div class="list-group-item">
                     <div class="d-flex justify-content-between">
                         <strong>
-                            Hodnotenie:
-                            <?php for ($i = 1; $i <= 5; $i++): ?>
-                                <?= $i <= $review->getRating() ? '★' : '☆' ?>
-                            <?php endfor; ?>
+                            <?= htmlspecialchars($user?->getName() . ' ' . $user?->getSurname()) ?>
                         </strong>
-
                         <small class="text-muted">
                             <?= htmlspecialchars($review->getDate()) ?>
                         </small>
                     </div>
+
+                    <div class="mb-1">
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <?= $i <= $review->getRating() ? '★' : '☆' ?>
+                        <?php endfor; ?>
+                    </div>
+
+                    <?php if ($review->getReview()): ?>
+                        <p class="mb-0">
+                            <?= nl2br(htmlspecialchars($review->getReview())) ?>
+                        </p>
+                    <?php endif; ?>
                 </div>
+
             <?php endforeach; ?>
+
         </div>
     <?php endif; ?>
 
 
+
 </div>
+<script>
+    document.getElementById('favBtn')?.addEventListener('click', function () {
+        const btn = this;
+        const bookId = btn.dataset.bookId;
+
+        fetch('<?= $link->url('books.addToFavourite') ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'book_id=' + bookId
+        })
+            .then(response => response.text())
+            .then(() => {
+                btn.disabled = true;
+                btn.classList.remove('btn-outline-danger');
+                btn.classList.add('btn-danger');
+
+                document.getElementById('favMsg').style.display = 'inline';
+            });
+    });
+</script>

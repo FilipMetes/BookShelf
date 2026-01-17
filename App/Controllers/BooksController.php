@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Configuration;
 use App\Models\Book;
 use App\Models\Genres;
+use App\Models\User;
 use App\Models\FavouriteBook;
 use App\Models\Review;
 
@@ -69,17 +70,29 @@ class BooksController extends BaseController
             return $this->redirect($this->url('books.index'));
         }
 
-        // 🔹 všetky recenzie ku knihe
         $reviews = Review::getAll(
             'id_book = ?',
-            [$id]
+            [$id],
+            'date DESC'
         );
+
+        $reviewsData = [];
+
+        foreach ($reviews as $review) {
+            $user = User::getOne($review->getIdUser());
+
+            $reviewsData[] = [
+                'review' => $review,
+                'user' => $user
+            ];
+        }
 
         return $this->html([
             'book' => $book,
-            'reviews' => $reviews
+            'reviewsData' => $reviewsData
         ]);
     }
+
 
 
     /**
@@ -230,6 +243,7 @@ class BooksController extends BaseController
     {
         $bookId = (int)$request->value('book_id');
         $rating = (int)$request->value('rating');
+        $reviewText = trim($request->value('review'));
 
         // musí byť prihlásený
         if (!$this->user->isLoggedIn()) {
@@ -238,6 +252,11 @@ class BooksController extends BaseController
 
         // validácia ratingu
         if ($rating < 1 || $rating > 5) {
+            return $this->redirect($this->url('books.detail', ['id' => $bookId]));
+        }
+
+        // voliteľná validácia textu
+        if ($reviewText !== '' && strlen($reviewText) > 1000) {
             return $this->redirect($this->url('books.detail', ['id' => $bookId]));
         }
 
@@ -252,34 +271,34 @@ class BooksController extends BaseController
         if ($existing) {
             $review = $existing[0];
             $review->setRating($rating);
+            $review->setReview($reviewText ?: null);
             $review->setDate(date('Y-m-d'));
         } else {
             $review = new Review([
                 'id_book' => $bookId,
                 'id_user' => $userId,
-                'rating' => $rating,
-                'date' => date('Y-m-d')
+                'rating'  => $rating,
+                'review'  => $reviewText ?: null,
+                'date'    => date('Y-m-d')
             ]);
         }
 
         $review->save();
 
-        // 🔥 PRG – redirect, žiadny resubmit
+        // PRG
         return $this->redirect($this->url('books.detail', ['id' => $bookId]));
     }
 
+
     public function addToFavourite(Request $request): Response
     {
-        $bookId = (int)$request->value('book_id');
-
-        // musí byť prihlásený
         if (!$this->user->isLoggedIn()) {
             return $this->redirect($this->url('auth.login'));
         }
 
+        $bookId = (int)$request->value('book_id');
         $userId = $this->user->getId();
 
-        // už existuje?
         $existing = FavouriteBook::getAll(
             'id_user = ? AND id_book = ?',
             [$userId, $bookId]
@@ -291,13 +310,38 @@ class BooksController extends BaseController
                 'id_book' => $bookId,
                 'date' => date('Y-m-d')
             ]);
-
             $fav->save();
         }
 
-        // PRG
-        return $this->redirect($this->url('books.detail', ['id' => $bookId]));
+        return $this->json(['success' => true]);
     }
+
+
+    public function removeFavourite(Request $request): Response
+    {
+        if (!$this->user->isLoggedIn()) {
+            throw new HttpException(401, 'Neprihlásený');
+        }
+
+        $userId = $this->user->getId();
+        $bookId = (int)$request->value('book_id');
+
+        $existing = FavouriteBook::getAll(
+            'id_user = ? AND id_book = ?',
+            [$userId, $bookId]
+        );
+
+        if ($existing) {
+            $existing[0]->delete();
+        }
+
+        // AJAX odpoveď
+        return $this->json([
+            'success' => true,
+            'book_id' => $bookId
+        ]);
+    }
+
 
 
 

@@ -22,6 +22,7 @@
                         <th>Priezvisko</th>
                         <th>Email</th>
                         <th class="text-center">Admin</th>
+                        <th class="text-center">Akcia</th>
                     </tr>
                     </thead>
 
@@ -39,6 +40,13 @@
                                        value="<?= $u->getId() ?>"
                                         <?= $u->getRole() === 'A' ? 'checked' : '' ?>>
                             </td>
+                            <td class="text-center">
+                                <a href="<?= $link->url('order.listOrders', ['id' => $u->getId()]) ?>"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Objednávky
+                                </a>
+                            </td>
+
                         </tr>
                     <?php endforeach; ?>
                     </tbody>

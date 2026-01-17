@@ -34,26 +34,49 @@
 
             <?php if (!empty($orderedBooks)): ?>
                 <div class="card shadow-sm mt-4">
+
                     <div class="card-header bg-secondary text-white">
                         <h5 class="mb-0">Vaše objednané knihy</h5>
                     </div>
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <?php foreach ($orderedBooks as $item): ?>
-                                <?php $book = $item['book']; ?>
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong><?= htmlspecialchars($book->getTitle()) ?></strong>
-                                        od <?= htmlspecialchars($book->getAuthor()) ?>
-                                    </div>
-                                    <div>
-                                        <?= $item['count'] ?> ks
-                                        <span class="text-muted ms-2">(<?= $item['orderDate'] ?>)</span>
-                                    </div>
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0 align-middle">
+                                <thead class="table-light">
+                                <tr>
+                                    <th>Názov</th>
+                                    <th>Autor</th>
+                                    <th style="width: 120px;">Počet</th>
+                                    <th style="width: 160px;">Dátum</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <?php foreach ($orderedBooks as $item): ?>
+                                    <?php $book = $item['book']; ?>
+                                    <tr>
+                                        <td>
+                                            <strong><?= htmlspecialchars($book->getTitle()) ?></strong>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($book->getAuthor()) ?>
+                                        </td>
+
+                                        <td>
+                                            <?= (int)$item['count'] ?> ks
+                                        </td>
+
+                                        <td class="text-muted">
+                                            <?= htmlspecialchars($item['orderDate']) ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                 </div>
             <?php else: ?>
                 <div class="card shadow-sm mt-4">
@@ -66,40 +89,76 @@
                 </div>
             <?php endif; ?>
 
-        <?php if (!empty($favouriteBooks)): ?>
-            <div class="card shadow-sm mt-4">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0">Vaše obľúbené knihy</h5>
+
+            <?php if (!empty($favouriteBooks)): ?>
+                <div class="card shadow-sm mt-4">
+
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Vaše obľúbené knihy</h5>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table
+                                    class="table table-hover table-striped mb-0 align-middle"
+                                    id="favouriteTable"
+                                    data-remove-url="<?= $link->url('books.removeFavourite') ?>"
+                            >
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Názov</th>
+                                    <th>Autor</th>
+                                    <th style="width: 160px;">Pridané</th>
+                                    <th class="text-end" style="width: 120px;">Akcia</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <?php foreach ($favouriteBooks as $item): ?>
+                                    <?php $book = $item['book']; ?>
+                                    <tr id="fav-row-<?= $book->getId() ?>">
+                                        <td>
+                                            <strong><?= htmlspecialchars($book->getTitle()) ?></strong>
+                                        </td>
+
+                                        <td>
+                                            <?= htmlspecialchars($book->getAuthor()) ?>
+                                        </td>
+
+                                        <td class="text-muted">
+                                            <?= htmlspecialchars($item['date']) ?>
+                                        </td>
+
+                                        <td class="text-end">
+                                            <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-outline-danger remove-fav"
+                                                    data-book-id="<?= $book->getId() ?>">
+                                                Odstrániť
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <?php foreach ($favouriteBooks as $item): ?>
-                            <?php $book = $item['book']; ?>
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <strong><?= htmlspecialchars($book->getTitle()) ?></strong>
-                                    od <?= htmlspecialchars($book->getAuthor()) ?>
-                                </div>
-                                <div>
-                                    <span class="text-muted">(<?= htmlspecialchars($item['date']) ?>)</span>
-                                </div>
-                            </li>
-                        <?php endforeach; ?>
-                    </ul>
+            <?php else: ?>
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Vaše obľúbené knihy</h5>
+                    </div>
+                    <div class="card-body text-center text-muted">
+                        Zatiaľ nemáte žiadne obľúbené knihy
+                    </div>
                 </div>
-            </div>
-        <?php else: ?>
-            <div class="card shadow-sm mt-4">
-                <div class="card-header bg-danger text-white">
-                    <h5 class="mb-0">Vaše obľúbené knihy</h5>
-                </div>
-                <div class="card-body text-center text-muted">
-                    Zatiaľ nemáte žiadne obľúbené knihy
-                </div>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+
 
         </div>
 
     </div>
 </div>
+<script src="<?= $link->asset('js/removeFavourite.js') ?>"></script>
