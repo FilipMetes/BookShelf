@@ -42,7 +42,7 @@
                             </td>
                             <td class="text-center">
                                 <a href="<?= $link->url('order.listOrders', ['id' => $u->getId()]) ?>"
-                                   class="btn btn-sm btn-outline-primary">
+                                   class="btn btn-sm btn-dark">
                                     Objednávky
                                 </a>
                             </td>
@@ -65,7 +65,7 @@
                 <?php endif; ?>
 
                 <a href="<?= $link->url('books.index') ?>"
-                   class="btn btn-primary">
+                   class="btn btn-secondary">
                     Spravovať knihy
                 </a>
             </div>

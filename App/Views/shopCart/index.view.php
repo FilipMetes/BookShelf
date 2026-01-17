@@ -31,7 +31,7 @@
             Košík je momentálne prázdny.
         </div>
 
-        <a href="<?= $link->url('books.index') ?>" class="btn btn-primary">
+        <a href="<?= $link->url('books.index') ?>" class="btn btn-secondary">
             Späť na knihy
         </a>
 
@@ -104,7 +104,7 @@
 
         <div class="row mt-4">
             <div class="col-md-6">
-                <a href="<?= $link->url('books.index') ?>" class="btn btn-outline-secondary">
+                <a href="<?= $link->url('books.index') ?>" class="btn btn-secondary">
                     ← Pokračovať v nákupe
                 </a>
             </div>

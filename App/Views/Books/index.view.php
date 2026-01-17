@@ -96,7 +96,7 @@ use  App\Models\Book;
                 <div class="search-wrap d-flex align-items-center gap-2">
                     <label for="bookSearch" class="visually-hidden">Vyhľadať</label>
                     <input id="bookSearch" class="form-control" type="search" placeholder="Vyhľadať knihu podľa názvu">
-                    <button type="button" id="searchButton" class="btn btn-primary btn-sm">
+                    <button type="button" id="searchButton" class="btn btn-primary btn-sm btn-dark">
                         Vyhľadať
                     </button>
                 </div>

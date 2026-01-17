@@ -92,6 +92,33 @@
                         </div>
                     </div>
                 </div>
+                <?php if ($book->getSamplePath()): ?>
+                    <div class="text-center mt-3">
+                        <a href="<?= htmlspecialchars($book->getSamplePath()) ?>"
+                           target="_blank"
+                           class="btn btn-outline-primary btn-lg">
+                            📄 Zobraziť ukážku knihy
+                        </a>
+                    </div>
+
+                    <?php if ($user->isLoggedIn() && $user->getRole() === 'A'): ?>
+                        <form method="post"
+                              action="<?= $link->url('books.removeSample', ['id' => $book->getId()]) ?>"
+                              class="text-center mt-2"
+                              onsubmit="return confirm('Naozaj chcete odstrániť ukážku?');">
+
+                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                ❌ Odstrániť ukážku
+                            </button>
+                        </form>
+                    <?php endif; ?>
+
+                <?php else: ?>
+                    <div class="text-center mt-3 text-muted">
+                        Ukážka knihy nie je dostupná
+                    </div>
+                <?php endif; ?>
+
             </div>
         </div>
     </div>

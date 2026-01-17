@@ -110,11 +110,15 @@ class BooksController extends BaseController
             $book = new Book();
         }
 
-        // VALIDÁCIA formulára
         $formErrors = $this->formErrors($request);
-        if (count($formErrors) > 0) {
-            return $this->html(compact('book', 'formErrors'), 'form');
+
+        if (!empty($formErrors)) {
+            return $this->html([
+                'book' => $book,
+                'formErrors' => $formErrors
+            ], $id > 0 ? 'edit' : 'create');
         }
+
 
         // Naplnenie objektu až po validácii
         $book->setTitle($request->value('title'));
@@ -150,6 +154,20 @@ class BooksController extends BaseController
             $book->setCoverPath($unique);
         }
 
+        // UKÁŽKA KNIHY (PDF)
+        $sample = $request->file('sample');
+        if ($sample && $sample->getName() !== '') {
+
+            $uniqueSample = time() . '-' . $sample->getName();
+            $targetSample = Configuration::UPLOAD_DIR . $uniqueSample;
+
+            if (!$sample->store($targetSample)) {
+                throw new HttpException(500, "Chyba pri ukladaní PDF ukážky.");
+            }
+
+            $book->setSamplePath($uniqueSample);
+        }
+
         try {
             $book->save();
         } catch (Exception $e) {
@@ -171,8 +189,14 @@ class BooksController extends BaseController
             return $this->redirect($this->url('books.index'));
         }
 
+        // 🖼️ zmaž obálku
         if ($book->getCoverPath()) {
             @unlink(Configuration::UPLOAD_DIR . $book->getCoverPath());
+        }
+
+        // 📄 zmaž PDF ukážku
+        if ($book->getSamplePath()) {
+            @unlink(Configuration::UPLOAD_DIR . $book->getSamplePath());
         }
 
         try {
@@ -235,6 +259,20 @@ class BooksController extends BaseController
             !in_array($file->getType(), ['image/jpeg', 'image/png'])) {
             $errors[] = "Obrázok obálky musí byť typu JPG alebo PNG!";
         }
+
+        // Kontrola ukážky knihy (PDF)
+        // Kontrola ukážky knihy (PDF)
+        $sample = $request->file('sample');
+        if ($sample && $sample->getName() !== '') {
+
+            $ext = strtolower(pathinfo($sample->getName(), PATHINFO_EXTENSION));
+
+            if ($ext !== 'pdf') {
+                $errors[] = "Ukážka knihy musí byť vo formáte PDF.";
+            }
+        }
+
+
 
         return $errors;
     }
@@ -342,6 +380,32 @@ class BooksController extends BaseController
         ]);
     }
 
+    public function removeSample(Request $request): Response
+    {
+        // iba admin
+        if (!$this->user->isLoggedIn() || $this->user->getRole() !== 'A') {
+            return $this->redirect($this->url('books.index'));
+        }
+
+        $id = (int)$request->value('id');
+        $book = Book::getOne($id);
+
+        if (!$book || !$book->getSamplePath()) {
+            return $this->redirect($this->url('books.detail', ['id' => $id]));
+        }
+
+        // zmazanie PDF zo súborov
+        $path = Configuration::UPLOAD_DIR . $book->getSamplePath();
+        if (file_exists($path)) {
+            @unlink($path);
+        }
+
+        // vymazanie z DB
+        $book->setSamplePath(null);
+        $book->save();
+
+        return $this->redirect($this->url('books.detail', ['id' => $id]));
+    }
 
 
 

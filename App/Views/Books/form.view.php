@@ -76,6 +76,12 @@ use App\Models\Genres;
     </div>
 
     <div class="mb-3">
+        <label for="sample" class="form-label">Ukážka knihy (PDF)</label>
+        <input type="file" name="sample" id="sample" class="form-control" accept="application/pdf">
+    </div>
+
+
+    <div class="mb-3">
         <label for="cover" class="form-label">Obálka knihy</label>
         <input type="file" name="cover" id="cover" class="form-control">
         <?php if ($book->getCoverPath()): ?>

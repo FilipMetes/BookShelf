@@ -58,7 +58,14 @@ class Book extends Model
     public function setPages(?int $v): void { $this->pages = $v; }
     public function getText(): ?string { return $this->text; }
     public function setText(?string $v): void { $this->text = $v; }
-    public function getSamplePath(): ?string { return $this->sample_path; }
+    public function getSamplePath(): ?string
+    {
+        if ($this->sample_path && file_exists(Configuration::UPLOAD_DIR . $this->sample_path)) {
+            return Configuration::UPLOAD_URL . $this->sample_path;
+        }
+        return null;
+    }
+
     public function setSamplePath(?string $v): void { $this->sample_path = $v; }
     public function getCoverPath(): string {
         // Ak cover existuje a súbor je na disku, vráti ho (len názov súboru, nie URL)
