@@ -160,6 +160,41 @@ use  App\Models\Book;
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
+
+            <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+
+                        <!-- späť -->
+                        <li class="page-item <?= (!isset($page) || $page <= 1) ? 'disabled' : '' ?>">
+
+                        <a class="page-link"
+                               href="<?= $link->url('books.index', ['page' => $page - 1]) ?>">
+                                &laquo;
+                            </a>
+                        </li>
+
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li class="page-item <?= $i === $page ? 'active' : '' ?>">
+                                <a class="page-link"
+                                   href="<?= $link->url('books.index', ['page' => $i]) ?>">
+                                    <?= $i ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <!-- ďalej -->
+                        <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
+                            <a class="page-link"
+                               href="<?= $link->url('books.index', ['page' => $page + 1]) ?>">
+                                &raquo;
+                            </a>
+                        </li>
+
+                    </ul>
+                </nav>
+            <?php endif; ?>
+
         </main>
     </div>
 

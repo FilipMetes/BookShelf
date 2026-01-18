@@ -99,6 +99,18 @@ class Book extends Model
         return $authors;
     }
 
+    public static function getPage(int $limit, int $offset): array
+    {
+        return self::getAll('', [], 'id DESC', $limit, $offset);
+    }
+
+    public static function getTotalCount(): int
+    {
+        return self::getCount();
+    }
+
+
+
 
 
 

@@ -23,16 +23,20 @@ class BooksController extends BaseController
      */
     public function index(Request $request): Response
     {
-        try {
-            $books = Book::getAll();
+        $perPage = 12;
 
-            return $this->html(compact('books'));
+        // aktuálna stránka z URL ?page=2
+        $page = max(1, (int)$request->value('page'));
 
-        } catch (Exception $e) {
-            throw new HttpException(500, "DB Chyba: " . $e->getMessage());
-        }
+        $offset = ($page - 1) * $perPage;
+
+        $books = Book::getPage($perPage, $offset);
+        $total = Book::getTotalCount();
+
+        $totalPages = (int)ceil($total / $perPage);
+
+        return $this->html(compact('books', 'page', 'totalPages'));
     }
-
 
     /**
      * Formular na pridanie
