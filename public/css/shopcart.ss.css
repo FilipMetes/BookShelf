@@ -1,0 +1,46 @@
+/* ===== KOŠÍK – SPODNÝ SUMMARY ===== */
+
+.cart-summary {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1rem;
+}
+
+.total-box {
+    font-size: 1.1rem;
+}
+
+.total-label {
+    color: #6c757d;
+    margin-right: 0.25rem;
+}
+
+.total-price {
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: #198754; /* bootstrap success */
+}
+
+/* Mobil – väčší dôraz */
+@media (max-width: 767.98px) {
+    .total-box {
+        font-size: 1.25rem;
+    }
+
+    .total-price {
+        font-size: 1.6rem;
+    }
+}
+/* Mobil – tlačidlá cez celú šírku */
+@media (max-width: 767.98px) {
+    .btn-mobile-full {
+        width: 100%;
+    }
+}
+
+/* Desktop – tlačidlá normálnej šírky */
+@media (min-width: 768px) {
+    .btn-mobile-full {
+        width: auto;
+    }
+}
+

@@ -22,43 +22,81 @@ use  App\Models\Book;
 
                     <!-- Žáner filter -->
                     <div class="filter-section">
-                        <h6 class="filter-heading">Žáner</h6>
-                        <?php foreach(Genres::all() as $genre): ?>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="<?= $genre ?>" id="genre-<?= $genre ?>">
-                                <label class="form-check-label" for="genre-<?= $genre ?>"><?= $genre ?></label>
-                            </div>
-                        <?php endforeach; ?>
+                        <h6 class="filter-heading d-flex justify-content-between align-items-center"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#filter-genre"
+                            role="button"
+                            aria-expanded="false">
+                            Žáner
+                            <span class="small">⌄</span>
+                        </h6>
+
+                        <div id="filter-genre" class="collapse">
+                            <?php foreach(Genres::all() as $genre): ?>
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           value="<?= $genre ?>"
+                                           id="genre-<?= $genre ?>">
+                                    <label class="form-check-label" for="genre-<?= $genre ?>">
+                                        <?= $genre ?>
+                                    </label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
 
                     </div>
+
 
                     <!-- Autor filter -->
                     <div class="filter-section mt-3">
-                        <h6 class="filter-heading">Autor</h6>
-                        <?php foreach(Book::getDistinctAuthors() as $author): ?>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox"
-                                       value="<?= htmlspecialchars($author) ?>"
-                                       id="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
-                                <label class="form-check-label" for="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
-                                    <?= htmlspecialchars($author) ?>
-                                </label>
-                            </div>
-                        <?php endforeach; ?>
+                        <h6 class="filter-heading d-flex justify-content-between align-items-center"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#filter-author"
+                            role="button"
+                            aria-expanded="false">
+                            Autor
+                            <span class="small">⌄</span>
+                        </h6>
+
+                        <div id="filter-author" class="collapse">
+                            <?php foreach(Book::getDistinctAuthors() as $author): ?>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                           value="<?= htmlspecialchars($author) ?>"
+                                           id="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
+                                    <label class="form-check-label"
+                                           for="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
+                                        <?= htmlspecialchars($author) ?>
+                                    </label>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+
                     </div>
 
                     <!-- Formát filter -->
-                    <div class="filter-section mt-3 format-section">
-                        <h6 class="filter-heading">Formát</h6>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="E" id="format-e">
-                            <label class="form-check-label" for="format-e">Elektronický</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="F" id="format-p">
-                            <label class="form-check-label" for="format-p">Fyzický</label>
+                    <div class="filter-section mt-3">
+                        <h6 class="filter-heading d-flex justify-content-between align-items-center"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#filter-format"
+                            role="button">
+                            Formát
+                            <span class="small">⌄</span>
+                        </h6>
+
+                        <div id="filter-format" class="collapse">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="E" id="format-e">
+                                <label class="form-check-label" for="format-e">Elektronický</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="F" id="format-p">
+                                <label class="form-check-label" for="format-p">Fyzický</label>
+                            </div>
                         </div>
                     </div>
+
 
                     <!-- Cena filter -->
                     <div class="filter-section mt-3 price-section">
@@ -89,9 +127,9 @@ use  App\Models\Book;
 
         <!-- Main content: search, actions and books grid -->
         <main class="col-12 col-md-9">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 gap-md-3 mb-4">
 
-                <h2 class="catalog-title">Katalóg kníh</h2>
+            <h2 class="catalog-title mb-0 text-center text-md-start">Katalóg kníh</h2>
 
                 <div class="search-wrap d-flex align-items-center gap-2">
                     <label for="bookSearch" class="visually-hidden">Vyhľadať</label>

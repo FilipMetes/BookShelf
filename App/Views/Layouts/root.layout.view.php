@@ -8,6 +8,7 @@
 <html lang="sk">
 <head>
     <title><?= App\Configuration::APP_NAME ?></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/apple-touch-icon.png') ?>">
     <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/favicon-32x32.png') ?>">
@@ -21,9 +22,12 @@
             integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
             crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="<?= $link->asset('css/navbar.css') ?>?v=1.3">
+    <link rel="stylesheet" href="<?= $link->asset('css/navbar.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/books.css') ?>">
-    <link rel="stylesheet" href="<?= $link->asset('css/home.css') ?>?v=1.3">
+    <link rel="stylesheet" href="<?= $link->asset('css/home.css') ?>">
+    <link rel="stylesheet" href="<?= $link->asset('css/detail.css') ?>">
+    <link rel="stylesheet" href="<?= $link->asset('css/shopcart.css') ?>">
+    <link rel="stylesheet" href="<?= $link->asset('css/form.css') ?>">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
 <body>

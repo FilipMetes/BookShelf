@@ -14,27 +14,7 @@
     color: #495057;
 }
 
-/* Feature cards */
-.feature-card {
-    border: 1px solid rgba(0,0,0,0.08);
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    background-color: #fff;
-}
-
-.feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-}
-
-.feature-img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-}
-
-/* About section */
+/* About + section titles */
 .home-page h2 {
     font-weight: 600;
     color: #000000;
@@ -46,15 +26,69 @@
     font-size: 1rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .feature-card {
-        text-align: center;
-    }
+/* --- Book scroller --- */
+.book-scroller {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 10px;
 
-    .feature-img {
-        margin: 0 auto;
-    }
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    scroll-behavior: smooth;
 }
 
+/* scrollbar */
+.book-scroller::-webkit-scrollbar {
+    height: 8px;
+}
 
+.book-scroller::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+}
+
+/* --- Book card --- */
+.book-card {
+    width: 180px;
+    flex-shrink: 0;
+}
+
+.book-card img {
+    height: 260px;
+    object-fit: cover;
+}
+
+/* =========================
+   MOBILE OPTIMIZATION
+========================= */
+
+@media (max-width: 768px) {
+
+    /* viac priestoru pre prst */
+    .book-scroller {
+        gap: 0.75rem;
+        padding-inline: 1rem;
+
+        /* lepší touch scroll */
+        -webkit-overflow-scrolling: touch;
+
+        /* snap efekt */
+        scroll-snap-type: x mandatory;
+    }
+
+    .book-card {
+        width: 70vw;              /* veľká karta */
+        max-width: 260px;
+        scroll-snap-align: center;
+    }
+
+    .book-card img {
+        height: 320px;
+    }
+
+    /* skryj scrollbar */
+    .book-scroller::-webkit-scrollbar {
+        display: none;
+    }
+}

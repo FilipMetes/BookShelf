@@ -14,7 +14,9 @@
 
         <form method="post" action="<?= $link->url('admin.setRoles') ?>">
             <div class="card-body p-0">
-                <table class="table table-hover table-striped mb-0 align-middle">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped mb-0 align-middle">
+
                     <thead class="table-light">
                     <tr>
                         <th style="width: 60px;">ID</th>
@@ -51,7 +53,8 @@
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
-                </table>
+                    </table>
+                </div>
             </div>
 
             <div class="p-3 border-top d-flex flex-column align-items-center gap-2">

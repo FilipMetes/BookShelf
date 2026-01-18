@@ -6,6 +6,7 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 
+use App\Models\Book;
 /**
  * Class HomeController
  * Handles actions related to the home page and other public actions.
@@ -37,10 +38,18 @@ class HomeController extends BaseController
      *
      * @return Response The response object containing the rendered HTML for the home page.
      */
+
     public function index(Request $request): Response
     {
-        return $this->html();
+
+        $books = Book::getAll(
+            orderBy: 'id DESC',
+            limit: 10
+        );
+
+        return $this->html(['books' => $books]);
     }
+
 
     /**
      * Displays the contact page.

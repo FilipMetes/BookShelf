@@ -1,0 +1,57 @@
+/* =========================
+   BOOK DETAIL – RESPONSIVE
+========================= */
+
+.book-detail-frame {
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+/* obrázok */
+.book-detail-frame img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: contain;
+}
+
+/* karty */
+.book-detail-frame .card {
+    border-radius: 12px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+
+    /* nadpis */
+    .book-detail-frame h2 {
+        font-size: 1.4rem;
+        text-align: center;
+    }
+
+    /* texty menšie */
+    .book-detail-frame p {
+        font-size: 0.95rem;
+    }
+
+    /* tlačidlá full width */
+    .book-detail-frame .btn {
+        width: 100%;
+    }
+
+    /* hodnotenie */
+    .btn-group {
+        flex-wrap: wrap;
+    }
+
+    .btn-group .btn {
+        flex: 1 1 20%;
+        font-size: 0.85rem;
+    }
+
+    /* recenzie */
+    #reviewsList .list-group-item {
+        font-size: 0.9rem;
+    }
+}

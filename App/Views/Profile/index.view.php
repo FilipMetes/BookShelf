@@ -109,7 +109,7 @@
                                     <th>Názov</th>
                                     <th>Autor</th>
                                     <th style="width: 160px;">Pridané</th>
-                                    <th class="text-end" style="width: 120px;">Akcia</th>
+                                    <th class="text-center" style="width: 120px;">Akcia</th>
                                 </tr>
                                 </thead>
 
@@ -125,11 +125,11 @@
                                             <?= htmlspecialchars($book->getAuthor()) ?>
                                         </td>
 
-                                        <td class="text-muted">
+                                        <td class="text-muted text-nowrap">
                                             <?= htmlspecialchars($item['date']) ?>
                                         </td>
 
-                                        <td class="text-end">
+                                        <td class="text-end text-nowrap">
                                             <button
                                                     type="button"
                                                     class="btn btn-sm btn-outline-danger remove-fav"

@@ -1,64 +1,120 @@
-/* --- Books catalog styles --- */
+/* =========================================================
+   BOOKS CATALOG – RESPONSIVE (MOBILE FIRST)
+   ========================================================= */
+
+/* --- Catalog header --- */
 .books-catalog .catalog-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #000000;
+    color: #000;
 }
 
-.search-wrap { max-width: 360px; width: 100%; }
-
-/* --- Book card styles --- */
-.book-card {
-    overflow: hidden;
-    border: none;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    font-size: 0.9rem;       /* menší text */
+.search-wrap {
+    max-width: 360px;
+    width: 100%;
 }
+
+/* =========================================================
+   BOOK GRID
+   ========================================================= */
+
+/* 📱 MOBILE – 1 kniha pod druhou */
 .books-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* mobile */
+    grid-template-columns: 1fr;
     gap: 1rem;
+    justify-items: center; /* ⬅️ DÔLEŽITÉ */
 }
 
-/* tablet */
+
+/* 📲 menší tablet */
+@media (min-width: 576px) {
+    .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 📲 tablet */
 @media (min-width: 768px) {
     .books-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-/* desktop */
+/* 💻 desktop */
 @media (min-width: 992px) {
     .books-grid {
         grid-template-columns: repeat(4, 1fr);
     }
 }
 
+/* =========================================================
+   BOOK CARD
+   ========================================================= */
+/* 📱 MOBILE */
+@media (max-width: 575.98px) {
+    .book-card {
+        width: 100%;
+        max-width: 360px; /* ⬅️ vizuálne pekná šírka */
+    }
+}
+
+.book-card {
+    border: none;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    font-size: 0.9rem;
+}
+
 .book-cover-img {
     width: 100%;
-    height: 140px;           /* zmenšená výška obrázka */
+    height: 160px;
     object-fit: contain;
     display: block;
     margin-bottom: 0.5rem;
     border-radius: 0.25rem;
 }
 
-
-.book-title { font-size: 0.9rem; margin-bottom: 0.2rem; }
-.book-author { font-size: 0.8rem; color: #6c757d; }
-.book-genre { font-size: 0.75rem; color: #6c757d; }
-.book-format { font-size: 0.75rem; color: #6c757d; }
-.book-price { font-size: 0.85rem; color: #dc3545; }
-
-@media (max-width: 576px) {
-    .book-cover-img { height: 120px; margin-bottom: 0.4rem; }
+/* menší mobil */
+@media (max-width: 575.98px) {
+    .book-cover-img {
+        height: 140px;
+    }
 }
 
-/* --- Filter sidebar styles --- */
+.book-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.book-author {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.1rem;
+}
+
+.book-genre,
+.book-format {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.book-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #dc3545;
+}
+
+/* =========================================================
+   FILTER SIDEBAR
+   ========================================================= */
+
 .filter-panel {
     border: 1px solid rgba(0,0,0,0.06);
     border-radius: 0.5rem;
-    background: #ffffff;
+    background: #fff;
 }
 
 .filter-title {
@@ -70,62 +126,85 @@
 .filter-heading {
     font-size: 0.95rem;
     font-weight: 600;
-    margin-bottom: 0.5rem;
     color: #495057;
+    cursor: pointer;
 }
 
-.filter-section .form-check { margin-bottom: 0.35rem; }
+.filter-section {
+    margin-bottom: 0.75rem;
+}
 
-.filter-panel .btn { margin-right: 0.5rem; }
+.filter-section .form-check {
+    margin-bottom: 0.35rem;
+}
 
+.filter-panel .btn {
+    margin-right: 0.5rem;
+}
+
+/* 💻 sticky filter */
 @media (min-width: 768px) {
-    .filter-panel { position: sticky; top: 80px; }
+    .filter-panel {
+        position: sticky;
+        top: 80px;
+    }
 }
 
+/* 📱 mobile filter */
 @media (max-width: 767.98px) {
-    .filter-panel { box-shadow: none; }
-    .filter-panel .card-body { padding: 0.75rem; }
+    .filter-panel {
+        box-shadow: none;
+    }
+
+    .filter-panel .card-body {
+        padding: 0.75rem;
+    }
 }
 
-.format-section .form-check {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.4rem;
+/* =========================================================
+   COLLAPSE ARROWS
+   ========================================================= */
+
+.filter-heading span {
+    font-size: 0.8rem;
 }
 
-.price-slider { padding-top: 0.25rem; }
-.price-slider .form-range { width: 100%; }
+/* =========================================================
+   PRICE SLIDER
+   ========================================================= */
 
-.price-slider input[type=range] {
-    -webkit-appearance: none;
+.price-section .form-range {
+    width: 100%;
+}
+
+.price-section input[type=range] {
     appearance: none;
     height: 6px;
-    background: linear-gradient(90deg, #0d6efd 0%, #0d6efd 25%, #e9ecef 25%);
+    background: #e9ecef;
     border-radius: 4px;
-    outline: none;
 }
 
-.price-slider input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
+.price-section input[type=range]::-webkit-slider-thumb {
     appearance: none;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: #0d6efd; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(13,110,253,0.4);
-    margin-top: -5px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: 2px solid #fff;
 }
 
-.price-slider input[type=range]::-moz-range-thumb {
-    width: 16px; height: 16px; border-radius: 50%;
-    background: #0d6efd; border: none; box-shadow: 0 1px 3px rgba(13,110,253,0.4);
+.price-section input[type=range]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #0d6efd;
+    border: none;
 }
 
-.price-slider .range-value {
-    font-weight: 600; color: #212529; margin-left: 0.5rem;
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.pagination .page-link {
+    font-size: 0.9rem;
 }
-
-@media (max-width: 576px) {
-    .filter-panel { margin-bottom: 1rem; }
-}
-
-
-
