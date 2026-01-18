@@ -21,6 +21,8 @@
 }
 
 .btn-mobile-full {
+    padding: 0.6rem 1.2rem; /* ⬅️ výška */
+    line-height: 1.2;
     width: auto;
 }
 

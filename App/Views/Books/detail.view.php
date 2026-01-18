@@ -148,8 +148,7 @@
                          name="review"
                          class="form-control"
                          rows="3"
-                         placeholder="Napíšte krátku recenziu...">
-                    </textarea>
+                         placeholder="Napíšte krátku recenziu..."></textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">
