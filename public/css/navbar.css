@@ -4,7 +4,7 @@
 }
 
 .navbar .nav-link {
-    color: #6c757d !important; /* sivý text pre odkazy */
+    color: #6c757d !important;
 }
 
 .navbar .nav-link:hover,
@@ -14,7 +14,7 @@
 }
 
 .navbar .navbar-text {
-    color: #6c757d !important; /* sivý text pre informácie o používateľovi */
+    color: #6c757d !important;
     margin-right: 1rem;
 }
 
@@ -22,7 +22,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #6c757d; /* sivý text brandu */
+    color: #6c757d;
 }
 
 .navbar-brand:hover {
@@ -35,4 +35,33 @@
     width: auto;
     display: inline-block;
 }
+
+/* MOBIL */
+@media (max-width: 767.98px) {
+
+    .navbar-collapse {
+        text-align: center;
+    }
+
+    .navbar-nav {
+        width: 100%;
+        align-items: center;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.75rem 0;
+    }
+
+    /* text "Prihlásený: ..." tiež do stredu */
+    .navbar-text {
+        display: block;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+}
+
 

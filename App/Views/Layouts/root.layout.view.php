@@ -27,7 +27,6 @@
     <link rel="stylesheet" href="<?= $link->asset('css/home.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/detail.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/shopcart.css') ?>">
-    <link rel="stylesheet" href="<?= $link->asset('css/form.css') ?>">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
 <body>
@@ -43,7 +42,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav me-auto d-flex align-items-center">
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $link->url('books.index') ?>">Knihy</a>
                 </li>

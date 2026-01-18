@@ -17,9 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: 'book_id=' + encodeURIComponent(bookId)
-        })
-            .then(res => res.json())
+            body: 'book_id=' + encodeURIComponent(bookId)}).then(res => res.json())
             .then(data => {
                 if (data.success) {
                     const row = document.getElementById('fav-row-' + bookId);

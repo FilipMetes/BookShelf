@@ -109,18 +109,21 @@
 
             <!-- VPRAVO – suma + objednať -->
             <div class="col-12 col-md-6 text-center text-md-end">
-                <div class="fw-semibold mb-2 mb-md-1">
-                    Celková cena:
-                    <span class="text-success fs-5">
+                <div class="d-flex flex-column flex-md-row
+                justify-content-md-end
+                align-items-center
+                gap-2">
+                    <div class="fw-semibold mb-0">
+                        Celková cena:
+                        <span class="text-success fs-5">
                 <?= number_format($totalPrice, 2) ?> €
             </span>
+                    </div>
+                    <a href="<?= $link->url('order.index') ?>"
+                       class="btn btn-success btn-sm btn-mobile-full">
+                        Objednať
+                    </a>
                 </div>
-
-                <a href="<?= $link->url('order.index') ?>"
-                   class="btn btn-success btn-sm btn-mobile-full">
-                    Objednať
-                </a>
-
             </div>
 
         </div>

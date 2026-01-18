@@ -51,8 +51,8 @@
                         <?php endif; ?>
 
                         <!-- Tlačidlo pre košík -->
-                        <div class="d-flex justify-content-between align-items-center mt-4">
-                            <div>
+                        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-stretch align-items-sm-center gap-2 mt-4">
+                        <div>
                                 <?php if ($book->getNumberAvailible() > 0): ?>
                                     <form method="post"
                                           action="<?= $link->url('shopcart.add', ['book_id' => $book->getId()]) ?>"
@@ -143,13 +143,13 @@
             </div>
 
             <div class="mb-3">
-                <label>
+
                     <textarea
                          name="review"
                          class="form-control"
                          rows="3"
-                         placeholder="Napíšte krátku recenziu..."></textarea>
-                </label>
+                         placeholder="Napíšte krátku recenziu...">
+                    </textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">
