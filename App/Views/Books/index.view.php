@@ -106,97 +106,106 @@ use  App\Models\Book;
                 <?php endif; ?>
             </div>
 
-            <div class="row g-3 books-grid">
+            <div class="books-grid">
 
                 <?php if (empty($books)): ?>
                     <p class="text-muted">Zatiaľ neboli pridané žiadne knihy.</p>
                 <?php else: ?>
                     <?php foreach ($books as $book): ?>
-                        <div class="col-6 col-md-4 col-lg-3">
-                            <div class="card book-card h-100"
-                                 data-format="<?= htmlspecialchars($book->getFormat()) ?>"
-                                 data-genre="<?= htmlspecialchars($book->getGenre()) ?>"
-                                 data-author="<?= htmlspecialchars($book->getAuthor()) ?>"
-                                 data-price="<?= htmlspecialchars($book->getPrice()) ?>">
+                        <div class="card book-card h-100"
+                             data-format="<?= htmlspecialchars($book->getFormat()) ?>"
+                             data-genre="<?= htmlspecialchars($book->getGenre()) ?>"
+                             data-author="<?= htmlspecialchars($book->getAuthor()) ?>"
+                             data-price="<?= htmlspecialchars($book->getPrice()) ?>">
 
-                                <img src="<?= $book->getCoverPath() ?>"
-                                     alt="<?= htmlspecialchars($book->getTitle()) ?>"
-                                     class="book-cover-img">
+                            <img src="<?= $book->getCoverPath() ?>"
+                                 alt="<?= htmlspecialchars($book->getTitle()) ?>"
+                                 class="book-cover-img">
 
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h5>
-                                    <p class="book-author mb-1"><?= htmlspecialchars($book->getAuthor()) ?></p>
-                                    <p class="book-genre text-muted mb-1"><?= htmlspecialchars($book->getGenre()) ?></p>
-                                    <p class="book-format text-muted mb-1">
-                                        <?= htmlspecialchars($book->getFormat() === 'E' ? 'Elektronický' : ($book->getFormat() === 'F' ? 'Fyzický' : $book->getFormat())) ?>
-                                    </p>
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h5>
+                                <p class="book-author mb-1"><?= htmlspecialchars($book->getAuthor()) ?></p>
+                                <p class="book-genre text-muted mb-1"><?= htmlspecialchars($book->getGenre()) ?></p>
+                                <p class="book-format text-muted mb-1">
+                                    <?= htmlspecialchars(
+                                            $book->getFormat() === 'E' ? 'Elektronický' :
+                                                    ($book->getFormat() === 'F' ? 'Fyzický' : $book->getFormat())
+                                    ) ?>
+                                </p>
 
+                                <div class="mt-auto">
+                                    <strong class="book-price d-block mb-2">
+                                        €<?= htmlspecialchars($book->getPrice()) ?>
+                                    </strong>
 
-                                    <div class="mt-auto">
-                                        <strong class="book-price d-block mb-2">€<?= htmlspecialchars($book->getPrice()) ?></strong>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <a class="btn btn-outline-secondary btn-sm"
+                                           href="<?= $link->url('books.detail', ['id' => $book->getId()]) ?>">
+                                            Detail
+                                        </a>
 
-                                        <div class="d-flex flex-wrap gap-1">
-                                            <a class="btn btn-outline-secondary btn-sm"
-                                               href="<?= $link->url('books.detail', ['id' => $book->getId()]) ?>">
-                                                Detail
+                                        <?php if ($user->isLoggedIn() && $user->isAdmin()): ?>
+                                            <a class="btn btn-outline-primary btn-sm"
+                                               href="<?= $link->url('books.edit', ['id' => $book->getId()]) ?>">
+                                                Upraviť
                                             </a>
-
-                                            <?php if ($user->isLoggedIn() && $user->isAdmin()): ?>
-                                                <a class="btn btn-outline-primary btn-sm"
-                                                   href="<?= $link->url('books.edit', ['id' => $book->getId()]) ?>">
-                                                    Upraviť
-                                                </a>
-                                                <a class="btn btn-outline-danger btn-sm"
-                                                   href="<?= $link->url('books.delete', ['id' => $book->getId()]) ?>">
-                                                    Zmazať
-                                                </a>
-                                            <?php endif; ?>
-                                        </div>
+                                            <a class="btn btn-outline-danger btn-sm"
+                                               href="<?= $link->url('books.delete', ['id' => $book->getId()]) ?>">
+                                                Zmazať
+                                            </a>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
-
                             </div>
+
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
+
             </div>
 
-            <?php if (!empty($totalPages) && $totalPages > 1): ?>
-                <nav class="mt-4">
-                    <ul class="pagination justify-content-center">
-
-                        <!-- späť -->
-                        <li class="page-item <?= (!isset($page) || $page <= 1) ? 'disabled' : '' ?>">
-
-                        <a class="page-link"
-                               href="<?= $link->url('books.index', ['page' => $page - 1]) ?>">
-                                &laquo;
-                            </a>
-                        </li>
-
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="page-item <?= $i === $page ? 'active' : '' ?>">
-                                <a class="page-link"
-                                   href="<?= $link->url('books.index', ['page' => $i]) ?>">
-                                    <?= $i ?>
-                                </a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <!-- ďalej -->
-                        <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
-                            <a class="page-link"
-                               href="<?= $link->url('books.index', ['page' => $page + 1]) ?>">
-                                &raquo;
-                            </a>
-                        </li>
-
-                    </ul>
-                </nav>
-            <?php endif; ?>
 
         </main>
-    </div>
+
+        <div class="row">
+            <div class="col-12 col-md-3"></div>
+
+            <div class="col-12 col-md-9">
+                <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                    <nav class="mt-4">
+                        <ul class="pagination justify-content-center">
+
+                            <!-- späť -->
+                            <li class="page-item <?= (!isset($page) || $page <= 1) ? 'disabled' : '' ?>">
+
+                                <a class="page-link"
+                                   href="<?= $link->url('books.index', ['page' => $page - 1]) ?>">
+                                    &laquo;
+                                </a>
+                            </li>
+
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item <?= $i === $page ? 'active' : '' ?>">
+                                    <a class="page-link"
+                                       href="<?= $link->url('books.index', ['page' => $i]) ?>">
+                                        <?= $i ?>
+                                    </a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <!-- ďalej -->
+                            <li class="page-item <?= $page >= $totalPages ? 'disabled' : '' ?>">
+                                <a class="page-link"
+                                   href="<?= $link->url('books.index', ['page' => $page + 1]) ?>">
+                                    &raquo;
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+                <?php endif; ?>
+            </div>
+        </div>
 
 </div>
 <script src="<?= $link->asset('js/filterBooks.js') ?>"></script>

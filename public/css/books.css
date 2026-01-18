@@ -14,6 +14,25 @@
     box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     font-size: 0.9rem;       /* menší text */
 }
+.books-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* mobile */
+    gap: 1rem;
+}
+
+/* tablet */
+@media (min-width: 768px) {
+    .books-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* desktop */
+@media (min-width: 992px) {
+    .books-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
 
 .book-cover-img {
     width: 100%;
@@ -23,6 +42,7 @@
     margin-bottom: 0.5rem;
     border-radius: 0.25rem;
 }
+
 
 .book-title { font-size: 0.9rem; margin-bottom: 0.2rem; }
 .book-author { font-size: 0.8rem; color: #6c757d; }

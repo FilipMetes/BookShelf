@@ -22,7 +22,7 @@
             crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="<?= $link->asset('css/navbar.css') ?>?v=1.3">
-    <link rel="stylesheet" href="<?= $link->asset('css/books.css') ?>?v=1.3">
+    <link rel="stylesheet" href="<?= $link->asset('css/books.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/home.css') ?>?v=1.3">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
