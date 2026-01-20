@@ -6,7 +6,7 @@
 
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-6 d-flex gap-4 flex-column">
+        <div class="col-12 col-sm-8 d-flex gap-4 flex-column">
             <div class="card shadow-sm">
                 <div class="card-header bg-dark text-white">
                     <h4>Pridať knihu</h4>

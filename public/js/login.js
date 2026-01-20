@@ -1,39 +1,42 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('.form-signin');
-    const fields = [
-        { id: 'username', message: 'E-mail je povinný.' },
-        { id: 'password', message: 'Heslo je povinné.' }
-    ];
+const form = document.getElementById("signForm");
+const emailInput = document.getElementById("username");
+const emailError = document.getElementById("email-error");
+const passwordInput = document.getElementById("password");
+const passwordError = document.getElementById("password-error");
 
-    if (!form) return;
+form.addEventListener("submit", function (e) {
+    emailError.style.display = "none";
+    passwordError.style.display = "none";
+    emailInput.classList.remove("input-error");
+    passwordInput.classList.remove("input-error");
 
-    // vytvorenie error divov
-    fields.forEach(f => {
-        const input = document.getElementById(f.id);
-        const error = document.createElement('div');
-        error.className = 'text-danger';
-        error.style.fontSize = '0.875rem';
-        error.id = f.id + 'Error';
-        input.after(error);
-    });
+    if (emailInput.value.trim() === "") {
+        e.preventDefault();
+        emailError.innerText = "E-mail je povinný";
+        emailError.style.display = "block";
+        emailInput.classList.add("input-error");
+    }else if (!emailInput.value.includes("@")) {
+        e.preventDefault();
+        emailError.innerText = "Neplatný formát e-mailu";
+        emailError.style.display = "block";
+        emailInput.classList.add("input-error");
+    }
 
-    form.addEventListener('submit', e => {
-        let valid = true;
-
-        fields.forEach(f => {
-            const input = document.getElementById(f.id);
-            const error = document.getElementById(f.id + 'Error');
-
-            error.textContent = '';
-            input.classList.remove('is-invalid');
-
-            if (input.value.trim() === '') {
-                error.textContent = f.message;
-                input.classList.add('is-invalid');
-                valid = false;
-            }
-        });
-
-        if (!valid) e.preventDefault();
-    });
+    if (passwordInput.value.trim() === "") {
+        e.preventDefault();
+        passwordError.innerText = "Heslo je povinné";
+        passwordError.style.display = "block";
+        passwordInput.classList.add("input-error");
+    }
 });
+
+emailInput.addEventListener("input", function () {
+    emailError.style.display = "none";
+    emailInput.classList.remove("input-error");
+});
+
+passwordInput.addEventListener("input", function () {
+    passwordError.style.display = "none";
+    passwordInput.classList.remove("input-error");
+});
+

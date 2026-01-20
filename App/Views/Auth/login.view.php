@@ -16,17 +16,18 @@ $view->setLayout('root');
                     <div class="text-center text-danger mb-3">
                         <?= @$message ?>
                     </div>
-                    <form class="form-signin" method="post" action="<?= $link->url('auth.login') ?>">
+                    <form class="form-signin" id="signForm" method="post" action="<?= $link->url('auth.login') ?>">
                         <div class="form-label-group mb-3">
                             <label for="username" class="form-label">E-mail</label>
-                            <input name="username" type="text" id="username" class="form-control" placeholder="E-mail"
-                                    autofocus>
+                            <input name="username" type="text" id="username" class="form-control" placeholder="E-mail">
+                            <small class="error" id="email-error"></small>
                         </div>
 
                         <div class="form-label-group mb-3">
                             <label for="password" class="form-label">Heslo</label>
                             <input name="password" type="password" id="password" class="form-control"
                                    placeholder="Heslo">
+                            <small class="error" id="password-error"></small>
                         </div>
                         <div class="text-center">
                             <button class="btn btn-primary" type="submit" name="submit">Prihlásiť sa</button>

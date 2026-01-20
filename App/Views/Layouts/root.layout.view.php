@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="<?= $link->asset('css/home.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/detail.css') ?>">
     <link rel="stylesheet" href="<?= $link->asset('css/shopcart.css') ?>">
+    <link rel="stylesheet" href="<?= $link->asset('css/form.css') ?>">
     <script src="<?= $link->asset('js/script.js') ?>"></script>
 </head>
 <body>

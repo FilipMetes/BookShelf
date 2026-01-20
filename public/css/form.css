@@ -1,0 +1,11 @@
+.error {
+    color: red;
+    font-size: 0.85em;
+    min-height: 1em;   /* kľúčové */
+    display: block;    /* vždy zaberá miesto */
+}
+
+
+.input-error {
+    border-color: red;
+}

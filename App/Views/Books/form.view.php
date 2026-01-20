@@ -17,8 +17,8 @@ use App\Models\Genres;
 <?php endif; ?>
 
 <form action="<?= $link->url('books.save') ?>" method="post" enctype="multipart/form-data" id="bookForm">
-
     <input type="hidden" name="id" value="<?= $book->getId() ?? '' ?>">
+    <small class="error" id="name-error"></small>
 
     <div class="mb-3">
         <label for="title" class="form-label">Názov knihy</label>

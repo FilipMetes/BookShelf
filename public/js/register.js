@@ -1,67 +1,83 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('registerForm');
-    if (!form) return;
+const form = document.getElementById("registerForm");
+const nameInput = document.getElementById("name");
+const nameError = document.getElementById("name-error");
+const surnameInput = document.getElementById("surname");
+const surnameError = document.getElementById("surname-error");
+const passwordInput = document.getElementById("password");
+const passwordError = document.getElementById("password-error");
+const emailInput = document.getElementById("e_mail");
+const emailError = document.getElementById("e_mail-error");
+const PSCinput = document.getElementById("PSC");
+const PSCerror = document.getElementById("PSC-error");
 
-    const fields = [
-        { id: 'name', message: 'Meno je povinné.' },
-        { id: 'surname', message: 'Priezvisko je povinné.' },
-        {
-            id: 'e_mail',
-            message: 'Email je povinný.',
-            invalid: 'Neplatný formát emailu.',
-            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        },
-        {
-            id: 'password',
-            message: 'Heslo je povinné.',
-            invalid: 'Heslo musí mať aspoň 6 znakov.',
-            minLength: 6
-        }
-    ];
+form.addEventListener("submit", function (e) {
+    nameInput.classList.remove("input-error");
+    surnameInput.classList.remove("input-error");
+    emailInput.classList.remove("input-error");
+    passwordInput.classList.remove("input-error");
+    nameError.style.display = "none";
+    surnameError.style.display = "none";
+    emailError.style.display = "none";
+    passwordError.style.display = "none";
 
-    form.addEventListener('submit', e => {
-        let hasError = false;
 
-        fields.forEach(f => {
-            const input = document.getElementById(f.id);
-            let error = document.getElementById(f.id + 'Error');
+    if (nameInput.value.trim() === "") {
+        e.preventDefault();
+        nameError.innerText = "Méno je povinné";
+        nameError.style.display = "block";
+        nameInput.classList.add("input-error");
+    }
 
-            if (!error) {
-                error = document.createElement('div');
-                error.id = f.id + 'Error';
-                error.className = 'form-text text-danger';
-                input.after(error);
-            }
+    if (surnameInput.value.trim() === "") {
+        e.preventDefault();
+        surnameError.innerText = "Priezvisko je povinné";
+        surnameError.style.display = "block";
+        surnameInput.classList.add("input-error");
+    }
 
-            error.textContent = '';
-            error.style.display = 'none';
-            input.classList.remove('is-invalid');
+    if (emailInput.value.trim() === "") {
+        e.preventDefault();
+        emailError.innerText = "E-mail je povinný";
+        emailError.style.display = "block";
+        emailInput.classList.add("input-error");
+    }else if (!emailInput.value.includes("@")) {
+        e.preventDefault();
+        emailError.innerText = "Neplatný formát e-mailu";
+        emailError.style.display = "block";
+        emailInput.classList.add("input-error");
+    }
 
-            const value = input.value.trim();
-
-            if (!value) {
-                error.textContent = f.message;
-                error.style.display = 'block';
-                input.classList.add('is-invalid');
-                hasError = true;
-                return;
-            }
-
-            if (f.pattern && !f.pattern.test(value)) {
-                error.textContent = f.invalid;
-                error.style.display = 'block';
-                input.classList.add('is-invalid');
-                hasError = true;
-            }
-
-            if (f.minLength && value.length < f.minLength) {
-                error.textContent = f.invalid;
-                error.style.display = 'block';
-                input.classList.add('is-invalid');
-                hasError = true;
-            }
-        });
-
-        if (hasError) e.preventDefault();
-    });
+    if (PSCinput.value.length > 5) {
+        e.preventDefault();
+        PSCerror.innerText = "PSČ môže mať maximálne 5 znakov";
+        PSCerror.style.display = "block";
+        PSCinput.classList.add("input-error");
+    }
+    if (passwordInput.value.trim() === "") {
+        e.preventDefault();
+        passwordError.innerText = "Heslo je povinné";
+        passwordError.style.display = "block";
+        passwordInput.classList.add("input-error");
+    }
 });
+
+emailInput.addEventListener("input", function () {
+    emailError.style.display = "none";
+    emailInput.classList.remove("input-error");
+});
+
+passwordInput.addEventListener("input", function () {
+    passwordError.style.display = "none";
+    passwordInput.classList.remove("input-error");
+});
+
+nameInput.addEventListener("input", function () {
+    nameError.style.display = "none";
+    nameInput.classList.remove("input-error");
+});
+
+surnameInput.addEventListener("input", function () {
+    surnameError.style.display = "none";
+    surnameInput.classList.remove("input-error");
+});
+

@@ -29,11 +29,12 @@
                             <div class="col-md-6 mb-3">
                                 <label for="name" class="form-label">Meno</label>
                                 <input type="text" id="name" name="name" class="form-control">
-                                <div id="nameError" class="form-text text-danger" style="display:none;"></div>
+                                <small class="error" id="name-error"></small>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="surname" class="form-label">Priezvisko</label>
                                 <input type="text" id="surname" name="surname" class="form-control">
+                                <small class="error" id="surname-error"></small>
                             </div>
                         </div>
 
@@ -50,17 +51,21 @@
                             <div class="col-md-6 mb-3">
                                 <label for="PSC" class="form-label">PSC</label>
                                 <input type="text" id="PSC" name="PSC" class="form-control" maxlength="5">
+                                <small class="error" id="PSC-error"></small>
                             </div>
                         </div>
 
                         <div class="mb-3">
                             <label for="e_mail" class="form-label">E-mail</label>
-                            <input type="email" id="e_mail" name="e_mail" class="form-control">
+                            <input type="text" id="e_mail" name="e_mail" class="form-control">
+                            <small class="error" id="e_mail-error"></small>
+
                         </div>
 
                         <div class="mb-3">
                             <label for="password" class="form-label">Heslo</label>
                             <input type="password" id="password" name="password" class="form-control">
+                            <small class="error" id="password-error"></small>
                         </div>
 
                         <div class="text-center">
