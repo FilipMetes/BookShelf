@@ -37,15 +37,10 @@
 }
 
 /* MOBIL */
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
 
     .navbar-collapse {
-        text-align: center;
-    }
-
-    .navbar-nav {
-        width: 100%;
-        align-items: center;
+        text-align: left;
     }
 
     .navbar-nav .nav-item {
@@ -54,13 +49,6 @@
 
     .navbar-nav .nav-link {
         padding: 0.75rem 0;
-    }
-
-    /* text "Prihlásený: ..." tiež do stredu */
-    .navbar-text {
-        display: block;
-        text-align: center;
-        margin-bottom: 0.5rem;
     }
 }
 

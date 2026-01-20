@@ -1,7 +1,10 @@
 <?php
 /** @var Framework\Support\LinkGenerator $link */
-/** @var \Framework\Auth\AppUser $user */
+/** @var AppUser $user */
 /** @var array $errors */
+
+use Framework\Auth\AppUser;
+
 ?>
 
 <div class="container mt-4">

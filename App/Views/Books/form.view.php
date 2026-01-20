@@ -18,16 +18,18 @@ use App\Models\Genres;
 
 <form action="<?= $link->url('books.save') ?>" method="post" enctype="multipart/form-data" id="bookForm">
     <input type="hidden" name="id" value="<?= $book->getId() ?? '' ?>">
-    <small class="error" id="name-error"></small>
+
 
     <div class="mb-3">
         <label for="title" class="form-label">Názov knihy</label>
         <input type="text" name="title" id="title" class="form-control" value="<?= htmlspecialchars($book->getTitle() ?? '') ?>">
+        <small class="error" id="title-error"></small>
     </div>
 
     <div class="mb-3">
         <label for="author" class="form-label">Autor</label>
         <input type="text" name="author" id="author" class="form-control" value="<?= htmlspecialchars($book->getAuthor() ?? '') ?>">
+        <small class="error" id="author-error"></small>
     </div>
 
     <div class="mb-3">
@@ -40,6 +42,7 @@ use App\Models\Genres;
                 </option>
             <?php endforeach; ?>
         </select>
+        <div id="genre-error" class="error"></div>
     </div>
 
     <div class="mb-3">
@@ -51,6 +54,13 @@ use App\Models\Genres;
             <input type="radio" id="formatF" name="format" value="F" <?= $book->getFormat() === 'F' ? 'checked' : '' ?>>
             <label for="formatF">Fyzický</label>
         </div>
+        <div id="format-error" class="error"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="year" class="form-label">Rok vydania</label>
+        <input type="number" name="year" id="year" class="form-control" value="<?= htmlspecialchars($book->getNumberAvailible() ?? '') ?>">
+        <div id="year-error" class="error"></div>
     </div>
 
     <div class="mb-3">

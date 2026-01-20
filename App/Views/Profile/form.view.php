@@ -29,12 +29,14 @@
                             <label for="name" class="form-label">Meno</label>
                             <input type="text" id="name" name="name" class="form-control"
                                    value="<?= htmlspecialchars($user->getName()) ?>">
+                            <small class="error" id="name-error"></small>
                         </div>
 
                         <div class="mb-3">
                             <label for="surname" class="form-label">Priezvisko</label>
                             <input type="text" id="surname" name="surname" class="form-control"
                                    value="<?= htmlspecialchars($user->getSurname()) ?>">
+                            <small class="error" id="surname-error"></small>
                         </div>
 
                         <div class="mb-3">
@@ -53,12 +55,14 @@
                             <label for="PSC" class="form-label">PSČ</label>
                             <input type="text" id="PSC" name="PSC" class="form-control"
                                    value="<?= htmlspecialchars($user->getPSC()) ?>">
+                            <small class="error" id="PSC-error"></small>
                         </div>
 
                         <div class="mb-3">
                             <label for="e_mail" class="form-label">E-mail</label>
                             <input type="text" id="e_mail" name="e_mail" class="form-control"
                                    value="<?= htmlspecialchars($user->getEmail()) ?>">
+                            <small class="error" id="e_mail-error"></small>
                         </div>
 
                         <div class="mb-3">
@@ -79,4 +83,4 @@
     </div>
 </div>
 
-<script src="<?= $link->asset('js/profile.js') ?>"></script>
+<script src="<?= $link->asset('js/personalInfoValidate.js') ?>"></script>

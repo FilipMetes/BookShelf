@@ -50,7 +50,7 @@
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="PSC" class="form-label">PSC</label>
-                                <input type="text" id="PSC" name="PSC" class="form-control" maxlength="5">
+                                <input type="number" id="PSC" name="PSC" class="form-control">
                                 <small class="error" id="PSC-error"></small>
                             </div>
                         </div>
@@ -80,3 +80,4 @@
     </div>
 </div>
 <script src="<?= $link->asset('js/register.js') ?>"></script>
+<script src="<?= $link->asset('js/personalInfoValidate.js') ?>"></script>

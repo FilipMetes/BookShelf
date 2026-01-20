@@ -101,20 +101,21 @@ class OrderController extends BaseController
         $requiredFields = [
             'name' => 'Meno je povinné.',
             'surname' => 'Priezvisko je povinné.',
-            'email' => 'Email je povinný.',
+            'e_mail' => 'Email je povinný.',
             'phone' => 'Telefón je povinný.',
             'street' => 'Ulica je povinná.',
             'city' => 'Mesto je povinné.',
-            'psc' => 'PSČ je povinné.',
+            'PSC' => 'PSČ je povinné.',
         ];
 
         foreach ($requiredFields as $field => $message) {
-            if (trim($request->value($field)) === '') {
+            if (trim($request->value($field) ?? '') === '') {
                 $errors[] = $message;
             }
+
         }
 
-        if (!filter_var($request->value('email'), FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var($request->value('e_mail'), FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'Neplatný email.';
         }
 

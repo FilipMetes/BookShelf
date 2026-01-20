@@ -43,7 +43,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto d-flex align-items-center">
+            <ul class="navbar-nav me-auto d-flex align-items-start">
                 <li class="nav-item">
                     <a class="nav-link" href="<?= $link->url('books.index') ?>">Knihy</a>
                 </li>
@@ -52,14 +52,14 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav ms-auto d-flex align-items-center">
+            <ul class="navbar-nav ms-auto d-flex align-items-start">
                 <!--Košík-->
                 <li class="nav-item me-3">
                     <a class="nav-link" href="<?= $link->url('shopCart.index') ?>">🛒 Košík</a>
                 </li>
 
                 <?php if ($user->isLoggedIn()) { ?>
-                    <li class="nav-item me-3 d-flex align-items-center">
+                    <li class="nav-item me-3 d-flex">
                         <span class="navbar-text">Prihlásený: <b><?= htmlspecialchars($user->getName()) ?></b></span>
                     </li>
                     <li class="nav-item">

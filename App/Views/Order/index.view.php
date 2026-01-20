@@ -36,6 +36,7 @@
                                        id="name"
                                        class="form-control"
                                        value="<?= htmlspecialchars(($user->getName() ?? '')) ?>">
+                                <small class="error" id="name-error"></small>
                             </div>
 
                             <!-- Priezvisko -->
@@ -46,16 +47,18 @@
                                        id="surname"
                                        class="form-control"
                                        value="<?= htmlspecialchars(($user->getSurname() ?? '')) ?>">
+                                <small class="error" id="surname-error"></small>
                             </div>
 
                             <!-- Email -->
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email"
-                                       name="email"
-                                       id="email"
+                                <label for="e_mail" class="form-label">Email</label>
+                                <input type="text"
+                                       name="e_mail"
+                                       id="e_mail"
                                        class="form-control"
                                        value="<?= htmlspecialchars(($user->getEmail() ?? '')) ?>">
+                                <small class="error" id="e_mail-error"></small>
                             </div>
                         <?php else: ?>
                             <!-- Meno -->
@@ -65,7 +68,9 @@
                                        name="name"
                                        id="name"
                                        class="form-control">
+                                <small class="error" id="name-error"></small>
                             </div>
+
 
                             <!-- Priezvisko -->
                             <div class="mb-3">
@@ -74,6 +79,7 @@
                                        name="surname"
                                        id="surname"
                                        class="form-control">
+                                <small class="error" id="surname-error"></small>
                             </div>
 
                             <!-- Email -->
@@ -81,8 +87,9 @@
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email"
                                        name="email"
-                                       id="email"
+                                       id="e_mail"
                                        class="form-control">
+                                <small class="e_mail" id="e_mail-error"></small>
                             </div>
                         <?php endif; ?>
 
@@ -93,6 +100,7 @@
                                    name="phone"
                                    id="phone"
                                    class="form-control">
+                            <small class="error" id="phone-error"></small>
                         </div>
 
                         <hr>
@@ -101,16 +109,19 @@
                         <div class="mb-3">
                             <label for="street" class="form-label">Ulica</label>
                             <input type="text" name="street" id="street" class="form-control">
+                            <small class="error" id="street-error"></small>
                         </div>
 
                         <div class="mb-3">
                             <label for="city" class="form-label">Mesto</label>
                             <input type="text" name="city" id="city" class="form-control">
+                            <small class="error" id="city-error"></small>
                         </div>
 
                         <div class="mb-3">
-                            <label for="psc" class="form-label">PSČ</label>
-                            <input type="text" name="psc" id="psc" class="form-control">
+                            <label for="PSC" class="form-label">PSČ</label>
+                            <input type="text" name="PSC" id="PSC" class="form-control">
+                            <small class="error" id="PSC-error"></small>
                         </div>
 
                         <hr>
@@ -157,6 +168,7 @@
                                        id="card_number"
                                        class="form-control"
                                        placeholder="1234 5678 9012 3456">
+                                <small class="error" id="card_number-error"></small>
                             </div>
 
                             <div class="mb-3">
@@ -166,6 +178,7 @@
                                        id="card_expiry"
                                        class="form-control"
                                        placeholder="MM/RR">
+                                <small class="error" id="card_expiry-error"></small>
                             </div>
 
                             <div class="mb-3">
@@ -175,6 +188,7 @@
                                        id="card_cvc"
                                        class="form-control"
                                        placeholder="123">
+                                <small class="error" id="card_cvc-error"></small>
                             </div>
                         </div>
 
@@ -198,6 +212,6 @@
         </div>
     </div>
 </div>
-
-<script src="<?= $link->asset('js/cardPayment.js') ?>"></script>
+<script src="<?= $link->asset('js/personalInfoValidate.js') ?>"></script>
 <script src="<?= $link->asset('js/order.js') ?>"></script>
+<script src="<?= $link->asset('js/cardCheck.js') ?>"></script>

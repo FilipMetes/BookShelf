@@ -17,7 +17,7 @@ class Book extends Model
     public ?int $year = null;
     public float $price = 0.0;
     public int $number_availible = 0;
-    public ?int $pages = null;
+    public ?int $pages = 0;
     public ?string $text = null;
     public ?string $sample_path = null;
     public ?string $cover_path = null;
@@ -32,7 +32,7 @@ class Book extends Model
         $this->year = isset($data['year']) && $data['year'] !== null ? (int)$data['year'] : null;
         $this->price = isset($data['price']) ? (float)$data['price'] : 0.0;
         $this->number_availible = isset($data['number_availible']) ? (int)$data['number_availible'] : 0;
-        $this->pages = isset($data['pages']) ? (int)$data['pages'] : null;
+        $this->pages = isset($data['pages']) ? (int)$data['pages'] : 0;
         $this->text = $data['text'] ?? null;
         $this->sample_path = $data['sample_path'] ?? null;
         $this->cover_path = $data['cover_path'] ?? null;

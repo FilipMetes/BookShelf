@@ -5,10 +5,6 @@ const passwordInput = document.getElementById("password");
 const passwordError = document.getElementById("password-error");
 
 form.addEventListener("submit", function (e) {
-    emailError.style.display = "none";
-    passwordError.style.display = "none";
-    emailInput.classList.remove("input-error");
-    passwordInput.classList.remove("input-error");
 
     if (emailInput.value.trim() === "") {
         e.preventDefault();

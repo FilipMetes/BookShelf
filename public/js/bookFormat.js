@@ -1,42 +1,87 @@
 const form = document.getElementById("bookForm");
-const emailInput = document.getElementById("username");
-const emailError = document.getElementById("email-error");
-const passwordInput = document.getElementById("password");
-const passwordError = document.getElementById("password-error");
+const titleInput = document.getElementById("title");
+const titleError = document.getElementById("title-error");
+const authorInput = document.getElementById("author");
+const authorError = document.getElementById("author-error");
+const genreSelect = document.getElementById("genre");
+const genreError = document.getElementById("genre-error");
+const formatRadios = document.getElementsByName("format");
+const formatError = document.getElementById("format-error");
+const yearInput = document.getElementById("year");
+const yearError = document.getElementById("year-error");
 
 form.addEventListener("submit", function (e) {
-    emailError.style.display = "none";
-    passwordError.style.display = "none";
-    emailInput.classList.remove("input-error");
-    passwordInput.classList.remove("input-error");
+    titleError.style.display = "none";
+    authorError.style.display = "none";
+    genreError.style.display = "none";
+    yearError.style.display = "none";
+    yearError.style.display = "none";
+    titleInput.classList.remove("input-error");
+    authorInput.classList.remove("input-error");
+    genreSelect.classList.remove("input-error");
 
-    if (emailInput.value.trim() === "") {
+    if (titleInput.value.trim() === "") {
         e.preventDefault();
-        emailError.innerText = "E-mail je povinný";
-        emailError.style.display = "block";
-        emailInput.classList.add("input-error");
-    }else if (!emailInput.value.includes("@")) {
-        e.preventDefault();
-        emailError.innerText = "Neplatný formát e-mailu";
-        emailError.style.display = "block";
-        emailInput.classList.add("input-error");
+        titleError.innerText = "Názov je povinný";
+        titleError.style.display = "block";
+        titleInput.classList.add("input-error");
     }
 
-    if (passwordInput.value.trim() === "") {
+    if (authorInput.value.trim() === "") {
         e.preventDefault();
-        passwordError.innerText = "Heslo je povinné";
-        passwordError.style.display = "block";
-        passwordInput.classList.add("input-error");
+        authorError.innerText = "Autor je povinný";
+        authorError.style.display = "block";
+        authorInput.classList.add("input-error");
+    }
+
+    if (genreSelect.value === "") {
+        e.preventDefault();
+        genreError.innerText = "Prosím, vyberte žáner";
+        genreError.style.display = "block";
+        genreSelect.classList.add("input-error");
+    }
+
+    if (yearInput.value === "") {
+        e.preventDefault();
+        yearError.innerText = "Rok je povinný";
+        yearError.style.display = "block";
+        yearInput.classList.add("input-error");
+    }
+    let formatSelected = false;
+    for (const radio of formatRadios) {
+        if (radio.checked) {
+            formatSelected = true;
+            break;
+        }
+    }
+    if (!formatSelected) {
+        e.preventDefault();
+        formatError.innerText = "Prosím, vyberte formát knihy";
+        formatError.style.display = "block";
     }
 });
 
-emailInput.addEventListener("input", function () {
+yearInput.addEventListener("input", function() {
+
+    if (this.value.length > 4) {
+        this.value = this.value.slice(0, 4);
+    }
+
+    yearError.style.display = "none";
+});
+
+titleInput.addEventListener("input", function () {
     emailError.style.display = "none";
     emailInput.classList.remove("input-error");
 });
 
-passwordInput.addEventListener("input", function () {
+authorInput.addEventListener("input", function () {
     passwordError.style.display = "none";
     passwordInput.classList.remove("input-error");
 });
 
+for (const radio of formatRadios) {
+    radio.addEventListener("change", function () {
+        formatError.style.display = "none";
+    });
+}
