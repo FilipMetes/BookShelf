@@ -19,7 +19,7 @@ class Order extends Model
     {
         $this->id = isset($data['id']) ? (int)$data['id'] : null;
         $this->id_user = isset($data['id_user']) ? (int)$data['id_user'] : 0;
-        $this->date = $data['date'] ?? '0000-00-00';  // default hodnota, keď nie je nastavená
+        $this->date = $data['date'] ?? date('Y-m-d');  // default hodnota, keď nie je nastavená
         $this->delivery = $data['delivery'] ?? '';     // default prázdny string
         $this->state = $data['state'] ?? '';           // default prázdny string
     }

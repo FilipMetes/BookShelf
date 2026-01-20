@@ -12,8 +12,9 @@
             <h5 class="mb-0">Správa používateľov</h5>
         </div>
 
-        <form method="post" action="<?= $link->url('admin.setRoles') ?>">
-            <div class="card-body p-0">
+        <form id="rolesForm">
+
+        <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped mb-0 align-middle">
 
@@ -23,6 +24,7 @@
                         <th>Meno</th>
                         <th>Priezvisko</th>
                         <th>Email</th>
+                        <th>Rola</th>
                         <th class="text-center">Admin</th>
                         <th class="text-center">Akcia</th>
                     </tr>
@@ -35,12 +37,14 @@
                             <td><strong><?= htmlspecialchars($u->getName()) ?></strong></td>
                             <td><strong><?= htmlspecialchars($u->getSurname()) ?></strong></td>
                             <td><?= htmlspecialchars($u->getEmail()) ?></td>
+                            <td class="role-text"><?= $u->getRole() === 'A' ? 'Admin' : 'Uživatel' ?></td>
                             <td class="text-center">
                                 <label>
                                     <input type="checkbox"
-                                           class="form-check-input"
-                                           name="admins[]"
-                                           value="<?= $u->getId() ?>"<?= $u->getRole() === 'A' ? 'checked' : '' ?>>
+                                           class="form-check-input role-toggle"
+                                           data-user-id="<?= $u->getId() ?>"
+                                           data-url="<?= $link->url('admin.setRole') ?>"
+                                            <?= $u->getRole() === 'A' ? 'checked' : '' ?>>
                                 </label>
                             </td>
                             <td class="text-center">
@@ -76,3 +80,5 @@
         </form>
     </div>
 </div>
+
+<script src="<?= $link->asset('js/updateRoles.js') ?>"></script>

@@ -25,21 +25,22 @@ class AdminController extends BaseController
     }
 
 
-    public function setRoles(Request $request): Response
+    public function setRole(Request $request): Response
     {
-        $admins = $request->value('admins') ?? [];
+        $userId = (int)$request->value('user_id');
+        $role = $request->value('role');
 
-        foreach (User::getAll() as $user) {
-            $user->setRole(in_array($user->getId(), $admins) ? 'A' : 'U');
-            $user->save();
+        $user = User::getOne($userId);
+        if (!$user) {
+            return $this->json(['success' => false]);
         }
 
-        // flash správa
-        $this->app->getSession()->set('success', 'Zmeny vykonané');
+        $user->setRole($role);
+        $user->save();
 
-        // PRG pattern
-        return $this->redirect($this->url('admin.index'));
+        return $this->json(['success' => true]);
     }
+
 
 
 }

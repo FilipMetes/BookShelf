@@ -8,21 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const bookId = this.dataset.bookId;
         const url = this.dataset.url;
 
+        // fetch v skrátenej forme
         fetch(url, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'book_id=' + bookId
+            body: new URLSearchParams({ book_id: bookId })
         })
-            .then(r => r.json())
+            .then(res => res.json())
             .then(data => {
                 if (data.success) {
                     this.disabled = true;
-                    this.classList.remove('btn-outline-danger');
-                    this.classList.add('btn-danger');
+                    this.classList.replace('btn-outline-danger', 'btn-danger');
                     document.getElementById('favMsg').style.display = 'inline';
                 }
-            });
+            })
+            .catch(console.error);
     });
 });

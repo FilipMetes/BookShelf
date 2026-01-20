@@ -29,7 +29,7 @@ class Book extends Model
         $this->author = $data['author'] ?? '';
         $this->genre = $data['genre'] ?? '';
         $this->format = $data['format'] ?? '';
-        $this->year = isset($data['year']) && $data['year'] !== null ? (int)$data['year'] : null;
+        $this->year = isset($data['year']) ? (int)$data['year'] : null;
         $this->price = isset($data['price']) ? (float)$data['price'] : 0.0;
         $this->number_availible = isset($data['number_availible']) ? (int)$data['number_availible'] : 0;
         $this->pages = isset($data['pages']) ? (int)$data['pages'] : 0;
