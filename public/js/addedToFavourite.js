@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('favBtn');
-    if (!btn) return;
+    if (!btn) {
+        return;
+    }
 
     btn.addEventListener('click', function () {
         const bookId = this.dataset.bookId;

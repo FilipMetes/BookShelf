@@ -11,11 +11,6 @@ form.addEventListener("submit", function (e) {
         emailError.innerText = "E-mail je povinný";
         emailError.style.display = "block";
         emailInput.classList.add("input-error");
-    }else if (!emailInput.value.includes("@")) {
-        e.preventDefault();
-        emailError.innerText = "Neplatný formát e-mailu";
-        emailError.style.display = "block";
-        emailInput.classList.add("input-error");
     }
 
     if (passwordInput.value.trim() === "") {

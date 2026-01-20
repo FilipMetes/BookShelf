@@ -33,19 +33,19 @@ form.addEventListener("submit", function (e) {
         emailError.innerText = "E-mail je povinný";
         emailError.style.display = "block";
         emailInput.classList.add("input-error");
-    }else if (!emailInput.value.includes("@")) {
+    }else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
         e.preventDefault();
         emailError.innerText = "Neplatný formát e-mailu";
         emailError.style.display = "block";
         emailInput.classList.add("input-error");
     }
 
-    if (PSCInput.value.length !== 5) {
+    if (PSCInput.value.trim() !== "" && PSCInput.value.trim().length !== 5) {
         e.preventDefault();
         PSCError.innerText = "PSČ musi mať 5 znakov";
         PSCError.style.display = "block";
         PSCInput.classList.add("input-error");
-    }
+    }``
 });
 
 emailInput.addEventListener("input", function () {

@@ -11,14 +11,6 @@ const yearInput = document.getElementById("year");
 const yearError = document.getElementById("year-error");
 
 form.addEventListener("submit", function (e) {
-    titleError.style.display = "none";
-    authorError.style.display = "none";
-    genreError.style.display = "none";
-    yearError.style.display = "none";
-    yearError.style.display = "none";
-    titleInput.classList.remove("input-error");
-    authorInput.classList.remove("input-error");
-    genreSelect.classList.remove("input-error");
 
     if (titleInput.value.trim() === "") {
         e.preventDefault();

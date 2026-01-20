@@ -55,6 +55,11 @@ function initCardCheck() {
                     cardExpiryError.style.display = "block";
                 }
                 cardExpiryInput.classList.add("input-error");
+            }else if (!/^(0[1-9]|1[0-2])\/\d{2,4}$/.test(cardExpiryInput.value.trim())) {
+                e.preventDefault();
+                cardExpiryError.innerText = "Neplatný formát (MM/YY)";
+                cardExpiryError.style.display = "block";
+                cardExpiryInput.classList.add("input-error");
             }
 
             if (cardCvcInput.value.trim() === "") {
@@ -63,6 +68,11 @@ function initCardCheck() {
                     cardCvcError.innerText = "CVC kód je povinný";
                     cardCvcError.style.display = "block";
                 }
+                cardCvcInput.classList.add("input-error");
+            } else if (!/^\d{3,4}$/.test(cardCvcInput.value.trim())) {
+                e.preventDefault();
+                cardCvcError.innerText = "Neplatný CVC kód";
+                cardCvcError.style.display = "block";
                 cardCvcInput.classList.add("input-error");
             }
         }

@@ -1,6 +1,6 @@
 <?php
 
-/** @var string|null $message */
+/** @var string|null $error */
 /** @var \Framework\Support\LinkGenerator $link */
 /** @var \Framework\Support\View $view */
 
@@ -14,7 +14,7 @@ $view->setLayout('root');
                 <div class="card-body">
                     <h5 class="card-title text-center">Prihlásenie</h5>
                     <div class="text-center text-danger mb-3">
-                        <?= @$message ?>
+                        <?= @$error ?>
                     </div>
                     <form class="form-signin" id="signForm" method="post" action="<?= $link->url('auth.login') ?>">
                         <div class="form-label-group mb-3">

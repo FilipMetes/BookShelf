@@ -40,29 +40,29 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="street" class="form-label">Ulica</label>
+                            <label for="e_mail" class="form-label">E-mail</label>
+                            <input type="text" id="e_mail" name="e_mail" class="form-control"
+                                   value="<?= htmlspecialchars($user->getEmail()) ?>">
+                            <small class="error" id="e_mail-error"></small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="street" class="form-label">Ulica (nepovinné)</label>
                             <input type="text" id="street" name="street" class="form-control"
                                    value="<?= htmlspecialchars($user->getStreet()) ?>">
                         </div>
 
                         <div class="mb-3">
-                            <label for="city" class="form-label">Mesto</label>
+                            <label for="city" class="form-label">Mesto (nepovinné)</label>
                             <input type="text" id="city" name="city" class="form-control"
                                    value="<?= htmlspecialchars($user->getCity()) ?>">
                         </div>
 
                         <div class="mb-3">
-                            <label for="PSC" class="form-label">PSČ</label>
+                            <label for="PSC" class="form-label">PSČ (nepovinné)</label>
                             <input type="text" id="PSC" name="PSC" class="form-control"
                                    value="<?= htmlspecialchars($user->getPSC()) ?>">
                             <small class="error" id="PSC-error"></small>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="e_mail" class="form-label">E-mail</label>
-                            <input type="text" id="e_mail" name="e_mail" class="form-control"
-                                   value="<?= htmlspecialchars($user->getEmail()) ?>">
-                            <small class="error" id="e_mail-error"></small>
                         </div>
 
                         <div class="mb-3">

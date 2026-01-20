@@ -39,17 +39,17 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="street" class="form-label">Ulica</label>
+                            <label for="street" class="form-label">Ulica (nepovinné)</label>
                             <input type="text" id="street" name="street" class="form-control">
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="city" class="form-label">Mesto</label>
+                                <label for="city" class="form-label">Mesto (nepovinné)</label>
                                 <input type="text" id="city" name="city" class="form-control">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="PSC" class="form-label">PSC</label>
+                                <label for="PSC" class="form-label">PSC (nepovinné)</label>
                                 <input type="number" id="PSC" name="PSC" class="form-control">
                                 <small class="error" id="PSC-error"></small>
                             </div>
@@ -79,5 +79,6 @@
         </div>
     </div>
 </div>
-<script src="<?= $link->asset('js/register.js') ?>"></script>
 <script src="<?= $link->asset('js/personalInfoValidate.js') ?>"></script>
+<script src="<?= $link->asset('js/register.js') ?>"></script>
+

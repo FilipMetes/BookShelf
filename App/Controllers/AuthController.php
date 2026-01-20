@@ -46,7 +46,7 @@ class AuthController extends BaseController
      */
     public function login(Request $request): Response
     {
-        $message = null;
+        $error = null;
 
         if ($request->hasValue('submit')) {
             $email = trim($request->value('username'));
@@ -65,16 +65,16 @@ class AuthController extends BaseController
                     }
                 } else {
                     // nesprávny email alebo heslo
-                    $message = 'Neplatné prihlasovacie údaje.';
+                    $error = 'Neplatné prihlasovacie údaje.';
                 }
             } catch (Exception $ex) {
                 // chyba pri prístupe k DB alebo iná výnimka
-                $message = 'Chyba pri prihlasovaní. Skúste neskôr.';
+                $error = 'Chyba pri prihlasovaní. Skúste neskôr.';
             }
         }
 
         // vykreslíme login view s prípadnou správou
-        return $this->html(compact('message'));
+        return $this->html(compact('error'));
     }
 
     /**

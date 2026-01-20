@@ -83,8 +83,8 @@ class ProfileController extends BaseController
 
         $session = $this->app->getSession();
 
-        $errors = $session->get('profile_errors') ?? [];
-        $session->remove('profile_errors'); // 🔥 flash
+        $errors = $session->get('errors') ?? [];
+        $session->remove('errors'); // 🔥 flash
 
         return $this->html(compact('user', 'errors'), 'form');
     }
@@ -106,7 +106,7 @@ class ProfileController extends BaseController
         $errors = $this->formErrors($request);
 
         if (!empty($errors)) {
-            $this->app->getSession()->set('profile_errors', $errors);
+            $this->app->getSession()->set('errors', $errors);
 
             return $this->redirect($this->url('profile.edit'));
         }

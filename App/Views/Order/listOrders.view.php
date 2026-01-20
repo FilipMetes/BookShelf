@@ -2,6 +2,7 @@
 /** @var Framework\Support\LinkGenerator $link */
 /** @var AppUser $user */
 /** @var array $errors */
+/** @var array $ordersWithItems */
 
 use Framework\Auth\AppUser;
 

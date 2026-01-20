@@ -141,6 +141,7 @@
                                 <input class="form-check-input" type="radio" name="delivery" id="delivery-o" value="osobne">
                                 <label for="delivery-o" class="form-check-label">Osobný odber</label>
                             </div>
+                            <div id="delivery-error" class="error"></div>
                         </div>
 
 
@@ -155,6 +156,7 @@
                                 <input class="form-check-input" type="radio" name="payment" id='payment-k' value="karta">
                                 <label for='payment-k' class="form-check-label">Platba kartou</label>
                             </div>
+                            <div id="payment-error" class="error"></div>
                         </div>
 
                         <!-- Údaje k platbe kartou -->
@@ -163,7 +165,7 @@
 
                             <div class="mb-3">
                                 <label for="card_number" class="form-label">Číslo karty</label>
-                                <input type="text"
+                                <input type="number"
                                        name="card_number"
                                        id="card_number"
                                        class="form-control"
@@ -198,6 +200,7 @@
                             <label for="terms" class="form-check-label">
                                 Súhlasím s obchodnými podmienkami
                             </label>
+                            <div id="terms-error" class="error"></div>
                         </div>
 
                         <!-- Submit -->

@@ -15,9 +15,9 @@ class RegisterController extends BaseController
     {
         $session = $this->app->getSession();
 
-        $errors = $session->get('register_errors') ?? [];
+        $errors = $session->get('errors') ?? [];
 
-        $session->remove('register_errors');
+        $session->remove('errors');
 
         return $this->html(compact('errors'));
     }
@@ -52,7 +52,7 @@ class RegisterController extends BaseController
                 }
             }
 
-            $this->app->getSession()->set('register_errors', $errors);
+            $this->app->getSession()->set('errors', $errors);
 
             return $this->redirect($this->url('register.index'));
         }
@@ -82,7 +82,9 @@ class RegisterController extends BaseController
             $errors[] = 'Neplatný email.';
         }
 
-        if (strlen($password) < 6) {
+        if ($password === '') {
+            $errors[] = 'Heslo je povinné.';
+        }else if (strlen($password) < 6) {
             $errors[] = 'Heslo musí mať aspoň 6 znakov.';
         }
 

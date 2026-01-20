@@ -28,11 +28,6 @@ class OrderController extends BaseController
     {
         $user = $this->user;
 
-        if (!$user->isLoggedIn()) {
-            $this->app->getSession()->remove('cart');
-            return $this->redirect($this->url('shopcart.index'));
-        }
-
         $cart = $this->app->getSession()->get('cart');
 
         if (empty($cart)) {
@@ -61,6 +56,11 @@ class OrderController extends BaseController
                 ]);
                 return $this->redirect($this->url('order.index'));
             }
+        }
+
+        if (!$user->isLoggedIn()) {
+            $this->app->getSession()->remove('cart');
+            return $this->redirect($this->url('shopcart.index'));
         }
 
         // vytvorenie objednávky

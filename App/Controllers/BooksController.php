@@ -91,10 +91,7 @@ class BooksController extends BaseController
             ];
         }
 
-        return $this->html([
-            'book' => $book,
-            'reviewsData' => $reviewsData
-        ]);
+        return $this->html(compact('book', 'reviewsData'));
     }
 
     /**
@@ -115,7 +112,7 @@ class BooksController extends BaseController
         $formErrors = $this->formErrors($request);
 
         if (!empty($formErrors)) {
-            return $this->html(['book' => $book, 'formErrors' => $formErrors], $id > 0 ? 'edit' : 'create');
+            return $this->html(compact('book', 'formErrors'), $id > 0 ? 'edit' : 'create');
         }
 
 

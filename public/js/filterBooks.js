@@ -44,11 +44,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let visible = true;
 
-            if (query && !title.includes(query) && !author.includes(query)) visible = false;
-            if (genres.length && !genres.includes(genre)) visible = false;
-            if (authors.length && !authors.includes(author)) visible = false;
-            if (formats.length && !formats.includes(format)) visible = false;
-            if (price > maxPrice) visible = false;
+            if (query && !title.includes(query) && !author.includes(query)) {
+                visible = false;
+            }
+            if (genres.length && !genres.includes(genre)) {
+                visible = false;
+            }
+            if (authors.length && !authors.includes(author)) {
+                visible = false;
+            }
+            if (formats.length && !formats.includes(format)) {
+                visible = false;
+            }
+            if (price > maxPrice) {
+                visible = false;
+            }
 
             card.style.display = visible ? '' : 'none';
         });
@@ -56,7 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ===== Eventy =====
     searchBtn.addEventListener('click', filterBooks);
-    applyBtn?.addEventListener('click', filterBooks);
+    if (applyBtn) {
+        applyBtn.addEventListener('click', filterBooks);
+    }
 
     searchInput.addEventListener('keydown', e => {
         if (e.key === 'Enter') {
