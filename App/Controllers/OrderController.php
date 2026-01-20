@@ -240,5 +240,36 @@ class OrderController extends BaseController
         );
     }
 
+    public function markDelivered(Request $request): Response
+    {
+        // len admin
+        if (!$this->user->isLoggedIn() || !$this->user->isAdmin()) {
+            return $this->redirect($this->url('home.index'));
+        }
+
+        $orderId = (int) $request->value('order_id');
+        if (!$orderId) {
+            return $this->redirect($this->url('admin.index'));
+        }
+
+        // 🔥 TU sa načíta objednávka z DB
+        $order = Order::getOne($orderId);
+        if (!$order) {
+            return $this->redirect($this->url('admin.index'));
+        }
+
+
+        if ($request->value('delivered')) {
+            $order->setState('D');
+            $order->save();
+        }
+
+        return $this->redirect(
+            $this->url('order.listOrders', ['id' => $order->getIdUser()])
+        );
+    }
+
+
+
 
 }

@@ -11,20 +11,12 @@ function checkOrderForm() {
     const paymentError = document.getElementById("payment-error");
     const termsCheck = document.getElementById("terms");
     const termsError = document.getElementById("terms-error");
-    const PSCInput = document.getElementById("PSC");
-    const PSCError = document.getElementById("PSC-error");
 
 
     form.addEventListener("submit", function (e) {
 
         let isValid = true;
 
-        if (PSCInput.value.trim() !== "" || PSCInput.value.trim().length !== 5) {
-            isValid = false;
-            PSCError.innerText = "Neplatné PSČ";
-            PSCError.style.display = "block";
-            PSCInput.classList.add("input-error");
-        }
 
         if (cityInput.value.trim() === "") {
             isValid = false;

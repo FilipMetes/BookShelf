@@ -101,17 +101,18 @@
                                        class="form-control">
                                 <small class="e_mail" id="e_mail-error"></small>
                             </div>
-                        <?php endif; ?>
 
-                        <!-- Telefón -->
-                        <div class="mb-3">
-                            <label for="phone" class="form-label">Telefón</label>
-                            <input type="text"
-                                   name="phone"
-                                   id="phone"
-                                   class="form-control">
-                            <small class="error" id="phone-error"></small>
-                        </div>
+                            <!-- Telefón -->
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Telefón</label>
+                                <input type="text"
+                                       name="phone"
+                                       id="phone"
+                                       class="form-control">
+                                <small class="error" id="phone-error"></small>
+                            </div>
+
+                        <?php endif; ?>
 
                         <hr>
 

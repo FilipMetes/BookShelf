@@ -30,13 +30,35 @@ use Framework\Auth\AppUser;
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div>
                     Objednávka #<?= $order->getId() ?> |
-                    <?= htmlspecialchars($order->getDate()) ?>
+                    <?= htmlspecialchars($order->getDate()) ?> |
+                    <strong>
+                        <?= $order->getState() === 'P' ? 'Čaká sa' : 'Vybavená' ?>
+                    </strong>
                 </div>
 
                 <?php if ($order->getState() === 'P'): ?>
                     <form method="post"
+                          action="<?= $link->url('order.markDelivered') ?>"
+                          class="d-flex align-items-center gap-2 m-0">
+                        <input type="hidden" name="order_id" value="<?= $order->getId() ?>">
+
+                        <div class="form-check">
+                            <input class="form-check-input"
+                                   type="checkbox"
+                                   name="delivered"
+                                   value="1"
+                                   id="delivered<?= $order->getId() ?>"
+                                   onchange="this.form.submit()">
+                            <label class="form-check-label"
+                                   for="delivered<?= $order->getId() ?>">
+                                Označiť ako vybavené
+                            </label>
+                        </div>
+                    </form>
+
+                    <form method="post"
                           action="<?= $link->url('order.deleteOrder') ?>"
-                          onsubmit="return confirm('Naozaj chcete zrušiť objednávku?');"
+                          onsubmit="return confirm('Naozaj chcete zrušiť túto objednávku?');"
                           class="m-0">
                         <input type="hidden" name="order_id" value="<?= $order->getId() ?>">
                         <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -45,6 +67,7 @@ use Framework\Auth\AppUser;
                     </form>
                 <?php endif; ?>
             </div>
+
 
 
             <div class="card-body p-0">
