@@ -60,6 +60,16 @@
                                        value="<?= htmlspecialchars(($user->getEmail() ?? '')) ?>">
                                 <small class="error" id="e_mail-error"></small>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Telefón</label>
+                                <input type="text"
+                                       name="phone"
+                                       id="phone"
+                                       class="form-control"
+                                       value="<?= htmlspecialchars(($user->getPhone() ?? ''))?>">
+                                <small class="error" id="phone-error"></small>
+                            </div>
                         <?php else: ?>
                             <!-- Meno -->
                             <div class="mb-3">

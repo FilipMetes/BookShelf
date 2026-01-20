@@ -32,6 +32,7 @@ function initCardCheck() {
 
             let isValid = true;
 
+
             if (cardNumberError) cardNumberError.style.display = "none";
             if (cardExpiryError) cardExpiryError.style.display = "none";
             if (cardCvcError) cardCvcError.style.display = "none";
