@@ -9,8 +9,8 @@ use App\Models\Genres;
 <?php if (!empty($formErrors)): ?>
     <div class="alert alert-danger">
         <ul class="mb-0">
-            <?php foreach ($formErrors as $err): ?>
-                <li><?= htmlspecialchars($err) ?></li>
+            <?php foreach ($formErrors as $error): ?>
+                <li><?= htmlspecialchars($error) ?></li>
             <?php endforeach; ?>
         </ul>
     </div>

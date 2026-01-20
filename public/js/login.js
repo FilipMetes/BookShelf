@@ -6,18 +6,24 @@ const passwordError = document.getElementById("password-error");
 
 form.addEventListener("submit", function (e) {
 
+    let isValid = true;
+
     if (emailInput.value.trim() === "") {
-        e.preventDefault();
+        isValid = false;
         emailError.innerText = "E-mail je povinný";
         emailError.style.display = "block";
         emailInput.classList.add("input-error");
     }
 
     if (passwordInput.value.trim() === "") {
-        e.preventDefault();
+        isValid = false;
         passwordError.innerText = "Heslo je povinné";
         passwordError.style.display = "block";
         passwordInput.classList.add("input-error");
+    }
+
+    if (!isValid) {
+        e.preventDefault();
     }
 });
 

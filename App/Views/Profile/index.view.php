@@ -19,6 +19,7 @@
                         <div class="mb-2"><strong>Mesto:</strong> <?= htmlspecialchars($user->getCity() ?? '-') ?></div>
                         <div class="mb-2"><strong>PSČ:</strong> <?= htmlspecialchars($user->getPSC() ?? '-') ?></div>
                         <div class="mb-2"><strong>E-mail:</strong> <?= htmlspecialchars($user->getEmail() ?? '-') ?></div>
+                        <div class="mb-2"><strong>Tel. číslo:</strong> <?= htmlspecialchars($user->getPhone() ?? '-') ?></div>
                         <div class="mb-2"><strong>Rola:</strong> <?= $user->isAdmin() ? 'Admin' : 'Bežný používateľ' ?></div>
                     <?php else: ?>
                         <p class="text-muted">Nie ste prihlásený.</p>

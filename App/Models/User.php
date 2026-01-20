@@ -12,6 +12,8 @@ class User extends Model implements IIdentity
     public ?int $id = null;
     public string $name = '';
     public string $surname = '';
+
+    public ?string $phone = null;
     public ?string $city = null;
     public ?string $PSC = null; // postal code
     public ?string $street = null;
@@ -24,6 +26,7 @@ class User extends Model implements IIdentity
         $this->id = isset($data['id']) ? (int)$data['id'] : null;
         $this->name = $data['name'] ?? '';
         $this->surname = $data['surname'] ?? '';
+        $this->phone = $data['phone'] ?? null;
         $this->city = $data['city'] ?? null;
         $this->PSC = $data['PSC'] ?? null;
         $this->street = $data['street'] ?? null;
@@ -56,6 +59,16 @@ class User extends Model implements IIdentity
     public function setSurname(string $surname): void
     {
         $this->surname = $surname;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): void
+    {
+        $this->phone = $phone;
     }
 
     public function getCity(): ?string

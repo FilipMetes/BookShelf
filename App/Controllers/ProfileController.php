@@ -116,6 +116,7 @@ class ProfileController extends BaseController
         $user->setSurname($request->value('surname'));
         $user->setCity($request->value('city'));
         $user->setPSC($request->value('PSC'));
+        $user->setPhone($request->value('phone'));
         $user->setStreet($request->value('street'));
         $user->setEmail($request->value('e_mail'));
 
@@ -164,6 +165,15 @@ class ProfileController extends BaseController
             if ($count > 0) {
                 $errors[] = 'Používateľ s týmto emailom už existuje.';
             }
+        }
+
+        $phone = trim($request->value('phone'));
+
+        // odstránime všetko okrem číslic
+        $digits = preg_replace('/\D/', '', $phone);
+
+        if ($phone !== '' && (strlen($digits) < 7 || strlen($digits) > 15)) {
+            $errors[] = 'Telefón musí obsahovať 7 až 15 číslic.';
         }
 
         // PSČ

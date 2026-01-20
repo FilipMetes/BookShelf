@@ -37,6 +37,7 @@ class RegisterController extends BaseController
                     $user = new User();
                     $user->setName(trim($request->value('name')));
                     $user->setSurname(trim($request->value('surname')));
+                    $user->setPhone(trim($request->value('phone')));
                     $user->setStreet(trim($request->value('street')) ?: null);
                     $user->setCity(trim($request->value('city')) ?: null);
                     $user->setPSC(trim($request->value('PSC')) ?: null);
@@ -80,6 +81,15 @@ class RegisterController extends BaseController
 
         if (!filter_var($e_mail, FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'Neplatný email.';
+        }
+
+        $phone = trim($request->value('phone'));
+
+        // odstránime všetko okrem číslic
+        $digits = preg_replace('/\D/', '', $phone);
+
+        if ($phone !== '' && (strlen($digits) < 7 || strlen($digits) > 15)) {
+            $errors[] = 'Telefón musí obsahovať 7 až 15 číslic.';
         }
 
         if ($password === '') {

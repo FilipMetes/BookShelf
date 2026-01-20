@@ -12,29 +12,31 @@ const yearError = document.getElementById("year-error");
 
 form.addEventListener("submit", function (e) {
 
+    let isValid = true;
+
     if (titleInput.value.trim() === "") {
-        e.preventDefault();
+        isValid = false;
         titleError.innerText = "Názov je povinný";
         titleError.style.display = "block";
         titleInput.classList.add("input-error");
     }
 
     if (authorInput.value.trim() === "") {
-        e.preventDefault();
+        isValid = false;
         authorError.innerText = "Autor je povinný";
         authorError.style.display = "block";
         authorInput.classList.add("input-error");
     }
 
     if (genreSelect.value === "") {
-        e.preventDefault();
+        isValid = false;
         genreError.innerText = "Prosím, vyberte žáner";
         genreError.style.display = "block";
         genreSelect.classList.add("input-error");
     }
 
     if (yearInput.value === "") {
-        e.preventDefault();
+        isValid = false;
         yearError.innerText = "Rok je povinný";
         yearError.style.display = "block";
         yearInput.classList.add("input-error");
@@ -47,9 +49,13 @@ form.addEventListener("submit", function (e) {
         }
     }
     if (!formatSelected) {
-        e.preventDefault();
+        isValid = false;
         formatError.innerText = "Prosím, vyberte formát knihy";
         formatError.style.display = "block";
+    }
+
+    if (!isValid) {
+        e.preventDefault();
     }
 });
 

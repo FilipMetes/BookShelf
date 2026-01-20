@@ -29,10 +29,8 @@ function initCardCheck() {
     form.addEventListener("submit", function(e) {
         // Validáciu spúšťame iba ak je platba kartou
         if (paymentCards.checked) {
-            // Reset chýb
-            cardNumberInput.classList.remove("input-error");
-            cardExpiryInput.classList.remove("input-error");
-            cardCvcInput.classList.remove("input-error");
+
+            let isValid = true;
 
             if (cardNumberError) cardNumberError.style.display = "none";
             if (cardExpiryError) cardExpiryError.style.display = "none";
@@ -40,7 +38,7 @@ function initCardCheck() {
 
             // Kontrola čísla karty
             if (cardNumberInput.value.trim() === "") {
-                e.preventDefault(); // Zastaví odoslanie formulára
+                isValid = false;
                 if (cardNumberError) {
                     cardNumberError.innerText = "Číslo karty je povinné";
                     cardNumberError.style.display = "block";
@@ -49,31 +47,35 @@ function initCardCheck() {
             }
 
             if (cardExpiryInput.value.trim() === "") {
-                e.preventDefault();
+                isValid = false;
                 if (cardExpiryError) {
                     cardExpiryError.innerText = "Dátum platnosti je povinný";
                     cardExpiryError.style.display = "block";
                 }
                 cardExpiryInput.classList.add("input-error");
             }else if (!/^(0[1-9]|1[0-2])\/\d{2,4}$/.test(cardExpiryInput.value.trim())) {
-                e.preventDefault();
+                isValid = false;
                 cardExpiryError.innerText = "Neplatný formát (MM/YY)";
                 cardExpiryError.style.display = "block";
                 cardExpiryInput.classList.add("input-error");
             }
 
             if (cardCvcInput.value.trim() === "") {
-                e.preventDefault();
+                isValid = false;
                 if (cardCvcError) {
                     cardCvcError.innerText = "CVC kód je povinný";
                     cardCvcError.style.display = "block";
                 }
                 cardCvcInput.classList.add("input-error");
             } else if (!/^\d{3,4}$/.test(cardCvcInput.value.trim())) {
-                e.preventDefault();
+                isValid = false;
                 cardCvcError.innerText = "Neplatný CVC kód";
                 cardCvcError.style.display = "block";
                 cardCvcInput.classList.add("input-error");
+            }
+
+            if (!isValid) {
+                e.preventDefault();
             }
         }
     });

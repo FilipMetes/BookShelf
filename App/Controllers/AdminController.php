@@ -34,12 +34,12 @@ class AdminController extends BaseController
             $user->save();
         }
 
-        // flash správa
-        $this->app->getSession()->set('success', 'Zmeny vykonané');
-
-        // PRG pattern
-        return $this->redirect($this->url('admin.index'));
+        return $this->json(['success' => true]);
     }
+
+
+
+
 
 
 }

@@ -63,6 +63,13 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="phone" class="form-label">Tel. číslo</label>
+                            <input type="text" id="phone" name="phone" class="form-control">
+                            <small class="error" id="phone-error"></small>
+
+                        </div>
+
+                        <div class="mb-3">
                             <label for="password" class="form-label">Heslo</label>
                             <input type="password" id="password" name="password" class="form-control">
                             <small class="error" id="password-error"></small>
