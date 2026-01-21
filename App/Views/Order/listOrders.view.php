@@ -27,8 +27,9 @@ use Framework\Auth\AppUser;
         <?php $order = $data['order']; ?>
 
         <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <div>
+            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+
+            <div>
                     Objednávka #<?= $order->getId() ?> |
                     <?= htmlspecialchars($order->getDate()) ?> |
                     <strong>
@@ -42,7 +43,7 @@ use Framework\Auth\AppUser;
                           class="d-flex align-items-center gap-2 m-0">
                         <input type="hidden" name="order_id" value="<?= $order->getId() ?>">
 
-                        <div class="form-check text-nowrap">
+                        <div class="form-check">
                             <input class="form-check-input"
                                    type="checkbox"
                                    name="delivered"
