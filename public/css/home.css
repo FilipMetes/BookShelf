@@ -5,7 +5,7 @@
 
 /* Hero banner */
 .home-page .display-4 {
-    font-weight: 700;
+    font-weight: 1000;
     color: #000000;
 }
 
@@ -14,7 +14,7 @@
     color: #495057;
 }
 
-/* About + section titles */
+/* About + najnovsie */
 .home-page h2 {
     font-weight: 600;
     color: #000000;
@@ -38,7 +38,6 @@
     scroll-behavior: smooth;
 }
 
-/* scrollbar */
 .book-scroller::-webkit-scrollbar {
     height: 8px;
 }
@@ -50,7 +49,7 @@
 
 /* --- Book card --- */
 .book-card {
-    width: 180px;
+    width: 200px;
     flex-shrink: 0;
 }
 

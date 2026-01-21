@@ -1,16 +1,16 @@
+/* DESKTOP */
 .navbar {
     background-color: #000 !important; /* čierne pozadie */
     border-bottom: 4px solid #dc3545; /* červený pásik pod navbarom */
 }
 
 .navbar .nav-link {
-    color: #6c757d !important;
+    color: #6c757d !important; /* siva farba textu */
 }
 
 .navbar .nav-link:hover,
 .navbar .nav-link:focus {
-    color: #adb5bd !important;
-    text-decoration: none;
+    color: #adb5bd !important; /*svetlejsia farba textu pri hover */
 }
 
 .navbar .navbar-text {
@@ -27,13 +27,6 @@
 
 .navbar-brand:hover {
     color: #adb5bd;
-    text-decoration: none;
-}
-
-.navbar-brand img {
-    height: 40px;
-    width: auto;
-    display: inline-block;
 }
 
 /* MOBIL */

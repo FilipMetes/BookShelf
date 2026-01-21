@@ -10,11 +10,11 @@
     <title><?= App\Configuration::APP_NAME ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/apple-touch-icon.png') ?>">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/favicon-32x32.png') ?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= $link->asset('favicons/favicon-16x16.png') ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?= $link->asset('favicons/book.png') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= $link->asset('favicons/book.png') ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $link->asset('favicons/book.png') ?>">
     <link rel="manifest" href="<?= $link->asset('favicons/site.webmanifest') ?>">
-    <link rel="shortcut icon" href="<?= $link->asset('favicons/favicon.ico') ?>">
+    <link rel="shortcut icon" href="<?= $link->asset('favicons/book.png') ?>">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -32,7 +32,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<nav class="navbar navbar-expand-md">
     <div class="container-fluid">
         <a class="navbar-brand" href="<?= $link->url('home.index') ?>">BookShelf</a>
 
@@ -52,14 +52,14 @@
                 </li>
             </ul>
 
-            <ul class="navbar-nav ms-auto d-flex align-items-start">
+            <ul class="navbar-nav d-flex align-items-end">
                 <!--Košík-->
-                <li class="nav-item me-3">
+                <li class="nav-item">
                     <a class="nav-link" href="<?= $link->url('shopCart.index') ?>">🛒 Košík</a>
                 </li>
 
                 <?php if ($user->isLoggedIn()) { ?>
-                    <li class="nav-item me-3 d-flex">
+                    <li class="nav-item ms-2 d-flex">
                         <span class="navbar-text">Prihlásený: <b><?= htmlspecialchars($user->getName()) ?></b></span>
                     </li>
                     <li class="nav-item">

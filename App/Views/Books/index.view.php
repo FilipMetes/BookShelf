@@ -2,27 +2,30 @@
 
 use App\Configuration;
 
-/** @var \Framework\Support\LinkGenerator $link */
-/** @var \App\Models\Book[] $books */
-/** @var \Framework\Auth\AppUser $user */
+/** @var LinkGenerator $link */
+/** @var Book[] $books */
+/** @var AppUser $user */
+/** @var int $page */
 
 use App\Models\Genres;
 use  App\Models\Book;
+use Framework\Auth\AppUser;
+use Framework\Support\LinkGenerator;
 
 ?>
 
-<div class="container books-catalog my-4">
+<div class="container books-catalog mt-4 mb-5">
 
     <div class="row">
         <!-- Left filter sidebar -->
         <aside class="col-12 col-md-3 mb-3 mb-md-0">
             <div class="card filter-panel">
                 <div class="card-body">
-                    <h5 class="filter-title">Filter</h5>
+                    <h5 class="filter-title mb-3">Filter</h5>
 
                     <!-- Žáner filter -->
                     <div class="filter-section">
-                        <h6 class="filter-heading d-flex justify-content-between align-items-center"
+                        <h6 class="filter-heading d-flex justify-content-between"
                             data-bs-toggle="collapse"
                             data-bs-target="#filter-genre"
                             role="button"
@@ -33,12 +36,12 @@ use  App\Models\Book;
 
                         <div id="filter-genre" class="collapse">
                             <?php foreach(Genres::all() as $genre): ?>
-                                <div class="form-check">
+                                <div class="form-check mb-1">
                                     <input class="form-check-input"
                                            type="checkbox"
                                            value="<?= $genre ?>"
                                            id="genre-<?= $genre ?>">
-                                    <label class="form-check-label" for="genre-<?= $genre ?>">
+                                    <label class="form-check-label ms-1" for="genre-<?= $genre ?>">
                                         <?= $genre ?>
                                     </label>
                                 </div>
@@ -50,7 +53,7 @@ use  App\Models\Book;
 
                     <!-- Autor filter -->
                     <div class="filter-section mt-3">
-                        <h6 class="filter-heading d-flex justify-content-between align-items-center"
+                        <h6 class="filter-heading d-flex justify-content-between"
                             data-bs-toggle="collapse"
                             data-bs-target="#filter-author"
                             role="button"
@@ -61,11 +64,11 @@ use  App\Models\Book;
 
                         <div id="filter-author" class="collapse">
                             <?php foreach(Book::getDistinctAuthors() as $author): ?>
-                                <div class="form-check">
+                                <div class="form-check mb-1">
                                     <input class="form-check-input" type="checkbox"
                                            value="<?= htmlspecialchars($author) ?>"
                                            id="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
-                                    <label class="form-check-label"
+                                    <label class="form-check-label ms-1"
                                            for="author-<?= strtolower(str_replace(' ', '-', $author)) ?>">
                                         <?= htmlspecialchars($author) ?>
                                     </label>
@@ -77,7 +80,7 @@ use  App\Models\Book;
 
                     <!-- Formát filter -->
                     <div class="filter-section mt-3">
-                        <h6 class="filter-heading d-flex justify-content-between align-items-center"
+                        <h6 class="filter-heading d-flex justify-content-between"
                             data-bs-toggle="collapse"
                             data-bs-target="#filter-format"
                             role="button">
@@ -86,13 +89,13 @@ use  App\Models\Book;
                         </h6>
 
                         <div id="filter-format" class="collapse">
-                            <div class="form-check">
+                            <div class="form-check mb-1">
                                 <input class="form-check-input" type="checkbox" value="E" id="format-e">
-                                <label class="form-check-label" for="format-e">Elektronický</label>
+                                <label class="form-check-label ms-1" for="format-e">Elektronický</label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="F" id="format-p">
-                                <label class="form-check-label" for="format-p">Fyzický</label>
+                                <label class="form-check-label ms-1" for="format-p">Fyzický</label>
                             </div>
                         </div>
                     </div>
@@ -104,7 +107,7 @@ use  App\Models\Book;
                         <div class="d-flex flex-column">
                             <input type="range" class="form-range" min="0" max="200" step="1" id="priceRange" value="50">
                             <label for="priceRange"></label>
-                            <div class="d-flex justify-content-between mt-1 small text-muted">
+                            <div class="d-flex justify-content-between mt-1">
                                 <span id="priceCurrent">50€</span> <!-- Aktuálna hodnota slidera -->
                                 <span>200€</span> <!-- Max -->
                             </div>
@@ -129,7 +132,7 @@ use  App\Models\Book;
         <main class="col-12 col-md-9">
             <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 gap-md-3 mb-4">
 
-            <h2 class="catalog-title mb-0 text-center text-md-start">Katalóg kníh</h2>
+            <h2 class="catalog-title mb-0 text-center">Katalóg kníh</h2>
 
                 <div class="search-wrap d-flex align-items-center gap-2">
                     <label for="bookSearch" class="visually-hidden">Vyhľadať</label>
@@ -150,7 +153,7 @@ use  App\Models\Book;
                     <p class="text-muted">Zatiaľ neboli pridané žiadne knihy.</p>
                 <?php else: ?>
                     <?php foreach ($books as $book): ?>
-                        <div class="card book-card h-100"
+                        <div class="card book-card w-100"
                              data-format="<?= htmlspecialchars($book->getFormat()) ?>"
                              data-genre="<?= htmlspecialchars($book->getGenre()) ?>"
                              data-author="<?= htmlspecialchars($book->getAuthor()) ?>"
@@ -160,23 +163,23 @@ use  App\Models\Book;
                                  alt="<?= htmlspecialchars($book->getTitle()) ?>"
                                  class="book-cover-img">
 
-                            <div class="card-body d-flex flex-column">
+                            <div class="card-body">
                                 <h5 class="book-title"><?= htmlspecialchars($book->getTitle()) ?></h5>
                                 <p class="book-author mb-1"><?= htmlspecialchars($book->getAuthor()) ?></p>
-                                <p class="book-genre text-muted mb-1"><?= htmlspecialchars($book->getGenre()) ?></p>
-                                <p class="book-format text-muted mb-1">
+                                <p class="book-genre mb-1"><?= htmlspecialchars($book->getGenre()) ?></p>
+                                <p class="book-format mb-1">
                                     <?= htmlspecialchars(
                                             $book->getFormat() === 'E' ? 'Elektronický' :
                                                     ($book->getFormat() === 'F' ? 'Fyzický' : $book->getFormat())
                                     ) ?>
                                 </p>
 
-                                <div class="mt-auto">
+                                <div>
                                     <strong class="book-price d-block mb-2">
-                                        €<?= htmlspecialchars($book->getPrice()) ?>
+                                        <?= htmlspecialchars($book->getPrice()) ?>€
                                     </strong>
 
-                                    <div class="d-flex flex-wrap gap-1">
+                                    <div class="d-flex justify-content-center gap-1">
                                         <a class="btn btn-outline-secondary btn-sm"
                                            href="<?= $link->url('books.detail', ['id' => $book->getId()]) ?>">
                                             Detail

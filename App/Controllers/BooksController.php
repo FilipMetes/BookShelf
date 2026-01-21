@@ -20,6 +20,7 @@ class BooksController extends BaseController
 {
     /**
      * Zoznam knih
+     * @throws Exception
      */
     public function index(Request $request): Response
     {
@@ -28,10 +29,10 @@ class BooksController extends BaseController
         // aktuálna stránka z URL ?page=2
         $page = max(1, (int)$request->value('page'));
 
-        $offset = ($page - 1) * $perPage;
+        $offset = ($page - 1) * $perPage; // od ktorej knihy zaciname
 
-        $books = Book::getPage($perPage, $offset);
-        $total = Book::getTotalCount();
+        $books = self::getPage($perPage, $offset);
+        $total = self::getTotalCount();
 
         $totalPages = (int)ceil($total / $perPage);
 
@@ -400,6 +401,21 @@ class BooksController extends BaseController
     }
 
 
+    /**
+     * @throws Exception
+     */
+    public static function getPage(int $limit, int $offset): array
+    {
 
+        return Book::getAll('', [], 'id DESC', $limit, $offset);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public static function getTotalCount(): int
+    {
+        return Book::getCount();
+    }
 
 }

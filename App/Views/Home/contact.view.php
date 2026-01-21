@@ -3,13 +3,13 @@
 /** @var \Framework\Support\LinkGenerator $link */
 ?>
 
-<div class="container my-4">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-md-8">
 
-            <div class="card shadow-sm rounded">
+            <div class="card shadow-sm mt-2">
                 <div class="card-header bg-dark text-white">
-                    <h4 class="mb-0">BookShelf Library</h4>
+                    <h4 class="mb-0">BookShelf Library</h4 class="mb-0">
                 </div>
                 <div class="card-body">
 
@@ -20,7 +20,7 @@
                     <div class="mt-3">
                         <iframe width="100%" height="300"
                                 src="https://www.openstreetmap.org/export/embed.html?bbox=19.565%2C49.45%2C19.58%2C49.465&amp;layer=mapnik&amp;marker=49.4583%2C19.5667"
-                                style="border:0;">
+                        >
                         </iframe>
                     </div>
 

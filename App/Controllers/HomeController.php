@@ -5,7 +5,7 @@ namespace App\Controllers;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
-
+use Exception;
 use App\Models\Book;
 /**
  * Class HomeController
@@ -42,10 +42,12 @@ class HomeController extends BaseController
     public function index(Request $request): Response
     {
 
-        $books = Book::getAll(
-            orderBy: 'id DESC',
-            limit: 10
-        );
+        try {
+            $books = Book::getAll(orderBy: 'id DESC', limit: 10);
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            $books = [];
+        }
 
         return $this->html(['books' => $books]);
     }

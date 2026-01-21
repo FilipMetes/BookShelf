@@ -10,7 +10,7 @@ use App\Models\Genres;
 use  App\Models\Book;
 
 ?>
-<div class="container home-page my-5">
+<div class="container home-page">
 
     <div class="row mb-5">
         <div class="col text-center">
@@ -24,7 +24,7 @@ use  App\Models\Book;
     <div class="row mb-5">
         <div class="col text-center">
             <h2>O BookShelf</h2>
-            <p class="mt-3">
+            <p>
                 BookShelf je e-shop, ktorý vám umožní prehľadne nakupovať,
                 vyhľadávať a objavovať nové tituly. Vytvorená pre čitateľov a nadšencov kníh.
             </p>
@@ -32,13 +32,13 @@ use  App\Models\Book;
     </div>
 
 
-    <div class="row mb-5">
+    <div class="row">
         <div class="col">
             <h2 class="mb-3 text-center">Najnovšie knihy</h2>
 
-            <div class="book-scroller d-flex gap-3 px-2">
+            <div class="book-scroller mb-4">
                 <?php foreach ($books as $book): ?>
-                    <div class="card book-card flex-shrink-0">
+                    <div class="card book-card">
                         <img
                                 src="<?= $book->getCoverPath() ?>"
                                 class="card-img-top"
