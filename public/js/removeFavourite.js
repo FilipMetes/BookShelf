@@ -7,28 +7,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const url = table.dataset.removeUrl;
 
     table.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('remove-fav')) {
-            return;
-        }
+        if (!e.target.classList.contains('remove-fav')) return;
 
         const bookId = e.target.dataset.bookId;
+        if (!bookId) return;
 
-        // jednoduchý fetch
+        /*
+            Vypracované s pomocou AI
+        */
         fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `book_id=${encodeURIComponent(bookId)}`
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ book_id: bookId })
         })
-            .then(r => r.json())
+            .then(res => res.json())
             .then(data => {
                 if (data.success) {
+                    // Odstránime riadok z tabuľky
                     const row = document.getElementById('fav-row-' + bookId);
-                    if (row) {
-                        row.remove();
-                    }
+                    row?.remove();
                 }
-
             })
-            .catch(console.error);
+            .catch(err => console.error('Chyba pri fetch:', err));
+        /*
+            koniec AI
+        */
     });
+
 });

@@ -62,6 +62,7 @@ use Framework\Support\LinkGenerator;
                             <span class="small">⌄</span>
                         </h6>
 
+                        <!-- Vypracované pomocou AI -->
                         <div id="filter-author" class="collapse">
                             <?php foreach(Book::getDistinctAuthors() as $author): ?>
                                 <div class="form-check mb-1">
@@ -75,6 +76,7 @@ use Framework\Support\LinkGenerator;
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <!-- koniec AI -->
 
                     </div>
 
@@ -128,7 +130,7 @@ use Framework\Support\LinkGenerator;
             </div>
         </aside>
 
-        <!-- Main content: search, actions and books grid -->
+        <!-- Main content -->
         <main class="col-12 col-md-9">
             <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 gap-md-3 mb-4">
 

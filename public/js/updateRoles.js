@@ -7,41 +7,44 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', (e) => {
         e.preventDefault(); // zabráni reloadu
 
-        // zistíme, ktorí užívatelia sú admini
+        /*
+            Vypracované s pomocou AI
+        */
         const checkboxes = form.querySelectorAll('.role-toggle');
-        let body = '';
+        const admins = [];
+
         checkboxes.forEach(cb => {
             if (cb.checked) {
-                // pridáme do POST dáta ako "admins[]=id"
-                body += 'admins[]=' + cb.dataset.userId + '&';
+                admins.push(parseInt(cb.dataset.userId));
             }
         });
+        /*
+            koniec AI
+        */
 
-        // odstránime posledné &
-        body = body.slice(0, -1);
-
-        // pošleme dáta cez fetch
         fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: body
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ admins })
         })
             .then(res => res.json())
             .then(data => {
+                /*
+                 Vypracované s pomocou AI
+                 */
                 if (data.success) {
-                    // aktualizujeme tabuľku: prepíšeme text Admin/Uživatel
                     checkboxes.forEach(cb => {
                         const row = cb.closest('tr');
                         const roleTd = row.querySelector('.role-text');
                         roleTd.textContent = cb.checked ? 'Admin' : 'Uživatel';
                     });
-                } else {
-                    alert('Nepodarilo sa uložiť zmeny!');
                 }
+                /*
+                 koniec
+                 */
             })
             .catch(err => {
                 console.error(err);
-                alert('Chyba pri ukladaní zmien!');
             });
     });
 });

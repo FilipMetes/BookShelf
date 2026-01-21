@@ -1,6 +1,6 @@
 function initCardCheck() {
-    const paymentCards = document.getElementById("payment-k"); // Platba kartou
-    const paymentCash = document.getElementById("payment-h");  // Hotovosť
+    const paymentCards = document.getElementById("payment-k");
+    const paymentCash = document.getElementById("payment-h");
     const cardPaymentFields = document.getElementById("cardPaymentFields");
     const form = document.getElementById("orderForm");
 
@@ -23,9 +23,8 @@ function initCardCheck() {
     paymentCards.addEventListener("change", toggleCardFields);
     paymentCash.addEventListener("change", toggleCardFields);
 
-    toggleCardFields(); // inicializácia pri načítaní
+    toggleCardFields();
 
-    // Validácia polí kariet pri submit
     form.addEventListener("submit", function(e) {
         // Validáciu spúšťame iba ak je platba kartou
         if (paymentCards.checked) {

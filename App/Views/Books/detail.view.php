@@ -69,22 +69,15 @@
                             <!-- PRAVÁ STRANA – obľúbené -->
                             <?php if ($user->isLoggedIn()): ?>
                                 <div class="text-end">
-
-                                    <div id="favMsg" class="text-success mb-2" style="display:none;">
-                                        ✔ Pridané
-                                    </div>
-
-                                    <button
-                                            type="button"
-                                            id="favBtn"
-                                            data-book-id="<?= $book->getId() ?>"
-                                            data-url="<?= $link->url('books.addToFavourite') ?>"
-                                            class="btn btn-outline-danger">
-                                        Pridať do obľúbených
-                                    </button>
-
+                                    <form method="post" action="<?= $link->url('books.addToFavourite') ?>">
+                                        <input type="hidden" name="book_id" value="<?= $book->getId() ?>">
+                                        <button type="submit" class="btn btn-outline-danger">
+                                            Pridať do obľúbených
+                                        </button>
+                                    </form>
                                 </div>
                             <?php endif; ?>
+
                         </div>
                     </div>
                 </div>
@@ -203,4 +196,3 @@
         </div>
     <?php endif; ?>
 </div>
-<script src="<?= $link->asset('js/addedToFavourite.js') ?>"></script>

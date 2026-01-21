@@ -26,7 +26,9 @@ class BooksController extends BaseController
     {
         $perPage = 12;
 
-        // aktuálna stránka z URL ?page=2
+        /*
+            Vypracované s pomocou AI
+        */
         $page = max(1, (int)$request->value('page'));
 
         $offset = ($page - 1) * $perPage; // od ktorej knihy zaciname
@@ -35,6 +37,9 @@ class BooksController extends BaseController
         $total = self::getTotalCount();
 
         $totalPages = (int)ceil($total / $perPage);
+        /*
+            koniec AI
+        */
 
         return $this->html(compact('books', 'page', 'totalPages'));
     }
@@ -367,21 +372,27 @@ class BooksController extends BaseController
     /**
      * @throws Exception
      */
+    /**
+     * @throws Exception
+     */
     public function addToFavourite(Request $request): Response
     {
         if (!$this->user->isLoggedIn()) {
             return $this->redirect($this->url('auth.login'));
         }
 
-        $bookId = (int)$request->value('book_id');
+        $bookId = (int)$request->post('book_id');
         $userId = $this->user->getId();
 
-        $existing = FavouriteBook::getAll(
-            'id_user = ? AND id_book = ?',
-            [$userId, $bookId]
-        );
+        if (!$bookId) {
+            // ak je neplatné ID, redirect späť
+            return $this->redirect($this->url('books.index'));
+        }
 
-        if (!$existing) {
+        // kontrola, či už existuje
+        $existing = FavouriteBook::getAll('id_user = ? AND id_book = ?', [$userId, $bookId]);
+
+        if (empty($existing)) {
             $fav = new FavouriteBook([
                 'id_user' => $userId,
                 'id_book' => $bookId,
@@ -390,8 +401,11 @@ class BooksController extends BaseController
             $fav->save();
         }
 
-        return $this->json(['success' => true]);
+        // PRG – redirect späť na detail knihy
+        return $this->redirect($this->url('books.detail', ['id' => $bookId]));
     }
+
+
 
 
     /**
@@ -403,24 +417,31 @@ class BooksController extends BaseController
             return $this->redirect($this->url('home.index'));
         }
 
-        $userId = $this->user->getId();
-        $bookId = (int)$request->value('book_id');
+        /*
+            Vypracované s pomocou AI
+        */
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true) ?: [];
+        $bookId = (int)($data['book_id'] ?? 0);
+        /*
+            koniec AI
+        */
 
-        $existing = FavouriteBook::getAll(
-            'id_user = ? AND id_book = ?',
-            [$userId, $bookId]
-        );
+        if (!$bookId) {
+            return $this->json(['success' => false]);
+        }
+
+        $userId = $this->user->getId();
+        $existing = FavouriteBook::getAll('id_user = ? AND id_book = ?', [$userId, $bookId]);
 
         if ($existing) {
             $existing[0]->delete();
         }
 
-        // AJAX odpoveď
-        return $this->json([
-            'success' => true,
-            'book_id' => $bookId
-        ]);
+        return $this->json(['success' => true, 'book_id' => $bookId]);
     }
+
+
 
     /**
      * @throws Exception

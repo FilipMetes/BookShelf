@@ -38,19 +38,35 @@ class AdminController extends BaseController
      */
     public function setRoles(Request $request): Response
     {
-        $admins = $request->value('admins') ?? [];
-
         if (!$this->user->isLoggedIn() || !$this->user->isAdmin()) {
             return $this->redirect('home.index');
         }
 
+        /*
+            Vypracované s pomocou AI
+        */
+        $input = file_get_contents('php://input');
+        $data = json_decode($input, true) ?: [];
+        /*
+            koniec AI
+        */
+        $admins = $data['admins'] ?? [];
+
         foreach (User::getAll() as $user) {
+            // preskočíme seba
+            if ($user->getId() === $this->user->getId()) {
+                continue;
+            }
+
             $user->setRole(in_array($user->getId(), $admins) ? 'A' : 'U');
             $user->save();
         }
 
+
         return $this->json(['success' => true]);
     }
+
+
 
 
 

@@ -10,12 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const cards = [...document.querySelectorAll('.book-card')];
 
-    // ===== Cena =====
     priceText.textContent = priceRange.value + '€';
     priceRange.addEventListener('input', () => {
         priceText.textContent = priceRange.value + '€';
     });
 
+    /*
+        Vypracované s pomocou AI
+     */
     function normalize(text) {
         return text
             ? text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
@@ -26,6 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
         return [...document.querySelectorAll(`input[id^="${prefix}"]:checked`)]
             .map(i => normalize(i.value));
     }
+    /*
+        koniec práce s AI
+     */
 
     function filterBooks() {
         const query = normalize(searchInput.value);
@@ -64,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // ===== Eventy =====
     searchBtn.addEventListener('click', filterBooks);
     if (applyBtn) {
         applyBtn.addEventListener('click', filterBooks);
@@ -77,6 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    /*
+        Vypracované s pomocou AI
+     */
     resetBtn?.addEventListener('click', () => {
         document.querySelectorAll('.filter-section input').forEach(i => i.checked = false);
         searchInput.value = '';
@@ -85,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cards.forEach(card => card.style.display = '');
     });
+    /*
+        koniec práce s AI
+     */
 
 });
 
