@@ -10,6 +10,7 @@ use App\Models\User;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
+use Exception;
 
 class OrderController extends BaseController
 {
@@ -17,13 +18,15 @@ class OrderController extends BaseController
     {
         $user = $this->user;
 
-        // flash errors
         $errors = $this->app->getSession()->get('errors') ?? [];
         $this->app->getSession()->remove('errors');
 
         return $this->html(compact('user', 'errors'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function checkout(Request $request): Response
     {
         $user = $this->user;
@@ -48,7 +51,9 @@ class OrderController extends BaseController
         // kontrola skladu
         foreach ($cart as $bookId => $count) {
             $book = Book::getOne($bookId);
-            if (!$book) continue;
+            if (!$book) {
+                continue;
+            }
 
             if ($book->getNumberAvailible() < $count) {
                 $this->app->getSession()->set('errors', [
@@ -74,7 +79,9 @@ class OrderController extends BaseController
 
         foreach ($cart as $bookId => $count) {
             $book = Book::getOne($bookId);
-            if (!$book) continue;
+            if (!$book) {
+                continue;
+            }
 
             (new OrderItem([
                 'id_order' => $order->getId(),
@@ -146,6 +153,9 @@ class OrderController extends BaseController
         return $errors;
     }
 
+    /**
+     * @throws Exception
+     */
     public function listOrders(Request $request): Response
     {
         $user = $this->user;
@@ -156,7 +166,7 @@ class OrderController extends BaseController
         }
 
         $userId = (int)$request->value('id');
-        $user = User::getOne($userId);
+        $userOrder = User::getOne($userId);
         if (!$userId) {
             return $this->redirect($this->url('admin.index'));
         }
@@ -194,9 +204,12 @@ class OrderController extends BaseController
             ];
         }
 
-        return $this->html(compact('ordersWithItems', 'user'), 'listOrders');
+        return $this->html(compact('ordersWithItems', 'userOrder'), 'listOrders');
     }
 
+    /**
+     * @throws Exception
+     */
     public function deleteOrder(Request $request): Response
     {
         $user = $this->user;
@@ -240,6 +253,9 @@ class OrderController extends BaseController
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function markDelivered(Request $request): Response
     {
         // len admin
@@ -252,7 +268,6 @@ class OrderController extends BaseController
             return $this->redirect($this->url('admin.index'));
         }
 
-        // 🔥 TU sa načíta objednávka z DB
         $order = Order::getOne($orderId);
         if (!$order) {
             return $this->redirect($this->url('admin.index'));
@@ -268,8 +283,4 @@ class OrderController extends BaseController
             $this->url('order.listOrders', ['id' => $order->getIdUser()])
         );
     }
-
-
-
-
 }

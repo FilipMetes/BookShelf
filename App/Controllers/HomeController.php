@@ -41,7 +41,6 @@ class HomeController extends BaseController
 
     public function index(Request $request): Response
     {
-
         try {
             $books = Book::getAll(orderBy: 'id DESC', limit: 10);
         } catch (Exception $e) {

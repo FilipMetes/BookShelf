@@ -6,6 +6,7 @@ use App\Models\User;
 use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
+use Exception;
 
 class AdminController extends BaseController
 {
@@ -14,8 +15,15 @@ class AdminController extends BaseController
         return $this->user->isLoggedIn() && $this->user->isAdmin();
     }
 
+    /**
+     * @throws Exception
+     */
     public function index(Request $request): Response
     {
+        if (!$this->user->isLoggedIn() || !$this->user->isAdmin()) {
+            return $this->redirect('home.index');
+        }
+
         $success = $this->app->getSession()->get('success');
         $this->app->getSession()->remove('success');
 
@@ -25,9 +33,16 @@ class AdminController extends BaseController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function setRoles(Request $request): Response
     {
         $admins = $request->value('admins') ?? [];
+
+        if (!$this->user->isLoggedIn() || !$this->user->isAdmin()) {
+            return $this->redirect('home.index');
+        }
 
         foreach (User::getAll() as $user) {
             $user->setRole(in_array($user->getId(), $admins) ? 'A' : 'U');

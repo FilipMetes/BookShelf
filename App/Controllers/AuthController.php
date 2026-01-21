@@ -52,30 +52,36 @@ class AuthController extends BaseController
             $email = trim($request->value('username'));
             $password = $request->value('password');
 
-            try {
-                $user = User::findByEmail($email);
+            if (empty($email) || empty($password)) {
+                $error = 'Vyplňte všetky polia.';
+            } else {
 
-                if ($user && $user->verifyPassword($password)) {
-                    // uložíme identity do session
-                    $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $user);
-                    if ($user->isAdmin()) {
-                        return $this->redirect($this->url("admin.index"));
+                try {
+                    $user = User::findByEmail($email);
+
+                    if ($user && $user->verifyPassword($password)) {
+                        // uložíme identity do session
+                        $this->app->getSession()->set(Configuration::IDENTITY_SESSION_KEY, $user);
+                        if ($user->isAdmin()) {
+                            return $this->redirect($this->url("admin.index"));
+                        } else {
+                            return $this->redirect($this->url("home.index"));
+                        }
                     } else {
-                        return $this->redirect($this->url("home.index"));
+                        // nesprávny email alebo heslo
+                        $error = 'Neplatné prihlasovacie údaje.';
                     }
-                } else {
-                    // nesprávny email alebo heslo
-                    $error = 'Neplatné prihlasovacie údaje.';
+                } catch (Exception $e) {
+                    // chyba pri prístupe k DB alebo iná výnimka
+                    error_log($e->getMessage());
+                    $error = 'Chyba pri prihlasovaní. Skúste neskôr.';
                 }
-            } catch (Exception $ex) {
-                // chyba pri prístupe k DB alebo iná výnimka
-                $error = 'Chyba pri prihlasovaní. Skúste neskôr.';
             }
         }
-
         // vykreslíme login view s prípadnou správou
         return $this->html(compact('error'));
     }
+
 
     /**
      * Logs out the current user.
@@ -84,6 +90,7 @@ class AuthController extends BaseController
      * tokens or session data associated with the user.
      *
      * @return ViewResponse The response object that renders the logout view.
+     * @throws Exception
      */
     public function logout(Request $request): Response
     {

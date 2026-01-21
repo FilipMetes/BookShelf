@@ -1,8 +1,13 @@
 <?php
-/** @var \Framework\Support\LinkGenerator $link */
-/** @var \Framework\Auth\AppUser $user */
-/** @var \App\Models\User[] $users */
+/** @var LinkGenerator $link */
+/** @var AppUser $user */
+/** @var User[] $users */
 /** @var string|null $success */
+
+use App\Models\User;
+use Framework\Auth\AppUser;
+use Framework\Support\LinkGenerator;
+
 ?>
 
 <div class="container mt-4">
@@ -36,13 +41,16 @@
                                 <td><?= htmlspecialchars($u->getEmail()) ?></td>
                                 <td class="role-text"><?= $u->getRole() === 'A' ? 'Admin' : 'Uživatel' ?></td>
                                 <td class="text-center">
-                                    <label>
-                                        <input type="checkbox"
-                                               class="form-check-input role-toggle"
-                                               data-user-id="<?= $u->getId() ?>"
-                                                <?= $u->getRole() === 'A' ? 'checked' : '' ?>>
-                                    </label>
+                                    <?php if ($user->getId() !== $u->getId()): ?>
+                                        <label>
+                                            <input type="checkbox"
+                                                   class="form-check-input role-toggle"
+                                                   data-user-id="<?= $u->getId() ?>"
+                                                    <?= $u->getRole() === 'A' ? 'checked' : '' ?>>
+                                        </label>
+                                    <?php endif; ?>
                                 </td>
+
                                 <td class="text-center">
                                     <a href="<?= $link->url('order.listOrders', ['id' => $u->getId()]) ?>"
                                        class="btn btn-sm btn-dark">

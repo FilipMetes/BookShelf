@@ -1,10 +1,12 @@
 <?php
 /** @var Framework\Support\LinkGenerator $link */
 /** @var AppUser $user */
+/** @var User $userOrder */
 /** @var array $errors */
 /** @var array $ordersWithItems */
 
 use Framework\Auth\AppUser;
+use App\Models\User;
 
 ?>
 
@@ -13,7 +15,7 @@ use Framework\Auth\AppUser;
         Objednávky používateľa
         <strong>
             <?= htmlspecialchars(
-                $user->getName() . ' ' . $user->getSurname()
+                $userOrder->getName() . ' ' . $userOrder->getSurname()
             ) ?>
         </strong>
     </h4>

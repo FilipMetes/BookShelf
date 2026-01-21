@@ -143,6 +143,7 @@ class User extends Model implements IIdentity
      * Find a user by email address.
      * @param string $email
      * @return self|null
+     * @throws Exception
      */
     public static function findByEmail(string $email): ?self
     {

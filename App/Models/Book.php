@@ -68,6 +68,7 @@ class Book extends Model
 
     public function setSamplePath(?string $v): void { $this->sample_path = $v; }
     public function getCoverPath(): string {
+
         // Ak cover existuje a súbor je na disku, vráti ho (len názov súboru, nie URL)
         if ($this->cover_path && file_exists(Configuration::UPLOAD_DIR . $this->cover_path)) {
             return Configuration::UPLOAD_URL . $this->cover_path; // napr. "/uploads/nazov_súboru.jpg"

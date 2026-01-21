@@ -41,18 +41,28 @@ class BooksController extends BaseController
 
     /**
      * Formular na pridanie
+     * @throws Exception
      */
     public function add(Request $request): Response
     {
+        if (!$this->user->isAdmin()) {
+            return $this->redirect($this->url('books.index'));
+        }
+
         $book = new Book(); // vytvoríme prázdny objekt, aby $book existovalo vo view
         return $this->html(compact('book'));
     }
 
     /**
      * Formular na editaciu
+     * @throws Exception
      */
     public function edit(Request $request): Response
     {
+        if (!$this->user->isAdmin()) {
+            return $this->redirect($this->url('books.index'));
+        }
+
         $id = (int)$request->value('id');
         $book = Book::getOne($id);
 
@@ -63,14 +73,19 @@ class BooksController extends BaseController
         return $this->html(compact('book'));
     }
 
+    /**
+     * @throws Exception
+     */
     public function detail(Request $request): Response
     {
         $id = (int)$request->value('id');
+
         if (!$id) {
             return $this->redirect($this->url('books.index'));
         }
 
         $book = Book::getOne($id);
+
         if (!$book) {
             return $this->redirect($this->url('books.index'));
         }
@@ -97,12 +112,14 @@ class BooksController extends BaseController
 
     /**
      * Uloženie knihy (create / update)
+     * @throws Exception
      */
     public function save(Request $request): Response
     {
         $id = (int)$request->value('id');
 
         $oldCover = "";
+
         if ($id > 0) {
             $book = Book::getOne($id);
             $oldCover = $book->getCoverPath();
@@ -116,8 +133,6 @@ class BooksController extends BaseController
             return $this->html(compact('book', 'formErrors'), $id > 0 ? 'edit' : 'add');
         }
 
-
-        // Naplnenie objektu až po validácii
         $book->setTitle($request->value('title'));
         $book->setAuthor($request->value('author'));
         $book->setGenre($request->value('genre'));
@@ -135,35 +150,43 @@ class BooksController extends BaseController
 
         // COVER OBRÁZOK
         $file = $request->file('cover');
-        if ($file && $file->getName() != "") {
 
-            if ($oldCover != "") {
+        if ($file && $file->isOk()) {
+
+            if ($oldCover !== '') {
                 @unlink(Configuration::UPLOAD_DIR . $oldCover);
             }
 
-            $unique = time() . '-' . $file->getName();
-            $target = Configuration::UPLOAD_DIR . $unique;
+            $ext = pathinfo($file->getName(), PATHINFO_EXTENSION);
+            $uniqueName = uniqid('cover_', true) . '.' . $ext;
+
+            $target = Configuration::UPLOAD_DIR . $uniqueName;
 
             if (!$file->store($target)) {
                 throw new HttpException(500, "Chyba pri ukladaní obrázka.");
             }
 
-            $book->setCoverPath($unique);
+            $book->setCoverPath($uniqueName);
         }
+
 
         // UKÁŽKA KNIHY (PDF)
         $sample = $request->file('sample');
-        if ($sample && $sample->getName() !== '') {
 
-            $uniqueSample = time() . '-' . $sample->getName();
-            $targetSample = Configuration::UPLOAD_DIR . $uniqueSample;
+        if ($sample && $sample->isOk()) {
 
-            if (!$sample->store($targetSample)) {
-                throw new HttpException(500, "Chyba pri ukladaní PDF ukážky.");
+            $ext = pathinfo($sample->getName(), PATHINFO_EXTENSION);
+            $uniqueSample = uniqid('sample_', true) . '.' . $ext;
+
+            $target = Configuration::UPLOAD_DIR . $uniqueSample;
+
+            if (!$sample->store($target)) {
+                throw new HttpException(500, "Chyba pri ukladaní PDF.");
             }
 
             $book->setSamplePath($uniqueSample);
         }
+
 
         try {
             $book->save();
@@ -176,6 +199,7 @@ class BooksController extends BaseController
 
     /**
      * Zmazanie knihy
+     * @throws Exception
      */
     public function delete(Request $request): Response
     {
@@ -207,6 +231,7 @@ class BooksController extends BaseController
 
     /**
      * Validácia formulára
+     * @throws Exception
      */
     private function formErrors(Request $request): array
     {
@@ -252,24 +277,42 @@ class BooksController extends BaseController
 
         // Kontrola typu cover obrázka
         $file = $request->file('cover');
-        if ($file && $file->getName() != "" && !in_array($file->getType(), ['image/jpeg', 'image/png'])) {
-            $errors[] = "Obrázok obálky musí byť typu JPG alebo PNG!";
+        if ($file && $file->getError() !== UPLOAD_ERR_NO_FILE) {
+            if (!$file->isOk()) {
+                $errors[] = $file->getErrorMessage();
+            } else {
+                $allowedTypes = ['image/jpeg', 'image/png'];
+
+                if (!in_array($file->getType(), $allowedTypes)) {
+                    $errors[] = "Obrázok obálky musí byť JPG alebo PNG.";
+                }
+            }
         }
+
 
         // Kontrola ukážky knihy (PDF)
         $sample = $request->file('sample');
-        if ($sample && $sample->getName() !== '') {
 
-            $ext = strtolower(pathinfo($sample->getName(), PATHINFO_EXTENSION));
+        if ($sample && $sample->getError() !== UPLOAD_ERR_NO_FILE) {
 
-            if ($ext !== 'pdf') {
-                $errors[] = "Ukážka knihy musí byť vo formáte PDF.";
+            if (!$sample->isOk()) {
+                $errors[] = $sample->getErrorMessage();
+            } else {
+                $ext = strtolower(pathinfo($sample->getName(), PATHINFO_EXTENSION));
+
+                if ($ext !== 'pdf') {
+                    $errors[] = "Ukážka knihy musí byť PDF.";
+                }
             }
         }
+
 
         return $errors;
     }
 
+    /**
+     * @throws Exception
+     */
     public function rate(Request $request): Response
     {
         $bookId = (int)$request->value('book_id');
@@ -321,6 +364,9 @@ class BooksController extends BaseController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function addToFavourite(Request $request): Response
     {
         if (!$this->user->isLoggedIn()) {
@@ -348,10 +394,13 @@ class BooksController extends BaseController
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function removeFavourite(Request $request): Response
     {
         if (!$this->user->isLoggedIn()) {
-            throw new HttpException(401, 'Neprihlásený');
+            return $this->redirect($this->url('home.index'));
         }
 
         $userId = $this->user->getId();
@@ -373,10 +422,13 @@ class BooksController extends BaseController
         ]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function removeSample(Request $request): Response
     {
         // iba admin
-        if (!$this->user->isLoggedIn() || $this->user->getRole() !== 'A') {
+        if (!$this->user->isLoggedIn() || !$this->user->isAdmin()) {
             return $this->redirect($this->url('books.index'));
         }
 

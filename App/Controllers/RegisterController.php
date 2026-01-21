@@ -62,6 +62,9 @@ class RegisterController extends BaseController
     }
 
 
+    /**
+     * @throws Exception
+     */
     private function formErrors(Request $request): array
     {
         $errors = [];
@@ -83,6 +86,12 @@ class RegisterController extends BaseController
             $errors[] = 'Neplatný email.';
         }
 
+        if ($PSC = $request->value('PSC')) {
+            if (!preg_match('/^\d{5}$/', $PSC)) {
+                $errors[] = "PSČ musí byť presne 5 číslic.";
+            }
+        }
+
         $phone = trim($request->value('phone'));
 
         // odstránime všetko okrem číslic
@@ -91,6 +100,7 @@ class RegisterController extends BaseController
         if ($phone !== '' && (strlen($digits) < 7 || strlen($digits) > 15)) {
             $errors[] = 'Telefón musí obsahovať 7 až 15 číslic.';
         }
+
 
         if ($password === '') {
             $errors[] = 'Heslo je povinné.';

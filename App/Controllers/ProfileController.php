@@ -12,9 +12,13 @@ use Framework\Core\BaseController;
 use Framework\Http\Request;
 use Framework\Http\Responses\Response;
 use Framework\Http\HttpException;
+use Exception;
 
 class ProfileController extends BaseController
 {
+    /**
+     * @throws Exception
+     */
     public function index(Request $request): Response
     {
         $user = $this->user;
@@ -68,6 +72,9 @@ class ProfileController extends BaseController
 
     }
 
+    /**
+     * @throws Exception
+     */
     public function edit(Request $request): Response
     {
         $sessionUser = $this->user;
@@ -84,23 +91,26 @@ class ProfileController extends BaseController
         $session = $this->app->getSession();
 
         $errors = $session->get('errors') ?? [];
-        $session->remove('errors'); // 🔥 flash
+        $session->remove('errors');
 
         return $this->html(compact('user', 'errors'), 'form');
     }
 
 
+    /**
+     * @throws Exception
+     */
     public function save(Request $request): Response
     {
         $sessionUser = $this->user;
 
         if (!$sessionUser->isLoggedIn()) {
-            throw new HttpException(401, "Musíš byť prihlásený.");
+            return $this->redirect($this->url('home.index'));
         }
 
         $user = User::getOne($sessionUser->getId());
         if (!$user) {
-            throw new HttpException(404, "Používateľ nenájdený.");
+            return $this->redirect($this->url('home.index'));
         }
 
         $errors = $this->formErrors($request);
@@ -133,6 +143,9 @@ class ProfileController extends BaseController
     }
 
 
+    /**
+     * @throws Exception
+     */
     private function formErrors(Request $request): array
     {
         $errors = [];
@@ -155,7 +168,7 @@ class ProfileController extends BaseController
         if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Zadaný e-mail nie je platný.";
         } else {
-            // Kontrola unikátnosti: ignoruj aktuálneho používateľa (id <> ?)
+            // Kontrola unikátnosti: ignoruj aktuálneho používateľa
             if ($currentUserId !== null) {
                 $count = User::getCount('e_mail = ? AND id <> ?', [$email, $currentUserId]);
             } else {

@@ -10,19 +10,24 @@ use Framework\Http\Responses\Response;
 
 class ShopCartController extends BaseController
 {
+    /**
+     * @throws \Exception
+     */
     public function index(Request $request): Response
     {
         $cart = $this->app->getSession()->get('cart') ?? [];
 
         $errors = $this->app->getSession()->get('errors') ?? [];
-        $this->app->getSession()->remove('errors'); // flash správanie
+        $this->app->getSession()->remove('errors');
 
         $cartItems = [];
         $totalPrice = 0;
 
         foreach ($cart as $bookId => $count) {
             $book = Book::getOne($bookId);
-            if (!$book) continue;
+            if (!$book) {
+                continue;
+            }
 
             $subtotal = $book->getPrice() * $count;
             $totalPrice += $subtotal;
@@ -38,13 +43,16 @@ class ShopCartController extends BaseController
     }
 
 
+    /**
+     * @throws \Exception
+     */
     public function add(Request $request): Response
     {
         $bookId = (int)$request->value('book_id');
         $count  = max(1, (int)$request->value('count', 1));
 
         if (!$bookId) {
-            throw new HttpException(400, "Neplatná kniha.");
+            return $this->redirect($this->url("books.index"));
         }
 
         $book = Book::getOne($bookId);
@@ -60,6 +68,9 @@ class ShopCartController extends BaseController
         return $this->redirect($this->url('shopcart.index'));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function remove(Request $request): Response
     {
         $bookId = (int)$request->value('book_id');
@@ -72,6 +83,9 @@ class ShopCartController extends BaseController
         return $this->redirect($this->url('shopcart.index'));
     }
 
+    /**
+     * @throws \Exception
+     */
     public function update(Request $request): Response
     {
         $bookId = (int)$request->value('book_id');
@@ -85,7 +99,7 @@ class ShopCartController extends BaseController
 
         if ($action === 'plus') {
             $cart[$bookId]++;
-        } elseif ($action === 'minus') {
+        } else if ($action === 'minus') {
             $cart[$bookId] = max(1, $cart[$bookId] - 1);
         }
 

@@ -1,10 +1,12 @@
 <?php
 
 /** @var string|null $error */
-/** @var \Framework\Support\LinkGenerator $link */
-/** @var \Framework\Support\View $view */
+/** @var LinkGenerator $link */
+/** @var View $view */
 
-$view->setLayout('root');
+use Framework\Support\LinkGenerator;
+use Framework\Support\View;
+
 ?>
 
 <div class="container">
