@@ -183,15 +183,24 @@ class ProfileController extends BaseController
         $phone = trim($request->value('phone'));
 
         // odstránime všetko okrem číslic
-        $digits = preg_replace('/\D/', '', $phone);
+        $phone = trim($request->value('phone'));
+        if ($phone !== '') {
+            $digits = preg_replace('/[^\d]/', '', $phone);
 
-        if ($phone !== '' && (strlen($digits) < 7 || strlen($digits) > 15)) {
-            $errors[] = 'Telefón musí obsahovať 7 až 15 číslic.';
+            if (!ctype_digit($digits)) {
+                $errors[] = "Telefón musí byť číslo.";
+            } elseif (strlen($digits) < 7 || strlen($digits) > 15) {
+                $errors[] = "Telefón musí obsahovať 7 až 15 číslic.";
+            }
         }
 
+
         // PSČ
-        if ($PSC = $request->value('PSC')) {
-            if (!preg_match('/^\d{5}$/', $PSC)) {
+        $PSC = $request->value('PSC');
+        if ($PSC !== '') {
+            if (!ctype_digit($PSC)) {
+                $errors[] = "PSČ musí byť číslo.";
+            } elseif (strlen($PSC) !== 5) {
                 $errors[] = "PSČ musí byť presne 5 číslic.";
             }
         }

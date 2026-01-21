@@ -120,6 +120,7 @@
             <input type="hidden" name="book_id" value="<?= $book->getId() ?>">
 
             <div class="mb-2">
+                <!-- Vypracované pomocou AI -->
                 <div class="btn-group" role="group">
                     <?php for ($i = 1; $i <= 5; $i++): ?>
                         <input type="radio"
@@ -133,6 +134,7 @@
                         </label>
                     <?php endfor; ?>
                 </div>
+                <!-- koniec AI -->
             </div>
 
             <div class="mb-3">
@@ -178,11 +180,13 @@
                         </small>
                     </div>
 
+                    <!-- Vypracované pomocou AI -->
                     <div class="mb-1">
                         <?php for ($i = 1; $i <= 5; $i++): ?>
                             <?= $i <= $review->getRating() ? '★' : '☆' ?>
                         <?php endfor; ?>
                     </div>
+                    <!-- koniec AI -->
 
                     <?php if ($review->getReview()): ?>
                         <p class="mb-0">

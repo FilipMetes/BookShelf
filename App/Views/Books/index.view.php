@@ -218,6 +218,7 @@ use Framework\Support\LinkGenerator;
                     <nav class="mt-4">
                         <ul class="pagination justify-content-center">
 
+                            <!-- Vypracované pomocou AI -->
                             <!-- späť -->
                             <li class="page-item <?= (!isset($page) || $page <= 1) ? 'disabled' : '' ?>">
 
@@ -243,6 +244,7 @@ use Framework\Support\LinkGenerator;
                                     &raquo;
                                 </a>
                             </li>
+                            <!-- koniec AI -->
 
                         </ul>
                     </nav>

@@ -22,6 +22,10 @@
     width: auto;
 }
 
+.list-group-item {
+    overflow-wrap: break-word;   /* novšie, odporúčané */
+}
+
 /* Mobil  */
 @media (max-width: 768px) {
 

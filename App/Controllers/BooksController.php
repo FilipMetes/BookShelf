@@ -162,10 +162,17 @@ class BooksController extends BaseController
                 @unlink(Configuration::UPLOAD_DIR . $oldCover);
             }
 
+            /*
+                Vypracované s pomocou AI
+            */
             $ext = pathinfo($file->getName(), PATHINFO_EXTENSION);
             $uniqueName = uniqid('cover_', true) . '.' . $ext;
 
             $target = Configuration::UPLOAD_DIR . $uniqueName;
+
+            /*
+                koniec AI
+            */
 
             if (!$file->store($target)) {
                 throw new HttpException(500, "Chyba pri ukladaní obrázka.");
@@ -180,10 +187,17 @@ class BooksController extends BaseController
 
         if ($sample && $sample->isOk()) {
 
+            /*
+                Vypracované s pomocou AI
+             */
             $ext = pathinfo($sample->getName(), PATHINFO_EXTENSION);
             $uniqueSample = uniqid('sample_', true) . '.' . $ext;
 
             $target = Configuration::UPLOAD_DIR . $uniqueSample;
+
+            /*
+                koniec AI
+            */
 
             if (!$sample->store($target)) {
                 throw new HttpException(500, "Chyba pri ukladaní PDF.");
@@ -280,6 +294,9 @@ class BooksController extends BaseController
             $errors[] = "Formát musí byť vyplnený a platný.";
         }
 
+        /*
+            Vypracované s pomocou AI
+        */
         // Kontrola typu cover obrázka
         $file = $request->file('cover');
         if ($file && $file->getError() !== UPLOAD_ERR_NO_FILE) {
@@ -311,6 +328,29 @@ class BooksController extends BaseController
             }
         }
 
+        /*
+            koniec AI
+        */
+
+        $year = $request->value('year');
+        if (!is_numeric($year) || (int)$year <= 0) {
+            $errors[] = "Rok musí byť kladné číslo.";
+        }
+
+        $price = $request->value('price');
+        if (!is_numeric($price) || (float)$price < 0) {
+            $errors[] = "Cena musí byť platné číslo >= 0.";
+        }
+
+        $numberAvailible = $request->value('number_availible');
+        if (!is_numeric($numberAvailible) || (int)$numberAvailible < 0) {
+            $errors[] = "Počet dostupných kusov musí byť celé číslo >= 0.";
+        }
+
+        $pages = $request->value('pages');
+        if (!is_numeric($pages) || (int)$pages <= 0) {
+            $errors[] = "Počet strán musí byť kladné číslo.";
+        }
 
         return $errors;
     }
@@ -448,7 +488,6 @@ class BooksController extends BaseController
      */
     public function removeSample(Request $request): Response
     {
-        // iba admin
         if (!$this->user->isLoggedIn() || !$this->user->isAdmin()) {
             return $this->redirect($this->url('books.index'));
         }
@@ -461,10 +500,16 @@ class BooksController extends BaseController
         }
 
         // zmazanie PDF zo súborov
+        /*
+            Vypracované s pomocou AI
+        */
         $path = Configuration::UPLOAD_DIR . $book->getSamplePath();
         if (file_exists($path)) {
             @unlink($path);
         }
+        /*
+            koniec AI
+        */
 
         // vymazanie z DB
         $book->setSamplePath(null);

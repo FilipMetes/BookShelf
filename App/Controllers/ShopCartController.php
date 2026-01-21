@@ -60,8 +60,14 @@ class ShopCartController extends BaseController
             return $this->redirect($this->url("books.index"));
         }
 
+        /*
+             Vypracované s pomocou AI
+        */
         $cart = $this->app->getSession()->get('cart') ?? [];
         $cart[$bookId] = ($cart[$bookId] ?? 0) + $count;
+        /*
+              koniec AI
+        */
 
         $this->app->getSession()->set('cart', $cart);
 

@@ -130,21 +130,66 @@ class OrderController extends BaseController
             $errors[] = 'Nie je zvolený spôsob dopravy.';
         }
 
-        if (!$request->value('payment')) {
+        // spôsob platby
+        $payment = $request->value('payment');
+
+        if (!$payment) {
             $errors[] = 'Nie je zvolený spôsob platby.';
         }
 
-        if ($request->value('payment') === 'karta') {
-            if (trim($request->value('card_number')) === '') {
+        $PSC = $request->value('PSC');
+            if (!ctype_digit($PSC)) {
+                $errors[] = "PSČ musí byť číslo.";
+            } elseif (strlen($PSC) !== 5) {
+                $errors[] = "PSČ musí byť presne 5 číslic.";
+            }
+
+        $phone = trim($request->value('phone'));
+            $digits = preg_replace('/[^\d]/', '', $phone);
+
+            if (!ctype_digit($digits)) {
+                $errors[] = "Telefón musí byť číslo.";
+            } elseif (strlen($digits) < 7 || strlen($digits) > 15) {
+                $errors[] = "Telefón musí obsahovať 7 až 15 číslic.";
+            }
+
+
+        if ($payment === 'karta') {
+
+            // ČÍSLO KARTY
+            $cardNumberRaw = $request->value('card_number');
+            $cardNumber = preg_replace('/\D/', '', $cardNumberRaw);
+
+            if ($cardNumber === '') {
                 $errors[] = 'Číslo karty je povinné.';
+            } elseif (!ctype_digit($cardNumber)) {
+                $errors[] = 'Číslo karty musí obsahovať iba číslice.';
+            } elseif (strlen($cardNumber) !== 16) {
+                $errors[] = 'Číslo karty musí mať 16 číslic.';
             }
-            if (trim($request->value('card_expiry')) === '') {
+
+            // EXPIRÁCIA (MM/YY alebo MM/YYYY)
+            $expiry = trim($request->value('card_expiry'));
+
+            if ($expiry === '') {
                 $errors[] = 'Platnosť karty je povinná.';
+            } elseif (!preg_match('/^(0[1-9]|1[0-2])\/\d{2,4}$/', $expiry)) {
+                $errors[] = 'Neplatný formát dátumu platnosti (MM/YY).';
             }
-            if (trim($request->value('card_cvc')) === '') {
-                $errors[] = 'CVC je povinné.';
+
+            // CVC
+            $cvcRaw = $request->value('card_cvc');
+            $cvc = preg_replace('/\D/', '', $cvcRaw);
+
+            if ($cvc === '') {
+                $errors[] = 'CVC kód je povinný.';
+            } elseif (!ctype_digit($cvc)) {
+                $errors[] = 'CVC musí obsahovať iba číslice.';
+            } elseif (strlen($cvc) < 3 || strlen($cvc) > 4) {
+                $errors[] = 'CVC musí mať 3 alebo 4 číslice.';
             }
         }
+
 
         if (!$request->value('terms')) {
             $errors[] = 'Musíte súhlasiť s obchodnými podmienkami.';
