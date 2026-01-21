@@ -1,7 +1,7 @@
 .error {
     color: red;
-    font-size: 0.85em;
-    min-height: 1em;   /* kľúčové */
+    font-size: 0.85rem;
+    min-height: 1rem;   /* kľúčové */
     display: block;    /* vždy zaberá miesto */
 }
 

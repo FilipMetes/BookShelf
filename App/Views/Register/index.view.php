@@ -6,13 +6,17 @@
 
 ?>
 
-<div class="container-fluid px-2 px-md-3 py-3 py-md-5">
+<div class="container-fluid">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-6">
 
         <div class="card my-4 shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Registrácia</h5>
+            </div>
+
             <div class="card-body">
-                    <h5 class="card-title text-center">Registrácia</h5>
+
 
                     <?php if (!empty($errors)) { ?>
                         <div class="alert alert-danger">

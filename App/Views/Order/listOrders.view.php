@@ -42,7 +42,7 @@ use Framework\Auth\AppUser;
                           class="d-flex align-items-center gap-2 m-0">
                         <input type="hidden" name="order_id" value="<?= $order->getId() ?>">
 
-                        <div class="form-check">
+                        <div class="form-check text-nowrap">
                             <input class="form-check-input"
                                    type="checkbox"
                                    name="delivered"
@@ -68,25 +68,25 @@ use Framework\Auth\AppUser;
                 <?php endif; ?>
             </div>
 
-
-
             <div class="card-body p-0">
-                <table class="table mb-0">
-                    <thead>
-                    <tr>
-                        <th>Kniha</th>
-                        <th>Počet</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($data['books'] as $item): ?>
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
                         <tr>
-                            <td><?= htmlspecialchars($item['book']->getTitle()) ?></td>
-                            <td><?= (int)$item['count'] ?> ks</td>
+                            <th>Kniha</th>
+                            <th>Počet</th>
                         </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($data['books'] as $item): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($item['book']->getTitle()) ?></td>
+                                <td><?= (int)$item['count'] ?> ks</td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     <?php endforeach; ?>

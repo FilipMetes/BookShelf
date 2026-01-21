@@ -171,7 +171,7 @@
                         </div>
 
                         <!-- Údaje k platbe kartou -->
-                        <div id="cardPaymentFields" style="display: none;">
+                        <div id="cardPaymentFields">
                             <hr>
 
                             <div class="mb-3">

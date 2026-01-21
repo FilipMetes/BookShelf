@@ -20,7 +20,7 @@
             </div>
 
             <div class="col-md-8">
-                <div class="card shadow-lg">
+                <div class="card">
                     <div class="card-header bg-dark text-white">
                         <h2 class="card-title mb-0"><?= htmlspecialchars($book->getTitle()) ?></h2>
                     </div>

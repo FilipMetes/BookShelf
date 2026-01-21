@@ -35,10 +35,10 @@
                 <tr>
                     <th>Kniha</th>
                     <th>Autor</th>
-                    <th class="text-end">Cena</th>
-                    <th class="text-center">Množstvo</th>
-                    <th class="text-end">Spolu</th>
-                    <th class="text-center">Akcia</th>
+                    <th>Cena</th>
+                    <th>Množstvo</th>
+                    <th>Spolu</th>
+                    <th>Akcia</th>
                 </tr>
                 </thead>
 
@@ -78,7 +78,7 @@
                             </form>
                         </td>
 
-                        <td class="text-end text-nowrap">
+                        <td class="text-end text-nowrap total-box">
                             <b><?= number_format($item['subtotal'], 2) ?> €</b>
                         </td>
 
@@ -96,7 +96,7 @@
         </table>
     </div>
 
-        <div class="row mt-4 align-items-center border-top pt-3">
+        <div class="row mt-4 align-items-center cart-summary">
 
             <!-- VĽAVO – pokračovať -->
             <div class="col-12 col-md-6 mb-3 mb-md-0 text-center text-md-start">
@@ -108,14 +108,14 @@
             </div>
 
             <!-- VPRAVO – suma + objednať -->
-            <div class="col-12 col-md-6 text-center text-md-end">
+            <div class="col-12 col-md-6 mb-3 mb-md-0 text-center text-md-end">
                 <div class="d-flex flex-column flex-md-row
                 justify-content-md-end
                 align-items-center
                 gap-2">
-                    <div class="fw-semibold mb-0">
-                        Celková cena:
-                        <span class="text-success fs-5">
+                    <div class=" mb-0 total-price">
+                       Celková cena:
+                        <span class="text-success">
                 <?= number_format($totalPrice, 2) ?> €
             </span>
                     </div>

@@ -49,7 +49,7 @@
                         <div class="mb-3">
                             <label for="phone" class="form-label">Tel. číslo</label>
                             <input type="text" id="phone" name="phone" class="form-control"
-                                   value="<?= htmlspecialchars($user->getPhone()) ?>">
+                                   value="<?= htmlspecialchars($user->getPhone() ?? '') ?>"
                             <small class="error" id="phone-error"></small>
 
                         </div>
