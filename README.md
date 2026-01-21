@@ -2,12 +2,12 @@ O aplikácii
 
 BookShelf je webová aplikácia, ktorá predstavuje e-shop pre nákup kníh. 
 
-Bežný uživatelia môžu prehľadávať katalóg kníh spolu s jeho filtrovaním pre lepší zážitok. Taktiež majú možnosť
-prezerať detail knihy, pridať recenziu ku knihe, pridať knihu do obľúbených a následné pridanie knihy do košíka. 
-Po registrácii má uživateľ možnosť prehliadať a upravovať svoj profil.
+Bežný uživatelia môžu prehľadávať katalóg kníh, spolu s jeho filtrovaním pre lepší zážitok. Taktiež majú možnosť si
+prezerať detaily knihy, pridať recenziu, pridať knihu do obľúbených alebo vložiť knihu do košíka. 
+Po registrácii má uživateľ možnosť prezerať a upravovať svoj profil.
 
 Administrátor má rovnaké možnosti ako bežný uživateľ s tým, že môže do katalógu knihy pridávať a následne ich upravovať
-alebo mazať. Taktieť má vlastnu sekciu admin, v ktorej môže spravovať práva uživateľov a vybavovať ich objednávky.
+alebo mazať. Taktiež má vlastnu sekciu admin, v ktorej môže spravovať práva uživateľov a vybavovať ich objednávky.
 
 Projekt je vypracovaný vo frameworku 'vaiicko' ponúkaný fakultou FRI Žilinskej Univerzity v Žiline
 

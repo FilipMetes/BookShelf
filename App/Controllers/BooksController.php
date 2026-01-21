@@ -348,8 +348,8 @@ class BooksController extends BaseController
         }
 
         $pages = $request->value('pages');
-        if (!is_numeric($pages) || (int)$pages <= 0) {
-            $errors[] = "Počet strán musí byť kladné číslo.";
+        if (!is_numeric($pages) || (int)$pages < 0) {
+            $errors[] = "Počet strán musí byť číslo.";
         }
 
         return $errors;
